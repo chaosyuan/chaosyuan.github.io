@@ -9,7 +9,7 @@ categories:
 
  CocoaPods 和 Carthage的区别:
  
-CocoaPods 是一套整体解决方案，在 Podfile文件中指定好我们需要的第三方库。然后执行 pod update命令，就会进行下载，集成，CocoaPods默认会自动创建并更新你的应用程序和所有依赖的Xcode workspace。Carthage使用xcodebuild来编译框架的二进制文件，但如何集成它们将交由用户自己判断。CocoaPods的方法非常易于使用。
+CocoaPods 是一套整体解决方案，在 Podfile文件中指定好我们需要的第三方库。然后执行 pod update命令，就会进行下载，集成，CocoaPods默认会自动创建并更新你的应用程序和所有依赖的Xcode workspace。CocoaPods的方法非常易于使用。
 
 相比之下，Carthage 就要轻量很多，它也会一个叫做 Cartfile 描述文件，但 Carthage 不会对我们的项目结构进行任何修改，更不多创建 workspace。它只是根据我们描述文件中配置的第三方库，将他们下载到本地，然后使用 xcodebuild 构建成 framework 文件。然后由我们自己将这些库集成到项目中。Carthage 使用的是一种非侵入性的方式，它本身不会对我们的项目结构进行任何改动。
 
@@ -47,4 +47,34 @@ Build中存放的是构建好的framework包:
 Checkouts中存放的是第三方库项目源文件：
 ![enter image description here](http://7xoc8b.com1.z0.glb.clouddn.com/Checkout.ong.png)
 
+接下来，在项目设置中，进入 General 选项卡，在最下方的 Linked Frameworks and Libraries 中，将 Carthage/Build/iOS 中的 framework 文件添加到项目中：
 
+![enter image description here](http://7xoc8b.com1.z0.glb.clouddn.com/linkFrameworks.png)
+
+
+然后在 Build Phrases 中，点击左上角的 + 号，添加一个 New Run Script Phrase:
+
+![enter image description here](http://7xoc8b.com1.z0.glb.clouddn.com/runScript.png)
+
+
+
+然后在脚本区域输入：
+![enter image description here](http://7xoc8b.com1.z0.glb.clouddn.com/userlocalBin.png)
+
+然后将 Alamofire 的路径添加到 Input Files 中:
+![enter image description here](http://7xoc8b.com1.z0.glb.clouddn.com/SRCRooT.png)
+
+最终结果如下图：
+![enter image description here](http://7xoc8b.com1.z0.glb.clouddn.com/resultScroot.png)
+
+
+添加这个 Run Script 的作用是为了让运行时能够找到这个动态库。如果不添加这个 copy-frameworks 脚本，那么项目在运行的时候会因为找不到这个动态库而在启动的时候崩溃。
+
+还可以将 Carthage 所集成的第三方库生成的符号文件添加到项目中，这样在调试的时候，就可以步入第三方库内部的代码了。
+
+
+具体步骤，还是进入 Build Phrases ，然后在右上角点击 New Copy Files Phrase，然后将 Carthage/Build/iOS 目录中的 Alamofire.framework.dSYM 符号文件拖动进来:
+![enter image description here](http://7xoc8b.com1.z0.glb.clouddn.com/dsymFrameWork.png)
+
+在项目运行后，就可以在断点中步入 SwiftyJSON 内部的代码了。
+这样就通过 Carthage 将 Alamofire 库顺利的集成到项目中了
