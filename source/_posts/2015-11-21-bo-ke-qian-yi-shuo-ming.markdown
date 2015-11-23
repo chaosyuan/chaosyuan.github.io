@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "博客迁移说明"
-date: 2015-11-23 19:39:47 +0800
+date: 2015-11-21 19:39:47 +0800
 comments: true
 categories: 
 ---
