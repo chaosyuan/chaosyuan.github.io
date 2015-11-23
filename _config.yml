@@ -80,8 +80,8 @@ google_plus_one_size: medium
 
 
 # duoshuo comments
-duoshuo_comments: true
-duoshuo_short_name: chaosyuan
+# duoshuo_comments: true
+# duoshuo_short_name: chaosyuan
 
 # Google Plus Profile
 # Hidden: No visible button, just add author information to search results

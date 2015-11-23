@@ -1,11 +1,11 @@
-
 ---
 layout: post
 title: "Carthage 包管理工具"
-date: 2015-11-15 16:41:29 +0800
+date: 2015-11-23 16:52:38 +0800
 comments: true
 categories: 
 ---
+
 说到iOS开发的包管理，大家首先可能会想到Cocoapads,它确实是一个很强大的工具，但是这次主要说一下另外一个包管理工具Carthage.
 
  CocoaPods 和 Carthage的区别:
