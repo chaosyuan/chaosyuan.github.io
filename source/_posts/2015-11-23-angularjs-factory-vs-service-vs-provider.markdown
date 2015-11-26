@@ -13,7 +13,8 @@ Angular 提供了3种方法来创建并注册我们自己的 Service.
  > 1.Factory
 > 2.Service
 > 3.Provide
-> 
+
+
 #####1.Factory()
 Angular里面创建service最简单的方式是使用factory()方法,用 factory 就是创建一个对象，为它添加属性，然后把这个对象返回出来。你把 service 传进 controller 之后，在 controller 里这个对象里的属性就可以通过 factory 使用了
 
@@ -38,7 +39,7 @@ Angular里面创建service最简单的方式是使用factory()方法,用 factory
     function debug() {}
     }
 })();
-```				
+```       
 在controller中调用
 ```javascript
 (function () {
@@ -55,6 +56,6 @@ Angular里面创建service最简单的方式是使用factory()方法,用 factory
     productList();
   }
 })();
-
 ```
+**注意：需要使用.config()来配置service的时候,不能使用factory()方法**
 
