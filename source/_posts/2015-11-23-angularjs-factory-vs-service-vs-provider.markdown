@@ -10,9 +10,9 @@ categories:
 ####AngularJS Service
 Angular 提供了3种方法来创建并注册我们自己的 Service.
 
- > 1.Factory
-> 2.Service
-> 3.Provide
+ >   1.Factory
+ >   2.Service
+ >   3.Provide
 
 
 #####1.Factory()
@@ -58,4 +58,69 @@ Angular里面创建service最简单的方式是使用factory()方法,用 factory
 })();
 ```
 **注意：需要使用.config()来配置service的时候,不能使用factory()方法**
+
+#####2.Service()
+service()通过构造函数的方式创建service, 给"this"添加属性，然后 service 返回"this"。 service 传入controller ，在controller里 "this" 上的属性就可以通过 service 来使用了
+
+```javascript
+
+(function () {
+  'use strict';
+  angular.module('login.services')
+    .service('login', login);
+  login.$inject = ['$scope', '$state']
+
+  function login($scope, $state) {
+
+    this.userInfo = {};
+    this.setUserInfo = function (useName) {
+
+      self.userInfo['name'] = useName
+      return userInfo;
+    }
+  }
+})();
+```
+在controller中调用
+```javascript
+(function () {
+  'use strict';
+  angular.module('app.userModule')
+    .controller('UserInfoController', UserInfoController);
+
+  UserInfoController.$inject = ['$scope', 'login'];
+
+  function UserInfoController ($scope, login) {
+    login.setUserInfo();
+  }
+
+})();
+```
+#####3.Provider()
+
+providers 是唯一一种你可以传进 .config() 函数的 service。当想要在 service 对象启用之前，先进行模块范围的配置，那优先考虑使用provider
+```javascript
+(function () {
+  'use strict';
+  angular.module('providerTestModele', [])
+    .config(function ($stateProvider, $urlRouterProvider) {
+      $urlRouterProvider.otherwise("/");
+    })
+    .provider('providerTest', ['$window', function ($window) {
+      this.test = {
+        "firstName": "yw"
+      };
+      this.$get = function () {
+        return this.test;
+      };
+    }
+    ]);
+})();
+```
+
+
+####参考
+1.https://www.airpair.com/angularjs/posts/top-10-mistakes-angularjs-developers-make
+2.https://github.com/johnpapa/angular-styleguide/blob/master/i18n/zh-CN.md
+3.http://tylermcginnis.com/angularjs-factory-vs-service-vs-provider/
 
