@@ -17,15 +17,17 @@ $q是做为angularjs的一个内置服务而存在的，只是对promise异步�
 #####defer
 defer对象(延迟对象)可以通$q.defer( )获取，下面是defer对象的api：
 
- >   1. resolve(value):向promise对象发送消息成功完成任务，value即为发送的消息。
- >   2. reject(reason): 向promise对象发送消息已经不可能完成这个任务了(拒绝)，reason即为发送的消息（拒绝原因）。
- >   3. notify(value): 向promise对象发送消息现在任务完成的情况（通知），value即为发送的消息。
- >   4. all( ) 传入Promise的数组，批量执行，返回一个promise对象
- >   5. when( ) 传入一个不确定的参数，如果符合Promise标准，就返回一个promise对象
+ 1. resolve(value):向promise对象发送消息成功完成任务，value即为发送的消息。
+ 2. reject(reason): 向promise对象发送消息已经不可能完成这个任务了(拒绝)，reason即为发送的消息（拒绝原因）。
+ 3. notify(value): 向promise对象发送消息现在任务完成的情况（通知），value即为发送的消息。
+ 4. all( ) 传入Promise的数组，批量执行，返回一个promise对象
+ 5. when( ) 传入一个不确定的参数，如果符合Promise标准，就返回一个promise对象
     
 关于状态有几个规定：
- >   1. 状态的变更是不可逆的
- >   2. 等待状态可以变成完成或者拒绝
+
+ 1. 状态的变更是不可逆的
+ 2. 等待状态可以变成完成或者拒绝
+
   
 #####promise 对象的方法
 promise就是这个defer对象的承诺对象，defer主要是用来发送消息的。promise对象可以通过defer.promise获取,消息发送完promise会调用现有的回调函数.
