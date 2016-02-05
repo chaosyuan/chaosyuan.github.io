@@ -16,7 +16,7 @@ Yeoman的目的不仅是要为新项目建立工作流，同时还是为了解�
 ####Yeoman的作用
 1. Yo:Yeoman核心工具，构建目录结构或文件，生成项目的生产环境和编译环境.
 2. bower:Web开发的包管理器，类似于npm，npm专注于nodeJs模块，而bower专注于CSS、JavaScript、图像等前端相关内容的管理。需要注意的是，Bower的运行，依赖于版本控制工具git。要想成功安装Yeoman,需先安装 Git.
-3. grunt:自动化构建工具.当然也可以使用[gulp].(http://gulpjs.com/) 
+3. grunt:自动化构建工具.当然也可以使用[gulp](http://gulpjs.com/)
 
 ####Yeoman的安装
 在安装Yeoman之前，需要安装： [NodeJS](https://nodejs.org/en/)
