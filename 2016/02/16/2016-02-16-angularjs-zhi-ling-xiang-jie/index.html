@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>AngularJS 指令详解 | zero</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="####前言最近在公司的项目中用到AngularJs中的指令。所谓的指令在我理解看来。就是把浏览器能够识别的标签使用语法糖包装起来。在其它地方直接调用。这样极大方便了项目的开发和维护。在聚财富项目中对通用的组件进行抽离，封装成自定义指令。整个工程都可以复用。在项目工程中创建语义化以及高度重用的组件，对于提高代码质量有很大的帮助，也方便扩展及后期维护。目前市场上的前端框架也只有AngularJS 拥">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AngularJS 指令详解">
+<meta property="og:url" content="http://chaosyuan.github.io/2016/02/16/2016-02-16-angularjs-zhi-ling-xiang-jie/index.html">
+<meta property="og:site_name" content="zero">
+<meta property="og:description" content="####前言最近在公司的项目中用到AngularJs中的指令。所谓的指令在我理解看来。就是把浏览器能够识别的标签使用语法糖包装起来。在其它地方直接调用。这样极大方便了项目的开发和维护。在聚财富项目中对通用的组件进行抽离，封装成自定义指令。整个工程都可以复用。在项目工程中创建语义化以及高度重用的组件，对于提高代码质量有很大的帮助，也方便扩展及后期维护。目前市场上的前端框架也只有AngularJS 拥">
+<meta property="og:updated_time" content="2016-03-01T08:11:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AngularJS 指令详解">
+<meta name="twitter:description" content="####前言最近在公司的项目中用到AngularJs中的指令。所谓的指令在我理解看来。就是把浏览器能够识别的标签使用语法糖包装起来。在其它地方直接调用。这样极大方便了项目的开发和维护。在聚财富项目中对通用的组件进行抽离，封装成自定义指令。整个工程都可以复用。在项目工程中创建语义化以及高度重用的组件，对于提高代码质量有很大的帮助，也方便扩展及后期维护。目前市场上的前端框架也只有AngularJS 拥">
+  
+    <link rel="alternative" href="/atom.xml" title="zero" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="null" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">袁伟</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">千里之行始于足下</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>Menu</li>
+						<li>Tags</li>
+						
+						<li>Links</li>
+						
+						
+						<li>Über</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/tags/随笔">随笔</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="#" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="#" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="#" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">袁伟</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="null" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">袁伟</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">千里之行始于足下</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/tags/随笔">随笔</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="#" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="#" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="#" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-2016-02-16-angularjs-zhi-ling-xiang-jie" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/02/16/2016-02-16-angularjs-zhi-ling-xiang-jie/" class="article-date">
+  	<time datetime="2016-02-16T09:20:32.000Z" itemprop="datePublished">2016-02-16</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      AngularJS 指令详解
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>####前言<br>最近在公司的项目中用到AngularJs中的指令。所谓的指令在我理解看来。就是把浏览器能够识别的标签使用语法糖包装起来。在其它地方直接调用。这样极大方便了项目的开发和维护。在<a href="https://www.jucaifu.com/" target="_blank" rel="external">聚财富</a>项目中对通用的组件进行抽离，封装成自定义指令。整个工程都可以复用。在项目工程中创建语义化以及高度重用的组件，对于提高代码质量有很大的帮助，也方便扩展及后期维护。目前市场上的前端框架也只有AngularJS 拥有自定义指令的功能，并且AngularJS 是目前唯一提供Web应用可复用能力的框架。</p>
+<p>####指令概述</p>
+<p>指令是DOM元素上的标记，使元素拥有特定的行为，也是用来扩展浏览器能力的技术之一。在DOM编译期间，和HTML元素关联着的指令会被检测到，并且被执行。这使得指令可以为DOM指定行为，或者改变它。AngularJS有一套完整的、可扩展的、用来帮助web应用开发的指令集（例如ng-repeat.ng-view.ng-controller等）。</p>
+<p>####执行流程</p>
+<p>下面说一下指令执行过程。</p>
+<ol>
+<li>浏览器得到 HTML 字符串内容，解析得成 DOM 结构</li>
+<li>ng 引入，把 DOM 结构扔给 $compile 函数处理。</li>
+</ol>
+<blockquote>
+<ol>
+<li>找出 DOM 结构中有变量占位符</li>
+<li>匹配找出 DOM 中包含的所有指令引用</li>
+<li>把指令关联到 DOM节点上</li>
+<li>DOM 中的多个指令按优先级排列</li>
+<li>执行指令中的 compile 函数（改变 DOM 结构，返回 link 函数）</li>
+</ol>
+</blockquote>
+<ol>
+<li>执行 link 函数（连接模板的 $scope）<br>注意：$compile和compile，前者是ng内置服务，后者是指令中的编译函数。使用时注意区分。</li>
+</ol>
+<p>####表现形式<br>指令的四种使用方式：</p>
+<ol>
+<li>作为元素(E) :<code>&lt;smsCode&gt;&lt;/smsCode&gt;</code></li>
+<li>作为属性(A) :<code>&lt;div smsCode=&quot;sms&quot;&gt;&lt;/div&gt;</code></li>
+<li>作为类名(C) :<code>&lt;div class=&quot;smsCode:sms;&quot;&gt;&lt;/div&gt;</code></li>
+<li>作为注释(M) :<code>&lt;!-- directive: smsCode sms --&gt;</code></li>
+</ol>
+<p>在实际项目中常用的就是作为元素和属性。</p>
+<p>####配置参数</p>
+<p>下面是一个标准指令的示例，可配置的参数包括以下部分</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">(function()&#123;</span><br><span class="line">  &apos;use strict&apos;;  </span><br><span class="line">angular.module(&apos;securityLoginToolbar&apos;)</span><br><span class="line">    .directive(&apos;loginToolbar&apos;, function factory(injectables) &#123;</span><br><span class="line"></span><br><span class="line">    var directiveDefinitionObject = &#123;</span><br><span class="line"></span><br><span class="line">        restrict: string,//指令的使用方式，包括元素，属性，类，注释</span><br><span class="line"></span><br><span class="line">        priority: number,//指令执行的优先级</span><br><span class="line"></span><br><span class="line">        template: string,//指令使用的模板，用HTML字符串的形式表示</span><br><span class="line"></span><br><span class="line">        templateUrl: string,//从指定的url地址加载模板</span><br><span class="line"></span><br><span class="line">        replace: bool,//是否用模板替换当前元素，若为false，则append在当前元素上</span><br><span class="line"></span><br><span class="line">        transclude: bool,//是否将当前元素的内容转移到模板中</span><br><span class="line"></span><br><span class="line">        scope: bool or object,//指定指令的作用域</span><br><span class="line"></span><br><span class="line">        controller: function controllerConstructor($scope, $element, $attrs, $transclude)&#123;...&#125;,//定义与其他指令进行交互的接口函数</span><br><span class="line"></span><br><span class="line">        require: string,//指定需要依赖的其他指令</span><br><span class="line"></span><br><span class="line">        link: function postLink(scope, iElement, iAttrs) &#123;...&#125;,//以编程的方式操作DOM，包括添加监听器等</span><br><span class="line"></span><br><span class="line">        compile: function compile(tElement, tAttrs, transclude)&#123;</span><br><span class="line"></span><br><span class="line">            return: &#123;</span><br><span class="line"></span><br><span class="line">                pre: function preLink(scope, iElement, iAttrs, controller)&#123;...&#125;,</span><br><span class="line">                post: function postLink(scope, iElement, iAttrs, controller)&#123;...&#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;//编程的方式修改DOM模板的副本，可以返回链接函数</span><br><span class="line">    &#125;;</span><br><span class="line">    return directiveDefinitionObject;</span><br><span class="line">&#125;);</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<p>loginToolbar 指令的名字。需要注意的是：在自定义指令命名时尽量不要以ng开头，防止与系统的指令冲突。</p>
+<p>factory函数，叫工厂函数，它是用来创建指令的。它只会被调用一次(类似于iOS的单例模式)：当编译器第一次匹配到相应指令的时候，在其中进行初始化的工作。调用它时使用的是 $inject， 它遵循所有依赖注入(DI)规则.</p>
+<ul>
+<li><p>优先级priority - 当一个DOM上有多个指令时，需要指定指令执行的顺序。 优先级就是用来在执行指令的compile函数前，先排序的。高优先级的先执行</p>
+</li>
+<li><p>restrict - EACM中的任意一个字母。它是用来限制指令的声明格式的。如果没有这一项。那就只允许使用属性形式的指令</p>
+</li>
+<li><p>模板template - 将当前的元素替换掉。 替换过程会自动将元素的属性和css类名添加到新元素上</p>
+</li>
+<li><p>模板地址templateUrl - 和template属性一样，这里指示的是一个模板的URL。因为模板加载是异步的，所有编译和链接都会等到加载完成后再执行</p>
+</li>
+<li><p>替换replace - 如果设置成true，那么页面上指令内部里面的内容会被模板替换。比如:<hello><div>这是指令内部的内容</div></hello>，hello指令内部的div内容将会被模板替换掉</p>
+</li>
+<li><p>transclude -  如果不想让指令内部的内容被模板替换，设置为true。</p>
+</li>
+</ul>
+<p>#####编译函数 Compile</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">compile: function compile(tElement, tAttrs, transclude)&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>一般需要修改模板DOM的时候，需要用到编译函数。它接受3个参数</p>
+<ol>
+<li>tElement （template element ）指令所在的元素。对这个元素及其子元素进行变形之类的操作是安全的.</li>
+<li>tAttrs （template attributes ) 元素上所有指令声明的属性，这些属性都是在编译函数里共享的.</li>
+<li>transclude - 一个嵌入的链接函数 function(scope, cloneLinkingFn)</li>
+</ol>
+<blockquote>
+<p>需要注意的是在编译函数里面不要进行任何DOM变形之外的操作。 DOM监听事件的注册应该在Linking函数中做，而不是Compile函数中</p>
+</blockquote>
+<p>#####链接函数  Link</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function link(scope, iElement, iAttrs, controller) &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+<p>link函数主要用来为DOM元素添加事件监听、监视模型属性变化、以及更新DOM。在模板被克隆之后执行的，也是绝大部分指令逻辑代码编写的地方</p>
+<ul>
+<li><p>scope - 指令需要监听的作用域</p>
+</li>
+<li><p>iElement （instance element） 指令所在的元素。只有在 postLink 函数中对元素的子元素进行操作才是安全的.</p>
+</li>
+<li><p>iAttrs (instance attributes) 实例属性，所有声明在当前元素上的属性列表，属性在所有链接函数间是共享的.</p>
+</li>
+<li><p>controller - 控制器实例</p>
+</li>
+</ul>
+<p>####总结<br>最后,希望对大家理解AngularJS指令能有一些帮助。详细请参考<a href="https://angularjs.org/" target="_blank" rel="external">官网</a>。如果发现文章中哪里有不对的,请及时给我发评论.谢谢!</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/02/05/2016-02-05-gruntfile-dot-js-qian-xi/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Grunt 浅析</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="2016-02-16-angularjs-zhi-ling-xiang-jie" data-title="AngularJS 指令详解" data-url="http://chaosyuan.github.io/2016/02/16/2016-02-16-angularjs-zhi-ling-xiang-jie/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 袁伟
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Grunt 浅析 | zero</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="####Grunt是什么Grunt是一个基于JavaScript上的一个很强大的任务管理器(task runner)，就是用JavaScript去执行一些程序来完成一些任务。比如说验证HTML、CSS、JavaScript的语法，压缩CSS、JavaScript、图像，Sass、LESS和Stylus编译成CSS等等，这些东西很适合用Grunt来解决。
+Grunt其实是一个基于NodeJS,可用于">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Grunt 浅析">
+<meta property="og:url" content="http://chaosyuan.github.io/2016/02/05/2016-02-05-gruntfile-dot-js-qian-xi/index.html">
+<meta property="og:site_name" content="zero">
+<meta property="og:description" content="####Grunt是什么Grunt是一个基于JavaScript上的一个很强大的任务管理器(task runner)，就是用JavaScript去执行一些程序来完成一些任务。比如说验证HTML、CSS、JavaScript的语法，压缩CSS、JavaScript、图像，Sass、LESS和Stylus编译成CSS等等，这些东西很适合用Grunt来解决。
+Grunt其实是一个基于NodeJS,可用于">
+<meta property="og:updated_time" content="2016-02-16T06:39:31.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Grunt 浅析">
+<meta name="twitter:description" content="####Grunt是什么Grunt是一个基于JavaScript上的一个很强大的任务管理器(task runner)，就是用JavaScript去执行一些程序来完成一些任务。比如说验证HTML、CSS、JavaScript的语法，压缩CSS、JavaScript、图像，Sass、LESS和Stylus编译成CSS等等，这些东西很适合用Grunt来解决。
+Grunt其实是一个基于NodeJS,可用于">
+  
+    <link rel="alternative" href="/atom.xml" title="zero" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="null" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">袁伟</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">千里之行始于足下</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>Menu</li>
+						<li>Tags</li>
+						
+						<li>Links</li>
+						
+						
+						<li>Über</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/tags/随笔">随笔</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="#" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="#" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="#" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">袁伟</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="null" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">袁伟</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">千里之行始于足下</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/tags/随笔">随笔</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="#" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="#" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="#" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-2016-02-05-gruntfile-dot-js-qian-xi" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/02/05/2016-02-05-gruntfile-dot-js-qian-xi/" class="article-date">
+  	<time datetime="2016-02-05T09:57:36.000Z" itemprop="datePublished">2016-02-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Grunt 浅析
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>####Grunt是什么<br>Grunt是一个基于JavaScript上的一个很强大的任务管理器(task runner)，就是用JavaScript去执行一些程序来完成一些任务。比如说验证HTML、CSS、JavaScript的语法，压缩CSS、JavaScript、图像，<a href="http://www.w3cplus.com/sassguide/" target="_blank" rel="external">Sass</a>、<a href="http://less.bootcss.com/" target="_blank" rel="external">LESS</a>和<a href="http://stylus-lang.com/" target="_blank" rel="external">Stylus</a>编译成CSS等等，这些东西很适合用Grunt来解决。</p>
+<p>Grunt其实是一个基于NodeJS,可用于自动化构建、测试、生成文档的项目管理工具。可以在开发中提高效率、减少错误率。</p>
+<p>Grunt不仅仅是构建工具，它还是任务运行器，管理每个子任务的自动化运行，它还可以做更多东西</p>
+<p>####为什么要用Grunt</p>
+<p>刚开始要用的时候很疑惑，为什么要用Grunt？在开发ios时候，相应的环境和配置文件配置好之后，直接Archive。很直接方便。其实前端这些都是为了自动化。对于前端项目，代码维护、打包、发布等流程变得极为繁琐，同时浪费的时间和精力也越来越多，当然人为的错误也随着流程的增加而增加了更多的出错率。为了明确模块分工，我们可以会将JavaScript、CSS代码拆解成很多个模块，它们都有独立的一个个文件，但这样一来用来页面上，增加了文件个数，同时也产生过多的Http请求，从性能的角度来考虑，不利于页面优化。所以需要合并这些JavaScript和CSS文件。尽可能的将项目中的文件进行压缩.这样一来， 都希望有一种工具能代替手工操作，能帮助整个团队在开发中能精简流程、提高效率、减少错误率。</p>
+<p>####Grunt能做什么</p>
+<p>Grunt就是一个工具箱，拥有非常丰富的任务插件，可以帮助我们实现各式各样的构建目标。</p>
+<ol>
+<li>编译文档型：比如编译LESS、Sass、Stylus、Coffeescript等。</li>
+<li>文件操作型：比如说合并、压缩JavaScript、CSS、图片等</li>
+<li>质量保障型：比如<a href="http://jshint.com/" target="_blank" rel="external">JSHint</a>、<a href="https://github.com/mochajs/mocha" target="_blank" rel="external">Mocha</a>等</li>
+<li>类库构建型：比如说Backbone.js、ember.js、angular.js等</li>
+</ol>
+<p>这些任务都依赖于Grunt提供的插件来完成的，但很多工作依旧需要在命令终端手工输入命令来完成这些操作。为此在Grunt中可以使用watch任务来实现一些监听文件改变、自动触发构建等功能。从而减少人工去每次操作任务</p>
+<p>####Grunt安装<br>正常运行Grunt，必须先安装<a href="https://nodejs.org/en/" target="_blank" rel="external">Node.js</a>和<a href="https://www.npmjs.com/" target="_blank" rel="external">npm</a></p>
+<p>环境安装完成之后，终端输入命令安装grunt运行工具</p>
+<pre><code>sudo  npm install -g grunt-cli
+</code></pre><p>这条命令将会把grunt命令植入到系统路径中，这样就允许从任意目录来运行它(定位到任意目录运行grunt命令)</p>
+<p>项目还有两个文件特别重要：<strong>package.json</strong>和<strong>Gruntfile.js</strong>，前者用于Nodejs包管理，比如Grunt插件安装，后者是Grunt配置文件，配置任务或者自定义任务</p>
+<ol>
+<li>package.json:用来存储已经作为npm模块发布的依赖模块。文件中列出项目所依赖的Grunt(配置Grunt版本)和Grunt插件(相应版本的插件)</li>
+<li>Gruntfile.js:用于配置或者定义Grunt任务和加载Grunt插件</li>
+</ol>
+<p>需要注意的是这两个文件都放置在项目的根目录中，并且应该与项目的源代码一起提交。</p>
+<p>#####package.json<br>package.json是一个JSON文件，创建这个文件的方式有很多种。比如：</p>
+<ol>
+<li>根据 <a href="http://www.gruntjs.net/project-scaffolding" target="_blank" rel="external">grunt-init</a> 模版自动创建特定于项目的package.json文件</li>
+<li>从<a href="http://gruntjs.com/" target="_blank" rel="external">官网</a>上复制或者下载一个.</li>
+<li><a href="https://docs.npmjs.com/init" target="_blank" rel="external">npm init</a>命令创建一个基本的package.json文件</li>
+</ol>
+<p>最简单的package.json文件模板：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;name&quot;: &quot;my-project-name&quot;,</span><br><span class="line">  &quot;version&quot;: &quot;0.1.0&quot;,</span><br><span class="line">  &quot;devDependencies&quot;: &#123;</span><br><span class="line">    //项目依赖插件</span><br><span class="line">    &quot;grunt&quot;: &quot;~0.4.5&quot;,</span><br><span class="line">    &quot;grunt-contrib-clean&quot;: &quot;^0.6.0&quot;,</span><br><span class="line">    &quot;grunt-contrib-compass&quot;: &quot;^1.0.0&quot;,</span><br><span class="line">    &quot;grunt-contrib-concat&quot;: &quot;^0.5.0&quot;,</span><br><span class="line">    &quot;grunt-contrib-connect&quot;: &quot;^0.9.0&quot;,</span><br><span class="line">    &quot;grunt-contrib-copy&quot;: &quot;^0.7.0&quot;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>向package.json文件中添加Grunt插件最简单方式是通过命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install &lt;module&gt; --save-dev</span><br></pre></td></tr></table></figure>
+<p>这条命令不仅安装了<module>，还会自动将其添加到<a href="https://docs.npmjs.com/files/package.json#devdependencies" target="_blank" rel="external">devDependencies</a> 配置段中，遵循<a href="https://docs.npmjs.com/misc/semver#Ranges" target="_blank" rel="external">tilde version range</a>格式。<br>例如：</module></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install grunt-google-cdn --save-dev</span><br></pre></td></tr></table></figure>
+<p>#####Gruntfile.js<br>在项目根目录下使用<a href="https://github.com/gruntjs/grunt-init-gruntfile" target="_blank" rel="external">grunt-init</a>或者直接创建一个Gruntfile.js文件。</p>
+<p>Gruntfile.js文件模板：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">module.exports = function(grunt) &#123;</span><br><span class="line"></span><br><span class="line">  // Project configuration.</span><br><span class="line">  grunt.initConfig(&#123;</span><br><span class="line">    pkg: grunt.file.readJSON(&apos;package.json&apos;),</span><br><span class="line">        uglify: &#123;</span><br><span class="line">        //uglify任务的配置信息</span><br><span class="line">            options: &#123;</span><br><span class="line">                beautify: false,</span><br><span class="line">                mangle: true //混淆变量名</span><br><span class="line">            &#125;,</span><br><span class="line">            dist: &#123;</span><br><span class="line">                files: [&#123;&#125;]</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  // 加载包含 &quot;uglify&quot; 任务的插件。</span><br><span class="line">  grunt.loadNpmTasks(&apos;grunt-contrib-uglify&apos;);</span><br><span class="line"></span><br><span class="line">  // 默认被执行的任务列表。</span><br><span class="line">  grunt.registerTask(&apos;default&apos;, [&apos;uglify&apos;]);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>配置完成后</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo  npm install</span><br></pre></td></tr></table></figure>
+<p>具体配置任务请参考<a href="http://www.gruntjs.net/configuring-tasks" target="_blank" rel="external">官网</a></p>
+<p>参考文献：</p>
+<ol>
+<li><a href="http://www.gruntjs.net" target="_blank" rel="external">http://www.gruntjs.net</a></li>
+<li><a href="https://docs.npmjs.com/files/package.json" target="_blank" rel="external">https://docs.npmjs.com/files/package.json</a></li>
+</ol>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/02/16/2016-02-16-angularjs-zhi-ling-xiang-jie/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          AngularJS 指令详解
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/02/04/2016-02-04-shi-yong-yomangou-jian-webgong-zuo-liu/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">使用Yoman构建Web工作流</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="2016-02-05-gruntfile-dot-js-qian-xi" data-title="Grunt 浅析" data-url="http://chaosyuan.github.io/2016/02/05/2016-02-05-gruntfile-dot-js-qian-xi/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 袁伟
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
