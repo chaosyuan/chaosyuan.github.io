@@ -1,0 +1,659 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="grunt,Yeoman," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前言最近公司的web应用上线了，抽空总结一下项目的构建流程。项目是用Yeoman创建出来的。
+Yeoman简介Yeoman是Google的团队和外部贡献者团队合作开发的，它的目标是通过Yo,Grunt和Bower为开发者创建一个易用Web应用的工作流，可以让网络前端开发者快速打造一个漂亮的网络应用(web applications)。
+Yeoman的目的不仅是要为新项目建立工作流，同时还是为了解决">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Yoman构建Web工作流">
+<meta property="og:url" content="http://chaosyuan.github.io/2016/02/04/2016-02-04-shi-yong-yomangou-jian-webgong-zuo-liu/index.html">
+<meta property="og:site_name" content="袁伟">
+<meta property="og:description" content="前言最近公司的web应用上线了，抽空总结一下项目的构建流程。项目是用Yeoman创建出来的。
+Yeoman简介Yeoman是Google的团队和外部贡献者团队合作开发的，它的目标是通过Yo,Grunt和Bower为开发者创建一个易用Web应用的工作流，可以让网络前端开发者快速打造一个漂亮的网络应用(web applications)。
+Yeoman的目的不仅是要为新项目建立工作流，同时还是为了解决">
+<meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/yomanmulu.png">
+<meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/grunttrack.png">
+<meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/Chrome-liveReload.png">
+<meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/LiveReloadIcon.png">
+<meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/ng-inspector%20for%20AngularJS.png">
+<meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/AngularJS%20Batarang.png">
+<meta property="og:updated_time" content="2016-08-10T02:58:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Yoman构建Web工作流">
+<meta name="twitter:description" content="前言最近公司的web应用上线了，抽空总结一下项目的构建流程。项目是用Yeoman创建出来的。
+Yeoman简介Yeoman是Google的团队和外部贡献者团队合作开发的，它的目标是通过Yo,Grunt和Bower为开发者创建一个易用Web应用的工作流，可以让网络前端开发者快速打造一个漂亮的网络应用(web applications)。
+Yeoman的目的不仅是要为新项目建立工作流，同时还是为了解决">
+<meta name="twitter:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/yomanmulu.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://chaosyuan.github.io/2016/02/04/2016-02-04-shi-yong-yomangou-jian-webgong-zuo-liu/"/>
+
+  <title> 使用Yoman构建Web工作流 | 袁伟 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">袁伟</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">千里之行始于足下</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                使用Yoman构建Web工作流
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-02-04T18:10:12+08:00" content="2016-02-04">
+              2016-02-04
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>最近公司的<a href="https://www.jucaifu.com/" target="_blank" rel="external">web</a>应用上线了，抽空总结一下项目的构建流程。项目是用<a href="http://yeoman.io/" target="_blank" rel="external">Yeoman</a>创建出来的。</p>
+<h4 id="Yeoman简介"><a href="#Yeoman简介" class="headerlink" title="Yeoman简介"></a>Yeoman简介</h4><p><a href="http://yeoman.io/" target="_blank" rel="external">Yeoman</a>是Google的团队和外部贡献者团队合作开发的，它的目标是通过<a href="http://yeoman.io/" target="_blank" rel="external">Yo</a>,<a href="http://gruntjs.com/" target="_blank" rel="external">Grunt</a>和<a href="http://bower.io/" target="_blank" rel="external">Bower</a>为开发者创建一个易用Web应用的工作流，可以让网络前端开发者快速打造一个漂亮的网络应用(web applications)。</p>
+<p>Yeoman的目的不仅是要为新项目建立工作流，同时还是为了解决前端开发所面临的诸多严重问题，比如各种零散的依赖关系. </p>
+<h4 id="Yeoman的作用"><a href="#Yeoman的作用" class="headerlink" title="Yeoman的作用"></a>Yeoman的作用</h4><ol>
+<li>Yo:Yeoman核心工具，构建目录结构或文件，生成项目的生产环境和编译环境.</li>
+<li>bower:Web开发的包管理器，类似于npm，npm专注于nodeJs模块，而bower专注于CSS、JavaScript、图像等前端相关内容的管理。需要注意的是，Bower的运行，依赖于版本控制工具git。要想成功安装Yeoman,需先安装 Git.</li>
+<li>grunt:自动化构建工具.当然也可以使用<a href="http://gulpjs.com/" target="_blank" rel="external">gulp</a></li>
+</ol>
+<a id="more"></a>
+<h4 id="Yeoman的安装"><a href="#Yeoman的安装" class="headerlink" title="Yeoman的安装"></a>Yeoman的安装</h4><p>在安装Yeoman之前，需要安装： <a href="https://nodejs.org/en/" target="_blank" rel="external">NodeJS</a></p>
+<pre><code>yuanweideMBP:~ yuanwei$ node -v
+v5.5.0
+yuanweideMBP:~ yuanwei$ npm -v
+3.3.12
+</code></pre><p>安装yeoman,grunt,bower,-g 安装在全局范围内，任何地方都能调用到相应命令</p>
+<pre><code>sudo npm install -g yo bower grunt-cli gulp
+</code></pre><p><a href="http://yeoman.io/generators/" target="_blank" rel="external">查看更多的构建程序</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir   /Users/yuanwei/yomanTest</div><div class="line">cd /Users/yuanwei/yomanTest</div><div class="line">yo</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">? &apos;Allo yuanwei! What would you like to do?</div><div class="line">  Run a generator</div><div class="line">  Karma</div><div class="line">  Webapp</div><div class="line">  ──────────────</div><div class="line">  Update your generators</div><div class="line">❯ Install a generator</div><div class="line">  Find some help</div><div class="line">  Get me out of here!</div><div class="line">  ──────────────</div></pre></td></tr></table></figure>
+<p>用上下箭头选中 Install a generator.安装完成后，生成的目录结构如下：</p>
+<p><img src="http://7xoc8b.com1.z0.glb.clouddn.com/yomanmulu.png" alt="enter image description here"></p>
+<h4 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h4><p>app</p>
+<blockquote>
+<p>源文件的存放目录,未压缩的js,css,scss等</p>
+</blockquote>
+<p>bower_components</p>
+<blockquote>
+<p>使用bower安装的第三方组件的源代码，jquery,bootstrap,angular等</p>
+</blockquote>
+<p> node_modules</p>
+<blockquote>
+<p>grunt 需要用到的工具模块安装目录</p>
+</blockquote>
+<p> test</p>
+<blockquote>
+<p>js 单元测试存放目录</p>
+</blockquote>
+<p>.bowerrc</p>
+<blockquote>
+<p>bower的配置目录，配置了使用bower安装的第3方组件存放目录</p>
+</blockquote>
+<p>.editorconfig</p>
+<blockquote>
+<p>方便开发者在不同的编辑器和IDE之间定义和维护一致的代码风格的配置，<a href="http://editorconfig.org/" target="_blank" rel="external">详细查看</a></p>
+</blockquote>
+<p>.gitattributes</p>
+<blockquote>
+<p>git属性设置，详细查看<a href="http://git-scm.com/doc" target="_blank" rel="external">git文档</a></p>
+</blockquote>
+<p>.gitignore</p>
+<blockquote>
+<p>git提交时忽略的目录，如bower_components和node_modules等目录并不需要提交给git</p>
+</blockquote>
+<p>.jshintrc</p>
+<blockquote>
+<p>jshint的配置文件，<a href="http://jshint.com/" target="_blank" rel="external">详细查看</a></p>
+</blockquote>
+<p>.yo-rc.json</p>
+<blockquote>
+<p>yo的配置文件</p>
+</blockquote>
+<p>.bower.json</p>
+<blockquote>
+<p>bower的配置文件，根据配置安装第三方组件到bower_components文件夹下</p>
+</blockquote>
+<p>.Gruntfile.json</p>
+<blockquote>
+<p>grunt的任务配置，根据任务配置自动化处理js,css等</p>
+</blockquote>
+<p>.package.json</p>
+<blockquote>
+<p>grunt的配置文件，根据配置安装grunt的依赖组件到node_modules文件夹下</p>
+</blockquote>
+<h4 id="开发项目"><a href="#开发项目" class="headerlink" title="开发项目"></a>开发项目</h4><p>在实际开发时，在app文件下进行开发，Grunt已经配置了开发任务</p>
+<p><img src="http://7xoc8b.com1.z0.glb.clouddn.com/grunttrack.png" alt="enter image description here"></p>
+<p>执行（或者直接双击serve）</p>
+<pre><code>grunt serve
+</code></pre><p>执行完命令后，创建tmp文件夹，存放经过编译后的scss文件，通过g<a href="https://github.com/gruntjs/grunt-contrib-connect" target="_blank" rel="external">runt-contrib-connect</a>模拟服务器打开app/index.html，并且通过<a href="https://github.com/gruntjs/grunt-contrib-watch" target="_blank" rel="external">grunt-contrib-watch</a>监听指定文件(html,css,js等)，如果文件内容改变，则通过<a href="https://github.com/gruntjs/grunt-contrib-connect" target="_blank" rel="external">grunt-contrib-connect</a>内的<a href="https://github.com/gruntjs/grunt-contrib-watch#optionslivereload" target="_blank" rel="external">livereload</a>功能通知浏览器，实现浏览器自动刷新</p>
+<p>livereload功能需要配置浏览器上的扩展  <a href="https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei" target="_blank" rel="external">LiveReload</a></p>
+<p><img src="http://7xoc8b.com1.z0.glb.clouddn.com/Chrome-liveReload.png" alt="enter image description here"></p>
+<p>安装完毕后，在浏览器右上方开启liveReload<br>开启图案<img src="http://7xoc8b.com1.z0.glb.clouddn.com/LiveReloadIcon.png" alt="enter image description here"><br>这样LiveReload功能才能正常使用</p>
+<h4 id="开发完毕"><a href="#开发完毕" class="headerlink" title="开发完毕"></a>开发完毕</h4><p>开发完毕时，需要对开发的内容进行检测，测试，压缩合并等</p>
+<pre><code>grunt default
+</code></pre><p>经过压缩合并等的内容都在dist目录下</p>
+<h4 id="推荐插件"><a href="#推荐插件" class="headerlink" title="推荐插件"></a>推荐插件</h4><p><a href="https://chrome.google.com/webstore/detail/ng-inspector-for-angularj/aadgmnobpdmgmigaicncghmmoeflnamj" target="_blank" rel="external">ng-inspector for AngularJS</a><br>方便查看页面AngularJS范围层次结构 ，以及它的控制器或指令与范围。</p>
+<p><img src="http://7xoc8b.com1.z0.glb.clouddn.com/ng-inspector%20for%20AngularJS.png" alt="enter image description here"></p>
+<p><a href="https://chrome.google.com/webstore/detail/angularjs-batarang/ighdmehidhipcmcojjgiloacoafjmpfk" target="_blank" rel="external">AngularJS Batarang</a><br>方便调试AngularJS<br><img src="http://7xoc8b.com1.z0.glb.clouddn.com/AngularJS%20Batarang.png" alt="enter image description here"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/grunt/" rel="tag">#grunt</a>
+          
+            <a href="/tags/Yeoman/" rel="tag">#Yeoman</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/" rel="next" title="AngularJS Controller 之间通信机制">
+                <i class="fa fa-chevron-left"></i> AngularJS Controller 之间通信机制
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/02/05/2016-02-05-gruntfile-dot-js-qian-xi/" rel="prev" title="Grunt 浅析">
+                Grunt 浅析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="袁伟" />
+          <p class="site-author-name" itemprop="name">袁伟</p>
+          <p class="site-description motion-element" itemprop="description">ZeroYuan</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Yeoman简介"><span class="nav-number">2.</span> <span class="nav-text">Yeoman简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Yeoman的作用"><span class="nav-number">3.</span> <span class="nav-text">Yeoman的作用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Yeoman的安装"><span class="nav-number">4.</span> <span class="nav-text">Yeoman的安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#目录结构"><span class="nav-number">5.</span> <span class="nav-text">目录结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#开发项目"><span class="nav-number">6.</span> <span class="nav-text">开发项目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#开发完毕"><span class="nav-number">7.</span> <span class="nav-text">开发完毕</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#推荐插件"><span class="nav-number">8.</span> <span class="nav-text">推荐插件</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">袁伟</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

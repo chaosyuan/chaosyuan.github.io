@@ -1,0 +1,624 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前言　YYAsyncLayer是异步绘制与显示的工具。在YYKitDemo中为了保证列表滚动流畅，将视图绘制、以及图片解码等任务放在后台线程。极大的优化了列表的性能。在阅读源码之后，整理一下异步绘制整体的实现思路。
+YYAsyncLayer首先介绍一下YYAsyncLayer几个类：
+
+
+YYAsyncLayer：继承自CALayer，是用来异步渲染layer内容，创建绘制的部分都在这个类
+YYS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="异步绘制-YYAsyncLayer">
+<meta property="og:url" content="http://chaosyuan.github.io/2016/05/05/2016-05-05-yi-bu-hui-zhi-yyasynclayer/index.html">
+<meta property="og:site_name" content="袁伟">
+<meta property="og:description" content="前言　YYAsyncLayer是异步绘制与显示的工具。在YYKitDemo中为了保证列表滚动流畅，将视图绘制、以及图片解码等任务放在后台线程。极大的优化了列表的性能。在阅读源码之后，整理一下异步绘制整体的实现思路。
+YYAsyncLayer首先介绍一下YYAsyncLayer几个类：
+
+
+YYAsyncLayer：继承自CALayer，是用来异步渲染layer内容，创建绘制的部分都在这个类
+YYS">
+<meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/YYAsyncLayer.png">
+<meta property="og:updated_time" content="2016-08-10T03:06:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="异步绘制-YYAsyncLayer">
+<meta name="twitter:description" content="前言　YYAsyncLayer是异步绘制与显示的工具。在YYKitDemo中为了保证列表滚动流畅，将视图绘制、以及图片解码等任务放在后台线程。极大的优化了列表的性能。在阅读源码之后，整理一下异步绘制整体的实现思路。
+YYAsyncLayer首先介绍一下YYAsyncLayer几个类：
+
+
+YYAsyncLayer：继承自CALayer，是用来异步渲染layer内容，创建绘制的部分都在这个类
+YYS">
+<meta name="twitter:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/YYAsyncLayer.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://chaosyuan.github.io/2016/05/05/2016-05-05-yi-bu-hui-zhi-yyasynclayer/"/>
+
+  <title> 异步绘制-YYAsyncLayer | 袁伟 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">袁伟</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">千里之行始于足下</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                异步绘制-YYAsyncLayer
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-05T20:08:50+08:00" content="2016-05-05">
+              2016-05-05
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>　<a href="https://github.com/ibireme/YYAsyncLayer" target="_blank" rel="external">YYAsyncLayer</a>是异步绘制与显示的工具。在YYKitDemo中为了保证列表滚动流畅，将视图绘制、以及图片解码等任务放在后台线程。极大的优化了列表的性能。在阅读源码之后，整理一下异步绘制整体的实现思路。</p>
+<h4 id="YYAsyncLayer"><a href="#YYAsyncLayer" class="headerlink" title="YYAsyncLayer"></a>YYAsyncLayer</h4><p>首先介绍一下<strong>YYAsyncLayer</strong>几个类：</p>
+<blockquote>
+<ul>
+<li>YYAsyncLayer：继承自CALayer，是用来异步渲染layer内容，创建绘制的部分都在这个类</li>
+<li>YYSentinel：提供获取当前值的value（readonly）属性，以及- (int32_t)increase自增加的方法返回一个新的value值，用于判断异步绘制任务是否被取消</li>
+<li>YYTransaction：用于创建RunLoopObserver监听Runloop的空闲时间，并将YYTranaction对象提交到集合中</li>
+</ul>
+</blockquote>
+<p>YYAsyncLayer类中只有一个属性：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@property BOOL displaysAsynchronously; //设置渲染是否是异步执行 默认YES</div></pre></td></tr></table></figure>
+<p>代理方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (YYAsyncLayerDisplayTask *)newAsyncDisplayTask</div></pre></td></tr></table></figure>
+<p>这个代理方法的触发时机是,当layer的内容需要更新的时候，生成新的绘制任务，返回一个<strong>YYAsyncLayerDisplayTask</strong>对象.</p>
+<a id="more"></a>
+<p>比如需要绘制Label绘制一个lable时，其实是继承自UIView<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">+ (Class)layerClass &#123;</div><div class="line">    return YYAsyncLayer.class;</div><div class="line">&#125;</div><div class="line">- (void)setFont:(UIFont *)font &#123;</div><div class="line">    _font = font;</div><div class="line">    [[YYTransaction transactionWithTarget:self selector:@selector(contentsNeedUpdated)] commit];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)layoutSubviews &#123;</div><div class="line">    [super layoutSubviews];</div><div class="line">    [[YYTransaction transactionWithTarget:self selector:@selector(contentsNeedUpdated)] commit];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>YYTransaction有selector、target的属性，selector就是contentsNeedUpdated方法，此时并不会立即在后台线程去更新显示，而是将YYTransaction对象本身提交保存在transactionSet的容器集合中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">+ (YYTransaction *)transactionWithTarget:(id)target selector:(SEL)selector&#123;</div><div class="line">    if (!target || !selector) return nil;</div><div class="line">    YYTransaction *t = [YYTransaction new];</div><div class="line">    t.target = target;</div><div class="line">    t.selector = selector;</div><div class="line">    return t;</div><div class="line">&#125;</div><div class="line">- (void)commit &#123;</div><div class="line">    if (!_target || !_selector) return;</div><div class="line">    YYTransactionSetup();</div><div class="line">    [transactionSet addObject:self];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>　同时在YYTransaction.m中注册一个RunloopObserver，监听MainRunloop在kCFRunLoopCommonModes下的kCFRunLoopBeforeWaiting（Runloop将要进入休眠）和kCFRunLoopExit（即将退出本次Runloop）的状态，在一次Runloop空闲时去执行更新显示的操作。利用Runloop做任务分发。从代码注释中看出Observer的优先级低于CATransaction的优先级。当 RunLoop 进入休眠前、CA 处理完事件后，就会执行该 Runloop 内提交的所有任务。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">static void YYTransactionSetup() &#123;</div><div class="line">    static dispatch_once_t onceToken;</div><div class="line">    dispatch_once(&amp;onceToken, ^&#123;</div><div class="line">        transactionSet = [NSMutableSet new];</div><div class="line">        CFRunLoopRef runloop = CFRunLoopGetMain();</div><div class="line">        CFRunLoopObserverRef observer;</div><div class="line">        </div><div class="line">        observer = CFRunLoopObserverCreate(CFAllocatorGetDefault(),</div><div class="line">                                           kCFRunLoopBeforeWaiting | kCFRunLoopExit,</div><div class="line">                                           true,      // repeat</div><div class="line">                                           0xFFFFFF,  // after CATransaction(2000000)</div><div class="line">                                           YYRunLoopObserverCallBack, NULL);</div><div class="line">        CFRunLoopAddObserver(runloop, observer, kCFRunLoopCommonModes);</div><div class="line">        CFRelease(observer);</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在RunloopObserver的回调方法，从transactionSet取出transaction对象执行SEL的方法，分发到每一次Runloop执行，避免一次Runloop执行时间太长</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">static void YYRunLoopObserverCallBack(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info) &#123;</div><div class="line">    if (transactionSet.count == 0) return;</div><div class="line">    NSSet *currentSet = transactionSet;</div><div class="line">    transactionSet = [NSMutableSet new];</div><div class="line">    [currentSet enumerateObjectsUsingBlock:^(YYTransaction *transaction, BOOL *stop) &#123;</div><div class="line">#pragma clang diagnostic push</div><div class="line">#pragma clang diagnostic ignored &quot;-Warc-performSelector-leaks&quot;</div><div class="line">        [transaction.target performSelector:transaction.selector];</div><div class="line">#pragma clang diagnostic pop</div><div class="line">    &#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>关于这一点是参考<a href="https://github.com/facebook/AsyncDisplayKit" target="_blank" rel="external">AsyncDisplayKit</a>实现的。两者者实现的思路是一样。</p>
+<p>YYAsyncLayerDisplayTask 中定义3个block，用于绘制的回调操作，即将绘制、绘制中、绘制完成。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@property (nullable, nonatomic, copy) void (^willDisplay)(CALayer *layer);</div><div class="line">@property (nullable, nonatomic, copy) void (^display)(CGContextRef context, CGSize size, BOOL(^isCancelled)(void));</div><div class="line">@property (nullable, nonatomic, copy) void (^didDisplay)(CALayer *layer, BOOL finished);</div></pre></td></tr></table></figure>
+<p>触发这个代理的方法是- setNeedsDisplay方法，当layer需要更新内容的时候，它会向代理发起一个异步绘制的请求，将内容的渲染放到后台队列去做，所以在使用YYAsyncLayer类时，需要重写<code>+ (Class)layerClass</code>方法，返回YYAsyncLayer类，否则会直接调用CALayer的方法，不会触发代理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">- (void)setNeedsDisplay &#123;</div><div class="line">    [self _cancelAsyncDisplay];</div><div class="line">    [super setNeedsDisplay];</div><div class="line">&#125;</div><div class="line">- (void)display &#123;</div><div class="line">    super.contents = super.contents;</div><div class="line">    [self _displayAsync:_displaysAsynchronously];</div><div class="line">&#125;</div><div class="line">- (void)_displayAsync:(BOOL)async &#123;</div><div class="line">    __strong id&lt;YYAsyncLayerDelegate&gt; delegate = self.delegate;</div><div class="line">    YYAsyncLayerDisplayTask *task = [delegate newAsyncDisplayTask];</div><div class="line">    //......</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>在- _displayAsync方法里面主要分成3部分：</p>
+<blockquote>
+<ol>
+<li>如果没有设置display回调，layer的内容会被清空</li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">if (!task.display) &#123;</div><div class="line"></div><div class="line">   if (task.willDisplay) task.willDisplay(self);</div><div class="line">   self.contents = nil;</div><div class="line">   if (task.didDisplay) task.didDisplay(self, YES);</div><div class="line">   return;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<ol>
+<li>异步绘制,根据displaysAsynchronously判断</li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div></pre></td><td class="code"><pre><div class="line">if (async) &#123;</div><div class="line">        if (task.willDisplay) task.willDisplay(self);</div><div class="line">        YYSentinel *sentinel = _sentinel;</div><div class="line">        // 判断当前计数是否等于之前计数</div><div class="line">        int32_t value = sentinel.value;</div><div class="line">        BOOL (^isCancelled)() = ^BOOL() &#123;</div><div class="line">            return value != sentinel.value;</div><div class="line">        &#125;;</div><div class="line">        CGSize size = self.bounds.size;</div><div class="line">        BOOL opaque = self.opaque;</div><div class="line">        CGFloat scale = self.contentsScale;</div><div class="line">        CGColorRef backgroundColor = (opaque &amp;&amp; self.backgroundColor) ? CGColorRetain(self.backgroundColor) : NULL;</div><div class="line">        if (size.width &lt; 1 || size.height &lt; 1) &#123; // 视图宽高小于1</div><div class="line">            CGImageRef image = (__bridge_retained CGImageRef)(self.contents);</div><div class="line">            self.contents = nil;</div><div class="line">            if (image) &#123;</div><div class="line">                dispatch_async(YYAsyncLayerGetReleaseQueue(), ^&#123;</div><div class="line">                    CFRelease(image);</div><div class="line">                &#125;);</div><div class="line">            &#125;</div><div class="line">            if (task.didDisplay) task.didDisplay(self, YES);</div><div class="line">            CGColorRelease(backgroundColor);</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line">         // 异步绘制</div><div class="line">        dispatch_async(YYAsyncLayerGetDisplayQueue(), ^&#123;</div><div class="line">            if (isCancelled()) &#123;</div><div class="line">                CGColorRelease(backgroundColor);</div><div class="line">                return;</div><div class="line">            &#125;</div><div class="line">            // 开启图片上下文</div><div class="line">            UIGraphicsBeginImageContextWithOptions(size, opaque, scale);</div><div class="line">            CGContextRef context = UIGraphicsGetCurrentContext();</div><div class="line">            if (opaque) &#123; // 不透明</div><div class="line">                CGContextSaveGState(context); &#123;</div><div class="line">                    if (!backgroundColor || CGColorGetAlpha(backgroundColor) &lt; 1) &#123;</div><div class="line">                        CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);</div><div class="line">                        CGContextAddRect(context, CGRectMake(0, 0, size.width * scale, size.height * scale));</div><div class="line">                        CGContextFillPath(context);</div><div class="line">                    &#125;</div><div class="line">                    if (backgroundColor) &#123;</div><div class="line">                        CGContextSetFillColorWithColor(context, backgroundColor);</div><div class="line">                        CGContextAddRect(context, CGRectMake(0, 0, size.width * scale, size.height * scale));</div><div class="line">                        CGContextFillPath(context);</div><div class="line">                    &#125;</div><div class="line">                &#125; CGContextRestoreGState(context);</div><div class="line">                CGColorRelease(backgroundColor);</div><div class="line">            &#125;</div><div class="line">            task.display(context, size, isCancelled);</div><div class="line">            if (isCancelled()) &#123;</div><div class="line">                UIGraphicsEndImageContext();</div><div class="line">                dispatch_async(dispatch_get_main_queue(), ^&#123;</div><div class="line">                    if (task.didDisplay) task.didDisplay(self, NO);</div><div class="line">                &#125;);</div><div class="line">                return;</div><div class="line">            &#125;</div><div class="line">            // 从图片上下文获取图片</div><div class="line">            UIImage *image = UIGraphicsGetImageFromCurrentImageContext();</div><div class="line">            UIGraphicsEndImageContext();</div><div class="line">            if (isCancelled()) &#123;</div><div class="line">                dispatch_async(dispatch_get_main_queue(), ^&#123;</div><div class="line">                    if (task.didDisplay) task.didDisplay(self, NO);</div><div class="line">                &#125;);</div><div class="line">                return;</div><div class="line">            &#125;</div><div class="line">            dispatch_async(dispatch_get_main_queue(), ^&#123;</div><div class="line">                if (isCancelled()) &#123;</div><div class="line">                    if (task.didDisplay) task.didDisplay(self, NO);</div><div class="line">                &#125; else &#123;</div><div class="line">                    self.contents = (__bridge id)(image.CGImage);</div><div class="line">                    if (task.didDisplay) task.didDisplay(self, YES);</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">        &#125;);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<ol>
+<li>同步绘制</li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">   [_sentinel increase];</div><div class="line">    if (task.willDisplay) task.willDisplay(self);</div><div class="line">    UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, self.contentsScale);</div><div class="line">    CGContextRef context = UIGraphicsGetCurrentContext();</div><div class="line">    if (self.opaque) &#123;</div><div class="line">       //......</div><div class="line">    &#125;</div><div class="line">    task.display(context, self.bounds.size, ^&#123;return NO;&#125;);</div><div class="line">    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();</div><div class="line">    UIGraphicsEndImageContext();</div><div class="line">    self.contents = (__bridge id)(image.CGImage);</div><div class="line">    if (task.didDisplay) task.didDisplay(self, YES);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>异步渲染的处理和同步渲染差不多，多了一个BOOL (^isCancelled)()block，这个block的好处是，在displayblock调用绘制前，可以通过判断isCancelled布尔值的值来停止绘制，减少性能上的消耗，以及避免出现线程阻塞的情况，比如TableView快速滑动的时候，就可以通过这样的判断，来避免不必要的绘制，提升滑动的流畅性.</p>
+<p>下图为异步绘制实现的整体思路：<br><img src="http://7xoc8b.com1.z0.glb.clouddn.com/YYAsyncLayer.png" alt="enter image description here"></p>
+<h4 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h4><p>从YYAsyncLayer中学到的一些技巧，项目中遇到的性能问题可也以依据这些思路去找到最合适的解决方案</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag">#iOS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/29/2016-04-29-ios[nil]uitableviewxing-neng-you-hua/" rel="next" title="iOS－UITableView性能优化">
+                <i class="fa fa-chevron-left"></i> iOS－UITableView性能优化
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/12/2016-05-12-yycacheyuan-ma-yue-du/" rel="prev" title="YYCache源码阅读">
+                YYCache源码阅读 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="袁伟" />
+          <p class="site-author-name" itemprop="name">袁伟</p>
+          <p class="site-description motion-element" itemprop="description">ZeroYuan</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#YYAsyncLayer"><span class="nav-number">2.</span> <span class="nav-text">YYAsyncLayer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#最后"><span class="nav-number">3.</span> <span class="nav-text">最后</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">袁伟</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,574 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JavaScript,AngularJS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="最近在写公司后台的管理系统，由于初试AngularJS. 所以很自然地就就把业务逻辑写在 controller 和 scope 中。在git上找到AngularJs编码规范，细读之后，回头看来，代码写的是一塌糊涂。controller中充斥着大量的业务逻辑。controller本身只充当控制器的作用，controller 只在需要的时候才会初始化，一旦不需要就会被抛弃。因此，当每次切换或刷新页面的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AngularJS:Factory vs Service vs Provider">
+<meta property="og:url" content="http://chaosyuan.github.io/2015/11/23/2015-11-23-angularjs-factory-vs-service-vs-provider/index.html">
+<meta property="og:site_name" content="袁伟">
+<meta property="og:description" content="最近在写公司后台的管理系统，由于初试AngularJS. 所以很自然地就就把业务逻辑写在 controller 和 scope 中。在git上找到AngularJs编码规范，细读之后，回头看来，代码写的是一塌糊涂。controller中充斥着大量的业务逻辑。controller本身只充当控制器的作用，controller 只在需要的时候才会初始化，一旦不需要就会被抛弃。因此，当每次切换或刷新页面的">
+<meta property="og:updated_time" content="2016-08-10T03:02:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AngularJS:Factory vs Service vs Provider">
+<meta name="twitter:description" content="最近在写公司后台的管理系统，由于初试AngularJS. 所以很自然地就就把业务逻辑写在 controller 和 scope 中。在git上找到AngularJs编码规范，细读之后，回头看来，代码写的是一塌糊涂。controller中充斥着大量的业务逻辑。controller本身只充当控制器的作用，controller 只在需要的时候才会初始化，一旦不需要就会被抛弃。因此，当每次切换或刷新页面的">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://chaosyuan.github.io/2015/11/23/2015-11-23-angularjs-factory-vs-service-vs-provider/"/>
+
+  <title> AngularJS:Factory vs Service vs Provider | 袁伟 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">袁伟</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">千里之行始于足下</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                AngularJS:Factory vs Service vs Provider
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-11-23T20:02:38+08:00" content="2015-11-23">
+              2015-11-23
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近在写公司后台的管理系统，由于初试AngularJS. 所以很自然地就就把业务逻辑写在 controller 和 scope 中。在git上找到AngularJs编码规范，细读之后，回头看来，代码写的是一塌糊涂。controller中充斥着大量的业务逻辑。controller本身只充当控制器的作用，controller 只在需要的时候才会初始化，一旦不需要就会被抛弃。因此，当每次切换或刷新页面的时候，Angular 会清空当前的 controller。因此controller 里是不能保存持久化数据的。这不属于它的作用范畴。业务逻辑处理应该抽离出来放在Service层，这样代码逻辑更加简洁，后期维护和测试也更加方便.</p>
+<h4 id="AngularJS-Service"><a href="#AngularJS-Service" class="headerlink" title="AngularJS Service"></a>AngularJS Service</h4><p>Angular 提供了3种方法来创建并注册我们自己的 Service.</p>
+<blockquote>
+<p>  1.Factory<br>  2.Service<br>  3.Provide</p>
+</blockquote>
+<a id="more"></a>
+<h5 id="1-Factory"><a href="#1-Factory" class="headerlink" title="1.Factory()"></a>1.Factory()</h5><p>Angular里面创建service最简单的方式是使用factory()方法,用 factory 就是创建一个对象，为它添加属性，然后把这个对象返回出来。你把 service 传进 controller 之后，在 controller 里这个对象里的属性就可以通过 factory 使用了</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line"><span class="meta">  'use strict'</span>;</div><div class="line">  angular.module(<span class="string">'service.productList'</span>, [])</div><div class="line">    .factory(<span class="string">'productListProvider'</span>, productListProvider);</div><div class="line">  productListProvider.$inject = [<span class="string">'$log'</span>,<span class="string">'$http'</span>];</div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">productListProvider</span> (<span class="params">$log,$http</span>) </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">var</span> service = &#123;</div><div class="line">      success: success,</div><div class="line">      error: error,</div><div class="line">      log: log,</div><div class="line">      debug: debug,</div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">return</span> service;</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">success</span>(<span class="params"></span>) </span>&#123;&#125;</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">error</span>(<span class="params"></span>) </span>&#123;&#125;</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">log</span>(<span class="params"></span>) </span>&#123;&#125;</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">debug</span>(<span class="params"></span>) </span>&#123;&#125;</div><div class="line">    &#125;</div><div class="line">&#125;)();</div><div class="line"><span class="string">``</span><span class="string">`       </span></div><div class="line">在controller中调用</div><div class="line">`<span class="string">``</span>javascript</div><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"><span class="meta">  'use strict'</span>;</div><div class="line">  angular.module(<span class="string">'app.product'</span>)</div><div class="line">    .controller(<span class="string">'ProductController'</span>, ProductController);</div><div class="line">  ProductController.$inject = [<span class="string">'$scope'</span>, <span class="string">'$state'</span>,  <span class="string">'productListProvider'</span>];</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">ProductController</span>(<span class="params">$scope, $state, productListProvider</span>) </span>&#123;</div><div class="line">  </div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">productList</span>(<span class="params"></span>) </span>&#123;</div><div class="line">      <span class="keyword">return</span> productListProvider.success();</div><div class="line">    &#125;</div><div class="line">    productList();</div><div class="line">  &#125;</div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
+<p><strong>注意：需要使用.config()来配置service的时候,不能使用factory()方法</strong></p>
+<h5 id="2-Service"><a href="#2-Service" class="headerlink" title="2.Service()"></a>2.Service()</h5><p>service()通过构造函数的方式创建service, 给”this”添加属性，然后 service 返回”this”。 service 传入controller ，在controller里 “this” 上的属性就可以通过 service 来使用了</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"><span class="meta">  'use strict'</span>;</div><div class="line">  angular.module(<span class="string">'login.services'</span>)</div><div class="line">    .service(<span class="string">'login'</span>, login);</div><div class="line">  login.$inject = [<span class="string">'$scope'</span>, <span class="string">'$state'</span>]</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">login</span>(<span class="params">$scope, $state</span>) </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">this</span>.userInfo = &#123;&#125;;</div><div class="line">    <span class="keyword">this</span>.setUserInfo = <span class="function"><span class="keyword">function</span> (<span class="params">useName</span>) </span>&#123;</div><div class="line"></div><div class="line">      self.userInfo[<span class="string">'name'</span>] = useName</div><div class="line">      <span class="keyword">return</span> userInfo;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
+<p>在controller中调用<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"><span class="meta">  'use strict'</span>;</div><div class="line">  angular.module(<span class="string">'app.userModule'</span>)</div><div class="line">    .controller(<span class="string">'UserInfoController'</span>, UserInfoController);</div><div class="line"></div><div class="line">  UserInfoController.$inject = [<span class="string">'$scope'</span>, <span class="string">'login'</span>];</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">UserInfoController</span> (<span class="params">$scope, login</span>) </span>&#123;</div><div class="line">    login.setUserInfo();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">&#125;)();</div></pre></td></tr></table></figure></p>
+<h5 id="3-Provider"><a href="#3-Provider" class="headerlink" title="3.Provider()"></a>3.Provider()</h5><p>providers 是唯一一种你可以传进 .config() 函数的 service。当想要在 service 对象启用之前，先进行模块范围的配置，那优先考虑使用provider<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"><span class="meta">  'use strict'</span>;</div><div class="line">  angular.module(<span class="string">'providerTestModele'</span>, [])</div><div class="line">    .config(<span class="function"><span class="keyword">function</span> (<span class="params">$stateProvider, $urlRouterProvider</span>) </span>&#123;</div><div class="line">      $urlRouterProvider.otherwise(<span class="string">"/"</span>);</div><div class="line">    &#125;)</div><div class="line">    .provider(<span class="string">'providerTest'</span>, [<span class="string">'$window'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">$window</span>) </span>&#123;</div><div class="line">      <span class="keyword">this</span>.test = &#123;</div><div class="line">        <span class="string">"firstName"</span>: <span class="string">"yw"</span></div><div class="line">      &#125;;</div><div class="line">      <span class="keyword">this</span>.$get = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.test;</div><div class="line">      &#125;;</div><div class="line">    &#125;</div><div class="line">    ]);</div><div class="line">&#125;)();</div></pre></td></tr></table></figure></p>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><p>1.<a href="https://www.airpair.com/angularjs/posts/top-10-mistakes-angularjs-developers-make" target="_blank" rel="external">https://www.airpair.com/angularjs/posts/top-10-mistakes-angularjs-developers-make</a><br>2.<a href="https://github.com/johnpapa/angular-styleguide/blob/master/i18n/zh-CN.md" target="_blank" rel="external">https://github.com/johnpapa/angular-styleguide/blob/master/i18n/zh-CN.md</a><br>3.<a href="http://tylermcginnis.com/angularjs-factory-vs-service-vs-provider/" target="_blank" rel="external">http://tylermcginnis.com/angularjs-factory-vs-service-vs-provider/</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag">#JavaScript</a>
+          
+            <a href="/tags/AngularJS/" rel="tag">#AngularJS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/21/2015-11-21-bo-ke-qian-yi-shuo-ming/" rel="next" title="博客迁移说明">
+                <i class="fa fa-chevron-left"></i> 博客迁移说明
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/11/26/2015-11-26-angularjs-lu-you-ji-zhi/" rel="prev" title="AngularJS 路由机制">
+                AngularJS 路由机制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="袁伟" />
+          <p class="site-author-name" itemprop="name">袁伟</p>
+          <p class="site-description motion-element" itemprop="description">ZeroYuan</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#AngularJS-Service"><span class="nav-number">1.</span> <span class="nav-text">AngularJS Service</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-Factory"><span class="nav-number">1.1.</span> <span class="nav-text">1.Factory()</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-Service"><span class="nav-number">1.2.</span> <span class="nav-text">2.Service()</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-Provider"><span class="nav-number">1.3.</span> <span class="nav-text">3.Provider()</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考"><span class="nav-number">2.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">袁伟</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

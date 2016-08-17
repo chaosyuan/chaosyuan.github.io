@@ -1,0 +1,600 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="AngularJS,Web," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前言最近，使用angularJS框架开发聚财富后台管理系统时，需要按照业务需求区分controller。有时候不同controller之间需要进行通信。在项目之初的时候，也踩过几次坑。所以总结一下controller之间通信方式。
+controller 在Angularjs中controller是个函数，用来向视图的作用域（$scope）添加额外的功能，一般用它来给作用域对象设置初始状态，并添加自">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AngularJS Controller 之间通信机制">
+<meta property="og:url" content="http://chaosyuan.github.io/2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/index.html">
+<meta property="og:site_name" content="袁伟">
+<meta property="og:description" content="前言最近，使用angularJS框架开发聚财富后台管理系统时，需要按照业务需求区分controller。有时候不同controller之间需要进行通信。在项目之初的时候，也踩过几次坑。所以总结一下controller之间通信方式。
+controller 在Angularjs中controller是个函数，用来向视图的作用域（$scope）添加额外的功能，一般用它来给作用域对象设置初始状态，并添加自">
+<meta property="og:updated_time" content="2016-08-10T03:17:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AngularJS Controller 之间通信机制">
+<meta name="twitter:description" content="前言最近，使用angularJS框架开发聚财富后台管理系统时，需要按照业务需求区分controller。有时候不同controller之间需要进行通信。在项目之初的时候，也踩过几次坑。所以总结一下controller之间通信方式。
+controller 在Angularjs中controller是个函数，用来向视图的作用域（$scope）添加额外的功能，一般用它来给作用域对象设置初始状态，并添加自">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://chaosyuan.github.io/2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/"/>
+
+  <title> AngularJS Controller 之间通信机制 | 袁伟 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">袁伟</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">千里之行始于足下</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                AngularJS Controller 之间通信机制
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-01-06T11:44:17+08:00" content="2016-01-06">
+              2016-01-06
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>最近，使用angularJS框架开发聚财富后台管理系统时，需要按照业务需求区分controller。有时候不同controller之间需要进行通信。在项目之初的时候，也踩过几次坑。所以总结一下controller之间通信方式。</p>
+<h4 id="controller"><a href="#controller" class="headerlink" title="controller"></a>controller</h4><p> 在Angularjs中controller是个函数，用来向视图的作用域（$scope）添加额外的功能，一般用它来给作用域对象设置初始状态，并添加自定义行为。</p>
+<p> 在创建新的控制器时，angularJS会生成并传递一个新的\$scope对象给这个controller,在angularJS应用的中的任何一个部分，都有父级作用域的存在，顶级就是ng-app所在的层级，它的父级作用域就是\$rootScope.每个\$scope的\$root指向\$rootScope.</p>
+<p>cotroller之间的通信本质上是当前的controller所在的\$scope如何跟其它controller上的\$scope进行通信。</p>
+<p>控制器通信的方式有3种：</p>
+<blockquote>
+<ol>
+<li>利用作用域继承的方式。即子控制器继承父控制器中的内容.</li>
+<li>使用angularJS中的事件，也就是使用\$on,\$emit,$broadcast进行消息传递.</li>
+<li>使用angularJS中的服务.写一个服务单例然后通过注入(DI)来使用</li>
+</ol>
+</blockquote>
+<a id="more"></a>
+<h4 id="作用域继承"><a href="#作用域继承" class="headerlink" title="作用域继承"></a>作用域继承</h4><p>由于作用域的继承是基于js的原型继承方式，分为两种情况（值类型和引用类型）.</p>
+<ul>
+<li>当作用域上面的值为基本类型的时候，修改父作用域上面的值会影响到子作用域，反之，修改子作用域只会影响子作用域的值，不会影响父作用域上面的值.</li>
+<li>当作用域上的值为对象，任何一方的修改都能影响另一方，这是在js中对象都是引用类型.</li>
+</ul>
+<p>angularJS中默认情况下，当前作用域中无法找到某个属性时，就会在父级作用域中进行查找，若找不到直至查找到\$rootScope。 如果在\$rootScope中也无法找到程序依旧运行，但视图不会更新.</p>
+<p><strong>基本类型</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">function fatherCtr($scope) &#123;</div><div class="line">      $scope.location = &quot;Mos Eisley North&quot;;</div><div class="line">      $scope.move = function(newLocation) &#123;</div><div class="line">           $scope.location = newLocation;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">function sonCtr($scope) &#123;</div><div class="line">      $scope.sell = function(newLocation) &#123;</div><div class="line">         $scope.location = newLocation;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">// html</div><div class="line">&lt;div ng-controller=&quot;fatherCtr&quot;&gt;</div><div class="line">    &lt;p&gt;Location: &#123;&#123;location&#125;&#125;&lt;/p&gt;</div><div class="line">    &lt;button ng-click=&quot;move(&apos;Mos Eisley South&apos;)&quot;&gt;Move&lt;/button&gt;</div><div class="line">    &lt;div ng-controller=&quot;sonCtr&quot;&gt;</div><div class="line">        &lt;p&gt;Location: &#123;&#123;location&#125;&#125;&lt;/p&gt;</div><div class="line">        &lt;button ng-click=&quot;sell(&apos;Owen Farm&apos;)&quot;&gt;Sell&lt;/button&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
+<p><strong>对象</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">function fatherCtr($scope) &#123;</div><div class="line">    $scope.obj = &#123;location:&quot;Mos Eisley North&quot;&#125;;</div><div class="line">&#125;</div><div class="line">function sonCtr($scope) &#123;</div><div class="line">    $scope.summon = function(newLocation) &#123;</div><div class="line">        $scope.obj.location = newLocation;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">// html</div><div class="line">&lt;div ng-controller=&quot;fatherCtr&quot;&gt;</div><div class="line">    &lt;p&gt;Sandcrawler Location: &#123;&#123;location&#125;&#125;&lt;/p&gt;</div><div class="line">    &lt;div ng-controller=&quot;sonCtr&quot;&gt;</div><div class="line">        &lt;button ng-click=&quot;summon(&apos;Owen Farm&apos;)&quot;&gt;</div><div class="line">            Summon Sandcrawler</div><div class="line">        &lt;/button&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
+<h4 id="基于事件"><a href="#基于事件" class="headerlink" title="基于事件"></a>基于事件</h4><p>基于事件的方式中需要用\$on,\$emit,\$boardcast这几个内置服务来实现，其中\$on表示事件监听，\$emit表示向父级以上的作用域触发事件，\$boardcast表示向子级以下的作用域广播事件.其实就是一个消息通知机制，这个类似于iOS中消息中心(NSNotificationCenter).<br>原理是一样的</p>
+<p><strong>向上传播事件</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">function fatherCtr($scope) &#123;</div><div class="line">    $scope.location = &quot;Mos Eisley North&quot;;</div><div class="line">    $scope.$on(&apos;summon&apos;, function(e, newLocation) &#123;</div><div class="line">        $scope.location = newLocation;</div><div class="line">    &#125;);</div><div class="line">&#125;</div><div class="line">function sonCtr($scope) &#123;</div><div class="line">    $scope.location = &quot;Owen Farm&quot;;</div><div class="line">    $scope.summon = function() &#123;</div><div class="line">        $scope.$emit(&apos;summon&apos;, $scope.location);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">// html</div><div class="line">&lt;div ng-controller=&quot;fatherCtr&quot;&gt;</div><div class="line">    &lt;p&gt;Sandcrawler Location: &#123;&#123;location&#125;&#125;&lt;/p&gt;</div><div class="line">    &lt;div ng-controller=&quot;sonCtr&quot;&gt;</div><div class="line">        &lt;p&gt;Droid Location: &#123;&#123;location&#125;&#125;&lt;/p&gt;</div><div class="line">        &lt;button ng-click=&quot;summon()&quot;&gt;Summon Sandcrawler&lt;/button&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
+<p><strong>向下广播事件</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">function fatherCtr($scope) &#123;</div><div class="line">    $scope.location = &quot;Mos Eisley North&quot;;</div><div class="line">    $scope.recall = function() &#123;</div><div class="line">        $scope.$broadcast(&apos;recall&apos;, $scope.location);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">function sonCtr($scope) &#123;</div><div class="line">    $scope.location = &quot;Owen Farm&quot;;</div><div class="line">    $scope.$on(&apos;recall&apos;, function(e, newLocation) &#123;</div><div class="line">        $scope.location = newLocation;</div><div class="line">    &#125;);</div><div class="line">&#125;</div><div class="line">//html</div><div class="line">&lt;div ng-controller=&quot;fatherCtr&quot;&gt;</div><div class="line">    &lt;p&gt;Sandcrawler Location: &#123;&#123;location&#125;&#125;&lt;/p&gt;</div><div class="line">    &lt;button ng-click=&quot;recall()&quot;&gt;Recall Droids&lt;/button&gt;</div><div class="line">    &lt;div ng-controller=&quot;sonCtr&quot;&gt;</div><div class="line">        &lt;p&gt;Droid Location: &#123;&#123;location&#125;&#125;&lt;/p&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
+<p><strong>同级作用域之间传播</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">   function fatherCtr($scope) &#123;</div><div class="line">    $scope.$on(&apos;requestDroidRecall&apos;, function(e) &#123;</div><div class="line">        $scope.$broadcast(&apos;executeDroidRecall&apos;);</div><div class="line">    &#125;);</div><div class="line">&#125;</div><div class="line">function sonCtr($scope) &#123;</div><div class="line">    $scope.location = &quot;Owen Farm&quot;;</div><div class="line">    $scope.recallAllDroids = function() &#123;</div><div class="line">        $scope.$emit(&apos;requestDroidRecall&apos;);</div><div class="line">    &#125;</div><div class="line">    $scope.$on(&apos;executeDroidRecall&apos;, function() &#123; </div><div class="line">        $scope.location = &quot;Sandcrawler&quot;</div><div class="line">    &#125;);</div><div class="line">&#125;</div><div class="line">// html</div><div class="line">&lt;div ng-controller=&quot;fatherCtr&quot;&gt;</div><div class="line">    &lt;div ng-controller=&quot;sonCtr&quot;&gt;</div><div class="line">        &lt;h2&gt;R2-D2&lt;/h2&gt;</div><div class="line">        &lt;p&gt;Droid Location: &#123;&#123;location&#125;&#125;&lt;/p&gt;</div><div class="line">        &lt;button ng-click=&quot;recallAddDroids()&quot;&gt;Recall All Droids&lt;/button&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">    &lt;div ng-controller=&quot;sonCtr&quot;&gt;</div><div class="line">        &lt;h2&gt;C-3PO&lt;/h2&gt;</div><div class="line">        &lt;p&gt;Droid Location: &#123;&#123;status&#125;&#125;&lt;/p&gt;</div><div class="line">        &lt;button ng-click=&quot;recallAddDroids()&quot;&gt;Recall All Droids&lt;/button&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
+<h4 id="基于服务"><a href="#基于服务" class="headerlink" title="基于服务"></a>基于服务</h4><p>利用angularJS中service单例模式的，服务(service)提供了一种能在应用的整个生命周期内保持数据的方式，能够在控制器之间进行通信，且能保证数据的一致性。(这个类似于iOS中的单例模式，在应用程序结束之前，不会被释放).</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">(function()&#123;</div><div class="line">  &apos;use strict&apos;;</div><div class="line">  </div><div class="line">  var msModule = angular.module(&apos;front_end_config&apos;, [&apos;resource.frontEndConfig&apos;,&apos;jcfApiResource&apos;]);</div><div class="line">  msModule.factory(&apos;msInstance&apos;, function()&#123;</div><div class="line">    return &#123;&#125;;</div><div class="line">  &#125;);</div><div class="line">  msModule.controller(&apos;SmsController&apos;, function($scope, msInstance) &#123;</div><div class="line">    $scope.editSms = function (row) &#123;</div><div class="line">      msInstance.editRow = row;</div><div class="line">    &#125;;</div><div class="line">  &#125;);</div><div class="line">  msModule.controller(&apos;smsInfoController&apos;, function($scope, msInstance) &#123;</div><div class="line">    $scope.smsInfo = function() &#123;</div><div class="line">      $scope.smsInfoRow =  msInstance.editRow;</div><div class="line">    &#125;;</div><div class="line">  &#125;);</div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
+<h4 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h4><ol>
+<li><a href="http://stackoverflow.com/questions/11252780/whats-the-correct-way-to-communicate-between-controllers-in-angularjs/19498009#19498009" target="_blank" rel="external">whats the correct way to conmmunicate between controllers</a></li>
+<li><a href="http://www.angularjs.cn/A07b" target="_blank" rel="external">http://www.angularjs.cn/A07b</a></li>
+<li><a href="http://www.cnblogs.com/whitewolf/archive/2013/04/16/3024843.html" target="_blank" rel="external">Angularjs Controller 间通信机制</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/AngularJS/" rel="tag">#AngularJS</a>
+          
+            <a href="/tags/Web/" rel="tag">#Web</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/10/2015-12-10-angularjs-promisedui-xiang-$q/" rel="next" title="AngularJS Promise对象($q)">
+                <i class="fa fa-chevron-left"></i> AngularJS Promise对象($q)
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/02/04/2016-02-04-shi-yong-yomangou-jian-webgong-zuo-liu/" rel="prev" title="使用Yoman构建Web工作流">
+                使用Yoman构建Web工作流 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="袁伟" />
+          <p class="site-author-name" itemprop="name">袁伟</p>
+          <p class="site-description motion-element" itemprop="description">ZeroYuan</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#controller"><span class="nav-number">2.</span> <span class="nav-text">controller</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#作用域继承"><span class="nav-number">3.</span> <span class="nav-text">作用域继承</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于事件"><span class="nav-number">4.</span> <span class="nav-text">基于事件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于服务"><span class="nav-number">5.</span> <span class="nav-text">基于服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考文献"><span class="nav-number">6.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">袁伟</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

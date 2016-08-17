@@ -1,0 +1,629 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="AngularJS,web," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前言最近在公司的项目中用到AngularJs中的指令。所谓的指令在我理解看来。就是把浏览器能够识别的标签使用语法糖包装起来。在其它地方直接调用。这样极大方便了项目的开发和维护。在聚财富项目中对通用的组件进行抽离，封装成自定义指令。整个工程都可以复用。在项目工程中创建语义化以及高度重用的组件，对于提高代码质量有很大的帮助，也方便扩展及后期维护。目前市场上的前端框架也只有AngularJS 拥有自定义">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AngularJS 指令详解">
+<meta property="og:url" content="http://chaosyuan.github.io/2016/02/16/2016-02-16-angularjs-zhi-ling-xiang-jie/index.html">
+<meta property="og:site_name" content="袁伟">
+<meta property="og:description" content="前言最近在公司的项目中用到AngularJs中的指令。所谓的指令在我理解看来。就是把浏览器能够识别的标签使用语法糖包装起来。在其它地方直接调用。这样极大方便了项目的开发和维护。在聚财富项目中对通用的组件进行抽离，封装成自定义指令。整个工程都可以复用。在项目工程中创建语义化以及高度重用的组件，对于提高代码质量有很大的帮助，也方便扩展及后期维护。目前市场上的前端框架也只有AngularJS 拥有自定义">
+<meta property="og:updated_time" content="2016-08-10T03:05:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AngularJS 指令详解">
+<meta name="twitter:description" content="前言最近在公司的项目中用到AngularJs中的指令。所谓的指令在我理解看来。就是把浏览器能够识别的标签使用语法糖包装起来。在其它地方直接调用。这样极大方便了项目的开发和维护。在聚财富项目中对通用的组件进行抽离，封装成自定义指令。整个工程都可以复用。在项目工程中创建语义化以及高度重用的组件，对于提高代码质量有很大的帮助，也方便扩展及后期维护。目前市场上的前端框架也只有AngularJS 拥有自定义">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://chaosyuan.github.io/2016/02/16/2016-02-16-angularjs-zhi-ling-xiang-jie/"/>
+
+  <title> AngularJS 指令详解 | 袁伟 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">袁伟</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">千里之行始于足下</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                AngularJS 指令详解
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-02-16T17:20:32+08:00" content="2016-02-16">
+              2016-02-16
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>最近在公司的项目中用到AngularJs中的指令。所谓的指令在我理解看来。就是把浏览器能够识别的标签使用语法糖包装起来。在其它地方直接调用。这样极大方便了项目的开发和维护。在<a href="https://www.jucaifu.com/" target="_blank" rel="external">聚财富</a>项目中对通用的组件进行抽离，封装成自定义指令。整个工程都可以复用。在项目工程中创建语义化以及高度重用的组件，对于提高代码质量有很大的帮助，也方便扩展及后期维护。目前市场上的前端框架也只有AngularJS 拥有自定义指令的功能，并且AngularJS 是目前唯一提供Web应用可复用能力的框架。</p>
+<h4 id="指令概述"><a href="#指令概述" class="headerlink" title="指令概述"></a>指令概述</h4><p>指令是DOM元素上的标记，使元素拥有特定的行为，也是用来扩展浏览器能力的技术之一。在DOM编译期间，和HTML元素关联着的指令会被检测到，并且被执行。这使得指令可以为DOM指定行为，或者改变它。AngularJS有一套完整的、可扩展的、用来帮助web应用开发的指令集（例如ng-repeat.ng-view.ng-controller等）。</p>
+<a id="more"></a>
+<h4 id="执行流程"><a href="#执行流程" class="headerlink" title="执行流程"></a>执行流程</h4><p>下面说一下指令执行过程。</p>
+<ol>
+<li>浏览器得到 HTML 字符串内容，解析得成 DOM 结构</li>
+<li>ng 引入，把 DOM 结构扔给 $compile 函数处理。</li>
+</ol>
+<blockquote>
+<ol>
+<li>找出 DOM 结构中有变量占位符</li>
+<li>匹配找出 DOM 中包含的所有指令引用</li>
+<li>把指令关联到 DOM节点上</li>
+<li>DOM 中的多个指令按优先级排列</li>
+<li>执行指令中的 compile 函数（改变 DOM 结构，返回 link 函数）</li>
+</ol>
+</blockquote>
+<ol>
+<li>执行 link 函数（连接模板的 $scope）<br>注意：$compile和compile，前者是ng内置服务，后者是指令中的编译函数。使用时注意区分。</li>
+</ol>
+<h4 id="表现形式"><a href="#表现形式" class="headerlink" title="表现形式"></a>表现形式</h4><p>指令的四种使用方式：</p>
+<ol>
+<li>作为元素(E) :<code>&lt;smsCode&gt;&lt;/smsCode&gt;</code></li>
+<li>作为属性(A) :<code>&lt;div smsCode=&quot;sms&quot;&gt;&lt;/div&gt;</code></li>
+<li>作为类名(C) :<code>&lt;div class=&quot;smsCode:sms;&quot;&gt;&lt;/div&gt;</code></li>
+<li>作为注释(M) :<code>&lt;!-- directive: smsCode sms --&gt;</code></li>
+</ol>
+<p>在实际项目中常用的就是作为元素和属性。</p>
+<h4 id="配置参数"><a href="#配置参数" class="headerlink" title="配置参数"></a>配置参数</h4><p>下面是一个标准指令的示例，可配置的参数包括以下部分</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">(function()&#123;</div><div class="line">  &apos;use strict&apos;;  </div><div class="line">angular.module(&apos;securityLoginToolbar&apos;)</div><div class="line">    .directive(&apos;loginToolbar&apos;, function factory(injectables) &#123;</div><div class="line"></div><div class="line">    var directiveDefinitionObject = &#123;</div><div class="line"></div><div class="line">        restrict: string,//指令的使用方式，包括元素，属性，类，注释</div><div class="line"></div><div class="line">        priority: number,//指令执行的优先级</div><div class="line"></div><div class="line">        template: string,//指令使用的模板，用HTML字符串的形式表示</div><div class="line"></div><div class="line">        templateUrl: string,//从指定的url地址加载模板</div><div class="line"></div><div class="line">        replace: bool,//是否用模板替换当前元素，若为false，则append在当前元素上</div><div class="line"></div><div class="line">        transclude: bool,//是否将当前元素的内容转移到模板中</div><div class="line"></div><div class="line">        scope: bool or object,//指定指令的作用域</div><div class="line"></div><div class="line">        controller: function controllerConstructor($scope, $element, $attrs, $transclude)&#123;...&#125;,//定义与其他指令进行交互的接口函数</div><div class="line"></div><div class="line">        require: string,//指定需要依赖的其他指令</div><div class="line"></div><div class="line">        link: function postLink(scope, iElement, iAttrs) &#123;...&#125;,//以编程的方式操作DOM，包括添加监听器等</div><div class="line"></div><div class="line">        compile: function compile(tElement, tAttrs, transclude)&#123;</div><div class="line"></div><div class="line">            return: &#123;</div><div class="line"></div><div class="line">                pre: function preLink(scope, iElement, iAttrs, controller)&#123;...&#125;,</div><div class="line">                post: function postLink(scope, iElement, iAttrs, controller)&#123;...&#125;</div><div class="line">            &#125;</div><div class="line">        &#125;//编程的方式修改DOM模板的副本，可以返回链接函数</div><div class="line">    &#125;;</div><div class="line">    return directiveDefinitionObject;</div><div class="line">&#125;);</div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
+<p>loginToolbar 指令的名字。需要注意的是：在自定义指令命名时尽量不要以ng开头，防止与系统的指令冲突。</p>
+<p>factory函数，叫工厂函数，它是用来创建指令的。它只会被调用一次(类似于iOS的单例模式)：当编译器第一次匹配到相应指令的时候，在其中进行初始化的工作。调用它时使用的是 $inject， 它遵循所有依赖注入(DI)规则.</p>
+<ul>
+<li><p>优先级priority - 当一个DOM上有多个指令时，需要指定指令执行的顺序。 优先级就是用来在执行指令的compile函数前，先排序的。高优先级的先执行</p>
+</li>
+<li><p>restrict - EACM中的任意一个字母。它是用来限制指令的声明格式的。如果没有这一项。那就只允许使用属性形式的指令</p>
+</li>
+<li><p>模板template - 将当前的元素替换掉。 替换过程会自动将元素的属性和css类名添加到新元素上</p>
+</li>
+<li><p>模板地址templateUrl - 和template属性一样，这里指示的是一个模板的URL。因为模板加载是异步的，所有编译和链接都会等到加载完成后再执行</p>
+</li>
+<li><p>替换replace - 如果设置成true，那么页面上指令内部里面的内容会被模板替换。比如:<hello><div>这是指令内部的内容</div></hello>，hello指令内部的div内容将会被模板替换掉</p>
+</li>
+<li><p>transclude -  如果不想让指令内部的内容被模板替换，设置为true。</p>
+</li>
+</ul>
+<h5 id="编译函数-Compile"><a href="#编译函数-Compile" class="headerlink" title="编译函数 Compile"></a>编译函数 Compile</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">compile: function compile(tElement, tAttrs, transclude)&#123;&#125;</div></pre></td></tr></table></figure>
+<p>一般需要修改模板DOM的时候，需要用到编译函数。它接受3个参数</p>
+<ol>
+<li>tElement （template element ）指令所在的元素。对这个元素及其子元素进行变形之类的操作是安全的.</li>
+<li>tAttrs （template attributes ) 元素上所有指令声明的属性，这些属性都是在编译函数里共享的.</li>
+<li>transclude - 一个嵌入的链接函数 function(scope, cloneLinkingFn)</li>
+</ol>
+<blockquote>
+<p>需要注意的是在编译函数里面不要进行任何DOM变形之外的操作。 DOM监听事件的注册应该在Linking函数中做，而不是Compile函数中</p>
+</blockquote>
+<h5 id="链接函数-Link"><a href="#链接函数-Link" class="headerlink" title="链接函数  Link"></a>链接函数  Link</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">function link(scope, iElement, iAttrs, controller) &#123; ... &#125;</div></pre></td></tr></table></figure>
+<p>link函数主要用来为DOM元素添加事件监听、监视模型属性变化、以及更新DOM。在模板被克隆之后执行的，也是绝大部分指令逻辑代码编写的地方</p>
+<ul>
+<li><p>scope - 指令需要监听的作用域</p>
+</li>
+<li><p>iElement （instance element） 指令所在的元素。只有在 postLink 函数中对元素的子元素进行操作才是安全的.</p>
+</li>
+<li><p>iAttrs (instance attributes) 实例属性，所有声明在当前元素上的属性列表，属性在所有链接函数间是共享的.</p>
+</li>
+<li><p>controller - 控制器实例</p>
+</li>
+</ul>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>最后,希望对大家理解AngularJS指令能有一些帮助。详细请参考<a href="https://angularjs.org/" target="_blank" rel="external">官网</a>。如果发现文章中哪里有不对的,请及时给我发评论.谢谢!</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/AngularJS/" rel="tag">#AngularJS</a>
+          
+            <a href="/tags/web/" rel="tag">#web</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/02/05/2016-02-05-gruntfile-dot-js-qian-xi/" rel="next" title="Grunt 浅析">
+                <i class="fa fa-chevron-left"></i> Grunt 浅析
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/02/2016-03-02-reactivecocoaxue-xi-zhi-lu1/" rel="prev" title="ReactiveCocoa学习之路（一）">
+                ReactiveCocoa学习之路（一） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="袁伟" />
+          <p class="site-author-name" itemprop="name">袁伟</p>
+          <p class="site-description motion-element" itemprop="description">ZeroYuan</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#指令概述"><span class="nav-number">2.</span> <span class="nav-text">指令概述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#执行流程"><span class="nav-number">3.</span> <span class="nav-text">执行流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#表现形式"><span class="nav-number">4.</span> <span class="nav-text">表现形式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置参数"><span class="nav-number">5.</span> <span class="nav-text">配置参数</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#编译函数-Compile"><span class="nav-number">5.1.</span> <span class="nav-text">编译函数 Compile</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#链接函数-Link"><span class="nav-number">5.2.</span> <span class="nav-text">链接函数  Link</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">袁伟</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

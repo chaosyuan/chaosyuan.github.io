@@ -1,0 +1,634 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前言SDWebImage强大的网络图片加载库，以前只是能够灵活使用，对底层的实现原理，也是知其然而不知其所以然，但是成为一名优秀的开发者来说，会用只是最简单的一步，更重要的是要研究其底层的技术实现和设计思路原理。这个月工作也不忙，所以阅读下类库源码。记录下自己的思考与总结。
+SDWebImage 简介
+
+提供UIImageView的一个分类，用来加载网络图片并且对网络图片的缓存进行管理
+采用异步方">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SDWebImage源码阅读">
+<meta property="og:url" content="http://chaosyuan.github.io/2016/04/03/2016-04-03-sdwebimageyuan-ma-yue-du/index.html">
+<meta property="og:site_name" content="袁伟">
+<meta property="og:description" content="前言SDWebImage强大的网络图片加载库，以前只是能够灵活使用，对底层的实现原理，也是知其然而不知其所以然，但是成为一名优秀的开发者来说，会用只是最简单的一步，更重要的是要研究其底层的技术实现和设计思路原理。这个月工作也不忙，所以阅读下类库源码。记录下自己的思考与总结。
+SDWebImage 简介
+
+提供UIImageView的一个分类，用来加载网络图片并且对网络图片的缓存进行管理
+采用异步方">
+<meta property="og:updated_time" content="2016-08-10T03:06:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SDWebImage源码阅读">
+<meta name="twitter:description" content="前言SDWebImage强大的网络图片加载库，以前只是能够灵活使用，对底层的实现原理，也是知其然而不知其所以然，但是成为一名优秀的开发者来说，会用只是最简单的一步，更重要的是要研究其底层的技术实现和设计思路原理。这个月工作也不忙，所以阅读下类库源码。记录下自己的思考与总结。
+SDWebImage 简介
+
+提供UIImageView的一个分类，用来加载网络图片并且对网络图片的缓存进行管理
+采用异步方">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://chaosyuan.github.io/2016/04/03/2016-04-03-sdwebimageyuan-ma-yue-du/"/>
+
+  <title> SDWebImage源码阅读 | 袁伟 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">袁伟</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">千里之行始于足下</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                SDWebImage源码阅读
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-03T16:02:07+08:00" content="2016-04-03">
+              2016-04-03
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p><a href="https://github.com/rs/SDWebImage" target="_blank" rel="external">SDWebImage</a>强大的网络图片加载库，以前只是能够灵活使用，对底层的实现原理，也是知其然而不知其所以然，但是成为一名优秀的开发者来说，会用只是最简单的一步，更重要的是要研究其底层的技术实现和设计思路原理。这个月工作也不忙，所以阅读下类库源码。记录下自己的思考与总结。</p>
+<h4 id="SDWebImage-简介"><a href="#SDWebImage-简介" class="headerlink" title="SDWebImage 简介"></a>SDWebImage 简介</h4><blockquote>
+<ol>
+<li>提供UIImageView的一个分类，用来加载网络图片并且对网络图片的缓存进行管理</li>
+<li>采用异步方式来下载网络图片</li>
+<li>采用异步方式，使用memory＋disk来缓存网络图片，自动管理缓存</li>
+<li>支持GIF动画</li>
+<li>支持WebP格式</li>
+<li>后台图片解压缩处理</li>
+<li>确保同一个URL的图片不被重复下载</li>
+<li>失效的URL不会被无限重试</li>
+<li>下载及缓存时，主线程不被阻塞</li>
+</ol>
+</blockquote>
+<h4 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h4><p>在SDWebImage中,图片的下载是由SDWebImageDownloader类来完成的,它是一个异步的下载器。并且对图片的加载做了优化处理。</p>
+<h5 id="下载选项"><a href="#下载选项" class="headerlink" title="下载选项"></a>下载选项</h5><p>在下载的过程中，程序会根据设置的不同的下载选项，而执行不同操作。下载选项由枚举<strong>SDWebImageDownloaderOptions</strong>定义，定义如下：</p>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">typedef NS_OPTIONS(NSUInteger, SDWebImageDownloaderOptions) &#123;</div><div class="line">    // 默认的使用模式,前往下载,返回进度block信息,完成时调用completedBlock</div><div class="line">    SDWebImageDownloaderLowPriority = 1 &lt;&lt; 0,</div><div class="line">    // 渐进式下载,如果设置了这个选项,会在下载过程中,每次接收到一段返回数据就会调用一次完成回调,回调中的image参数为未下载完成的部分图像,可以实现将图片一点点显示出来的功能</div><div class="line">    SDWebImageDownloaderProgressiveDownload = 1 &lt;&lt; 1,</div><div class="line"></div><div class="line">    // 默认情况下请求不使用NSURLCache，如果设置该选项，则以默认的缓存策略来使用NSURLCache</div><div class="line">    SDWebImageDownloaderUseNSURLCache = 1 &lt;&lt; 2,</div><div class="line">    </div><div class="line">    // 如果从NSURLcache缓存中读取图片，则在调用完成block的时候,传递空的image或者imageData</div><div class="line">    SDWebImageDownloaderIgnoreCachedResponse = 1 &lt;&lt; 3,</div><div class="line"></div><div class="line">    // 在iOS 4+系统上，允许程序进入后台后继续下载图片。该操作通过向系统申请额外时间来完成后台下载。如果后台任务终止，则操作将被取消</div><div class="line">    SDWebImageDownloaderContinueInBackground = 1 &lt;&lt; 4,</div><div class="line"></div><div class="line">    // 通过设置NSMutableURLRequest.HTTPShouldHandleCookies = YES来处理存储在NSHTTPCookieStore中的cookie</div><div class="line">    SDWebImageDownloaderHandleCookies = 1 &lt;&lt; 5,</div><div class="line"></div><div class="line">    // 允许不受信任的SSL证书。主要用于测试目的（生产环境慎用）</div><div class="line">    SDWebImageDownloaderAllowInvalidSSLCertificates = 1 &lt;&lt; 6,</div><div class="line"></div><div class="line">    // 将图片下载放到高优先级队列中</div><div class="line">    SDWebImageDownloaderHighPriority = 1 &lt;&lt; 7,</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>选项涉及了下载优先级，缓存策略，后台运行，cookie处理及认证</p>
+<h5 id="下载选项-1"><a href="#下载选项-1" class="headerlink" title="下载选项"></a>下载选项</h5><p>SDWebImage定义了两种下载顺序，定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">typedef NS_ENUM(NSInteger, SDWebImageDownloaderExecutionOrder) &#123;</div><div class="line"> </div><div class="line">    // 默认下载顺序 以队列的方式，按照先进先出的顺序下载</div><div class="line">    SDWebImageDownloaderFIFOExecutionOrder,</div><div class="line"></div><div class="line">    // 以栈的方式，按照后进先出的顺序下载</div><div class="line">    SDWebImageDownloaderLIFOExecutionOrder</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h5 id="下载管理器"><a href="#下载管理器" class="headerlink" title="下载管理器"></a>下载管理器</h5><p>SDWebImageDownloader下载管理器是一个单例类，主要管理图片的下载操作。图片的下载是放在NSOperationQueue操作队列中来完成的，队列的默认最大并发数为6.设置超时时间为15s.</p>
+<p>所有下载操作的网络响应序列化处理是放在一个自定义的并行调度队列中来处理的，其声明及定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@property (SDDispatchQueueSetterSementics, nonatomic) dispatch_queue_t barrierQueue;</div><div class="line"></div><div class="line">_barrierQueue = dispatch_queue_create(&quot;com.hackemist.SDWebImageDownloaderBarrierQueue&quot;, DISPATCH_QUEUE_CONCURRENT);</div></pre></td></tr></table></figure>
+<h5 id="下载回调"><a href="#下载回调" class="headerlink" title="下载回调"></a>下载回调</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// 下载进度(返回已经接收的图片数据的大小,未接收的图片数据的大小)</div><div class="line">typedef void(^SDWebImageDownloaderProgressBlock)(NSInteger receivedSize, NSInteger expectedSize);</div><div class="line">// 下载完成</div><div class="line">typedef void(^SDWebImageDownloaderCompletedBlock)(UIImage *image, NSData *data, NSError *error, BOOL finished);</div><div class="line">// Header 过滤</div><div class="line">typedef NSDictionary *(^SDWebImageDownloaderHeadersFilterBlock)(NSURL *url, NSDictionary *headers);</div></pre></td></tr></table></figure>
+<p>图片下载的回调信息存储在<strong>URLCallbacks</strong>属性里面。该属性是一个字典。key是图片的URL地址，value则是一个数组，包含每个图片的多组回调信息。value(数组里面)只包含一个元素,这个元素的类型是NSMutableDictionary类型,这个字典的key为NSString类型代表着回调类型,value为block,是对应的回调。目的都是为了给url绑定回调。由于允许多个图片同时下载，因此可能会有多个线程同时操作URLCallbacks属性。为了保证线程安全。将下载操作作为一个个任务放到barrierQueue队列中。并设置栅栏来确保同一时间只有一个线程操作URLCallbacks属性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">- (void)addProgressCallback:(SDWebImageDownloaderProgressBlock)progressBlock completedBlock:(SDWebImageDownloaderCompletedBlock)completedBlock forURL:(NSURL *)url createCallback:(SDWebImageNoParamsBlock)createCallback &#123;</div><div class="line"></div><div class="line">  // 以dispatch_barrier_sync操作来保证同一时间只有一个线程能对URLCallbacks进行操作</div><div class="line">    dispatch_barrier_sync(self.barrierQueue, ^&#123;</div><div class="line">    </div><div class="line"> // 处理同一URL的同步下载请求的单个下载</div><div class="line">        NSMutableArray *callbacksForURL = self.URLCallbacks[url];</div><div class="line">        NSMutableDictionary *callbacks = [NSMutableDictionary new];</div><div class="line">        if (progressBlock) callbacks[kProgressCallbackKey] = [progressBlock copy];</div><div class="line">        if (completedBlock) callbacks[kCompletedCallbackKey] = [completedBlock copy];</div><div class="line">        [callbacksForURL addObject:callbacks];</div><div class="line">        self.URLCallbacks[url] = callbacksForURL;</div><div class="line">// 如果url第一次绑定它的回调,也就是第一次使用这个url创建下载任务则执行一次创建回调</div><div class="line">        if (first) &#123;</div><div class="line">            createCallback();</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在barrierQueue队列中创建下载任务。至此下载的任务都创建好了,下面到下载的操作了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div></pre></td><td class="code"><pre><div class="line">   - (id &lt;SDWebImageOperation&gt;)downloadImageWithURL:(NSURL *)url </div><div class="line">                                         options:(SDWebImageDownloaderOptions)options </div><div class="line">                                        progress:(SDWebImageDownloaderProgressBlock)progressBlock</div><div class="line">                                       completed:(SDWebImageDownloaderCompletedBlock)completedBlock &#123;</div><div class="line"></div><div class="line">            __block SDWebImageDownloaderOperation *operation;</div><div class="line">            [self addProgressCallback:progressBlock </div><div class="line">                       completedBlock:completedBlock </div><div class="line">                               forURL:url </div><div class="line">                        createCallback:^&#123;</div><div class="line">         NSTimeInterval timeoutInterval = wself.downloadTimeout;</div><div class="line">       if (timeoutInterval == 0.0) &#123;</div><div class="line">         timeoutInterval = 15.0;</div><div class="line">       &#125;</div><div class="line">      // 1. 创建请求对象，并根据options参数设置其属性</div><div class="line">      // 为了避免潜在的重复缓存(NSURLCache + SDImageCache)，如果没有明确告知需要缓存，则禁用图片请求的缓存操作</div><div class="line">  NSMutableURLRequest *request = </div><div class="line">[[NSMutableURLRequest alloc] initWithURL:url </div><div class="line">cachePolicy:(options &amp; SDWebImageDownloaderUseNSURLCache ? NSURLRequestUseProtocolCachePolicy : NSURLRequestReloadIgnoringLocalCacheData) </div><div class="line">timeoutInterval:timeoutInterval];</div><div class="line"></div><div class="line">// 通过设置 NSMutableURLRequest.HTTPShouldHandleCookies = YES的方式来处理存储在NSHTTPCookieStore的cookies</div><div class="line">        request.HTTPShouldHandleCookies = (options &amp; SDWebImageDownloaderHandleCookies);</div><div class="line">//返回在接到上一个请求得得响应之前,需要传输数据,YES传输,NO不传输</div><div class="line">        request.HTTPShouldUsePipelining = YES;</div><div class="line">  &#125;];</div><div class="line">&#125;;</div><div class="line"></div><div class="line">/**</div><div class="line">如果自定义了wself.headersFilter,那就用自己设置的</div><div class="line">wself.headersFilter来设置HTTP的header field</div><div class="line">它的定义是typedef NSDictionary *(^SDWebImageDownloaderHeadersFilterBlock)(NSURL *url, NSDictionary *headers);</div><div class="line">一个返回结果为NSDictionary类型的block</div><div class="line"></div><div class="line">如果没有自己设置wself.headersFilter那么就用SDWebImage提供的HTTPHeaders</div><div class="line">HTTPHeaders在#import &quot;SDWebImageDownloader.h&quot;,init方法里面初始化,下载webp图片需要的header不一样</div><div class="line">#ifdef SD_WEBP</div><div class="line">        _HTTPHeaders = [@&#123;@&quot;Accept&quot;: @&quot;image/webp,image/*;q=0.8&quot;&#125; mutableCopy];</div><div class="line">#else</div><div class="line">        _HTTPHeaders = [@&#123;@&quot;Accept&quot;: @&quot;image/*;q=0.8&quot;&#125; mutableCopy];</div><div class="line">#endif</div><div class="line">*/</div><div class="line">  if (wself.headersFilter) &#123;</div><div class="line">            request.allHTTPHeaderFields = wself.headersFilter(url, [wself.HTTPHeaders copy]);</div><div class="line">        &#125;</div><div class="line">        else &#123;</div><div class="line">            request.allHTTPHeaderFields = wself.HTTPHeaders;</div><div class="line">        &#125;</div><div class="line">/**</div><div class="line">创建SDWebImageDownLoaderOperation操作对象(下载的操作就是在SDWebImageDownLoaderOperation类里面进行的)</div><div class="line">传入了进度回调,完成回调,取消回调</div><div class="line">*/</div><div class="line">    operation = [[wself.operationClass alloc] initWithRequest:request</div><div class="line">                                                          options:options</div><div class="line">                                                         progress:^(NSInteger receivedSize, NSInteger expectedSize) &#123;</div><div class="line">                                                          SDWebImageDownloader *sself = wself;</div><div class="line">                                                             if (!sself) return;</div><div class="line">                                                             __block NSArray *callbacksForURL;</div><div class="line">dispatch_sync(sself.barrierQueue, ^&#123;</div><div class="line">           // 从管理器的callbacksForURL中找出该URL所有的进度处理回调并调用</div><div class="line">                callbacksForURL = [sself.URLCallbacks[url] copy];</div><div class="line">        &#125;);</div><div class="line">  for (NSDictionary *callbacks in callbacksForURL) &#123;</div><div class="line">       dispatch_async(dispatch_get_main_queue(), ^&#123;</div><div class="line">      SDWebImageDownloaderProgressBlock callback = callbacks[kProgressCallbackKey];</div><div class="line">     if (callback) callback(receivedSize, expectedSize);</div><div class="line">          &#125;);</div><div class="line">         &#125;</div><div class="line">      &#125;</div><div class="line">    completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) &#123;</div><div class="line">        // 从管理器的callbacksForURL中找出该URL所有的完成处理回调并调用，</div><div class="line">                     SDWebImageDownloader *sself = wself;</div><div class="line">                     if (!sself) return;</div><div class="line">                     __block NSArray *callbacksForURL;</div><div class="line">                     dispatch_barrier_sync(sself.barrierQueue, ^&#123;</div><div class="line">                         callbacksForURL = [sself.URLCallbacks[url] copy];</div><div class="line">                       if (finished) &#123;</div><div class="line">        // 如果这个任务已经完成,就根据url这个key从URLCallbacks字典里面删除</div><div class="line">                                     [sself.URLCallbacks removeObjectForKey:url];</div><div class="line">                                        &#125;</div><div class="line">                                         &#125;);</div><div class="line">         for (NSDictionary *callbacks in callbacksForURL) &#123;</div><div class="line">                SDWebImageDownloaderCompletedBlock callback = callbacks[kCompletedCallbackKey];</div><div class="line">             if (callback) callback(image, data, error, finished);</div><div class="line">                                                            &#125;</div><div class="line">                                                        &#125;</div><div class="line">                                                        cancelled:^&#123;</div><div class="line">  // 取消操作将该url对应的回调信息从URLCallbacks中删除  </div><div class="line">   SDWebImageDownloader *sself = wself;</div><div class="line">   if (!sself) return;                                                                                                                                                              dispatch_barrier_async(sself.barrierQueue, ^&#123;                                                               [sself.URLCallbacks removeObjectForKey:url];</div><div class="line">                                                           &#125;);</div><div class="line">                                                        &#125;];</div><div class="line"></div><div class="line"> // 设置是否需要解压</div><div class="line"> operation.shouldDecompressImages = wself.shouldDecompressImages;</div><div class="line">       if (wself.urlCredential) &#123;</div><div class="line">            operation.credential = wself.urlCredential;</div><div class="line">        &#125; else if (wself.username &amp;&amp; wself.password) &#123;</div><div class="line">            operation.credential = [NSURLCredential credentialWithUser:wself.username password:wself.password persistence:NSURLCredentialPersistenceForSession];</div><div class="line">        &#125;   </div><div class="line">        if (options &amp; SDWebImageDownloaderHighPriority) &#123;</div><div class="line">            operation.queuePriority = NSOperationQueuePriorityHigh;</div><div class="line">        &#125; else if (options &amp; SDWebImageDownloaderLowPriority) &#123;</div><div class="line">            operation.queuePriority = NSOperationQueuePriorityLow;</div><div class="line">        &#125;</div><div class="line">//  将操作加入到操作队列downloadQueue中.如果是LIFO顺序，则将新的操作作为原队列中最后一个操作的依赖，然后将新操作设置为最后一个操作</div><div class="line">        [wself.downloadQueue addOperation:operation];</div><div class="line">        if (wself.executionOrder == SDWebImageDownloaderLIFOExecutionOrder) &#123;</div><div class="line">            [wself.lastAddedOperation addDependency:operation];</div><div class="line">            wself.lastAddedOperation = operation;</div><div class="line">        &#125;</div><div class="line">    return operation;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="下载操作"><a href="#下载操作" class="headerlink" title="下载操作"></a>下载操作</h5><p>每个图片的下载都是一个Operation操作。SDWebImage自定义了一个SDWebImageDownloaderOperation类,继承自NSOperation。并遵守<strong>SDWebImageOperation</strong>协议。对于图片的下载。使用的是NSURLConnection(未使用7.0以后的NSURLSession)。在SDWebImageDownloaderOperation中重写了<strong>start</strong>方法，方便自己管理下载的状态。此方法是执行下载任务的核心代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line">- (void)start &#123;</div><div class="line">    @synchronized (self) &#123;</div><div class="line">      // 管理下载状态，如果已取消，则重置当前下载并设置完成状态为YES</div><div class="line">        if (self.isCancelled) &#123;</div><div class="line">            self.finished = YES;</div><div class="line">            [self reset];</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">#if TARGET_OS_IPHONE &amp;&amp; __IPHONE_OS_VERSION_MAX_ALLOWED &gt;= __IPHONE_4_0</div><div class="line">        // 如果设置了在后台执行，则进行后台执行</div><div class="line">        if ([self shouldContinueWhenAppEntersBackground]) &#123;</div><div class="line">            __weak __typeof__ (self) wself = self;</div><div class="line">            self.backgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^&#123;</div><div class="line">                ...</div><div class="line">                &#125;</div><div class="line">            &#125;];</div><div class="line">        &#125;</div><div class="line">#endif</div><div class="line"></div><div class="line">        self.executing = YES;</div><div class="line">        self.connection = [[NSURLConnection alloc] initWithRequest:self.request delegate:self startImmediately:NO];</div><div class="line">        self.thread = [NSThread currentThread];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    [self.connection start];</div><div class="line"></div><div class="line">    if (self.connection) &#123;</div><div class="line">        if (self.progressBlock) &#123;</div><div class="line">            self.progressBlock(0, NSURLResponseUnknownLength);</div><div class="line">        &#125;</div><div class="line">        // 在主线程中发送开始下载的通知</div><div class="line">        dispatch_async(dispatch_get_main_queue(), ^&#123;</div><div class="line">            [[NSNotificationCenter defaultCenter] postNotificationName:SDWebImageDownloadStartNotification object:self];</div><div class="line">        &#125;);</div><div class="line">/**</div><div class="line">在[self.connection start];有返回结果之前,代码会一直阻塞在CFRunLoopRun这里，也就是说下载就一直在进行中,一直到下载完成或者错误(这两种情况都会调用CFRunLoopStop),阻塞才会解除</div><div class="line">*/</div><div class="line">        // 开启当前线程的runloop</div><div class="line">        if (floor(NSFoundationVersionNumber) &lt;= NSFoundationVersionNumber_iOS_5_1) &#123;</div><div class="line">            CFRunLoopRunInMode(kCFRunLoopDefaultMode, 10, false);</div><div class="line">        &#125;</div><div class="line">        else &#123;</div><div class="line">            CFRunLoopRun();</div><div class="line">        &#125;</div><div class="line">        // 如果未完成，则取消连接</div><div class="line">        if (!self.isFinished) &#123;</div><div class="line">            [self.connection cancel];</div><div class="line">            [self connection:self.connection didFailWithError:[NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorTimedOut userInfo:@&#123;NSURLErrorFailingURLErrorKey : self.request.URL&#125;]];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    else &#123;</div><div class="line">   //如果connection创建失败,直接执行完成回调,并传递一个connection没有初始化的错误</div><div class="line">        if (self.completedBlock) &#123;</div><div class="line">            self.completedBlock(nil, nil, [NSError errorWithDomain:NSURLErrorDomain code:0 userInfo:@&#123;NSLocalizedDescriptionKey : @&quot;Connection can&apos;t be initialized&quot;&#125;], YES);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">// 下载操作已经完成了,停止在后台的执行,使用endBackgroundTask</div><div class="line">#if TARGET_OS_IPHONE &amp;&amp; __IPHONE_OS_VERSION_MAX_ALLOWED &gt;= __IPHONE_4_0</div><div class="line">    if (self.backgroundTaskId != UIBackgroundTaskInvalid) &#123;</div><div class="line">        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskId];</div><div class="line">        self.backgroundTaskId = UIBackgroundTaskInvalid;</div><div class="line">    &#125;</div><div class="line">#endif</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>主要看一下connection: didReceiveData拼接数据的协议</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div></pre></td><td class="code"><pre><div class="line">- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data &#123;</div><div class="line">    // 拼接数据</div><div class="line">    [self.imageData appendData:data];</div><div class="line"></div><div class="line">    if ((self.options &amp; SDWebImageDownloaderProgressiveDownload) &amp;&amp; self.expectedSize &gt; 0 &amp;&amp; self.completedBlock) &#123;</div><div class="line"></div><div class="line">        // 获取已接收的数据的长度</div><div class="line">        const NSInteger totalSize = self.imageData.length;</div><div class="line"></div><div class="line">        // 每次接收到数据时,都会用现有的数据创建一个CGImageSourceRef对象以做处理,而且这个数据应该是已接收的全部数据,而不仅仅是新的字节</div><div class="line">        CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFDataRef)self.imageData, NULL);</div><div class="line"></div><div class="line">        /**</div><div class="line">在首次接收到数据的时候,图片的长宽都是0(width+height == 0)</div><div class="line">先从这些包含图像信息的数据中取出图像的长,宽,方向等信息以备使用</div><div class="line">*/</div><div class="line">        if (width + height == 0) &#123;</div><div class="line">            CFDictionaryRef properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, NULL);</div><div class="line">            if (properties) &#123;</div><div class="line">                NSInteger orientationValue = -1;</div><div class="line">                CFTypeRef val = CFDictionaryGetValue(properties, kCGImagePropertyPixelHeight);</div><div class="line">                if (val) CFNumberGetValue(val, kCFNumberLongType, &amp;height);</div><div class="line">                ...</div><div class="line">                CFRelease(properties);</div><div class="line"></div><div class="line">                          /**</div><div class="line">                使用Core Craphics框架绘制image时,使用的是</div><div class="line">                initWithCGImage这个函数,但是使用这个函数有时候会造成图片朝向的错误,所以在这里保存朝向信息,orientation是一个可以记录图片方向的枚举</div><div class="line">            */</div><div class="line">                orientation = [[self class] orientationFromPropertyValue:(orientationValue == -1 ? 1 : orientationValue)];</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        // 图片还未接收完全</div><div class="line">        if (width + height &gt; 0 &amp;&amp; totalSize &lt; self.expectedSize) &#123;</div><div class="line">            // 使用现有的数据创建图片对象，如果数据中存有多张图片，则取第一张</div><div class="line">            CGImageRef partialImageRef = CGImageSourceCreateImageAtIndex(imageSource, 0, NULL);</div><div class="line"></div><div class="line">#ifdef TARGET_OS_IPHONE</div><div class="line">            // 对下载下来的图片做个颜色空间转换等处理</div><div class="line">            if (partialImageRef) &#123;</div><div class="line">                const size_t partialHeight = CGImageGetHeight(partialImageRef);</div><div class="line">                CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();</div><div class="line">                CGContextRef bmContext = CGBitmapContextCreate(NULL, width, height, 8, width * 4, colorSpace, kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedFirst);</div><div class="line">                CGColorSpaceRelease(colorSpace);</div><div class="line"></div><div class="line">                if (bmContext) &#123;</div><div class="line">                    CGContextDrawImage(bmContext, (CGRect)&#123;.origin.x = 0.0f, .origin.y = 0.0f, .size.width = width, .size.height = partialHeight&#125;, partialImageRef);</div><div class="line">                    CGImageRelease(partialImageRef);</div><div class="line">                    partialImageRef = CGBitmapContextCreateImage(bmContext);</div><div class="line">                    CGContextRelease(bmContext);</div><div class="line">                &#125;</div><div class="line">                else &#123;</div><div class="line">                    CGImageRelease(partialImageRef);</div><div class="line">                    partialImageRef = nil;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">#endif</div><div class="line">            // 对图片进行缩放、解码操作</div><div class="line">            if (partialImageRef) &#123;</div><div class="line">                UIImage *image = [UIImage imageWithCGImage:partialImageRef scale:1 orientation:orientation];</div><div class="line">                NSString *key = [[SDWebImageManager sharedManager] cacheKeyForURL:self.request.URL];</div><div class="line">                UIImage *scaledImage = [self scaledImageForKey:key image:image];</div><div class="line">                image = [UIImage decodedImageWithImage:scaledImage];</div><div class="line">                CGImageRelease(partialImageRef);</div><div class="line">                dispatch_main_sync_safe(^&#123;</div><div class="line">                    if (self.completedBlock) &#123;</div><div class="line">                        self.completedBlock(image, nil, nil, NO);</div><div class="line">                    &#125;</div><div class="line">                &#125;);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        CFRelease(imageSource);</div><div class="line">    &#125;</div><div class="line">    if (self.progressBlock) &#123;</div><div class="line">        self.progressBlock(self.imageData.length, self.expectedSize);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下载的核心是利用NSURLConnection对象来加载数据。每个图片的下载都由一个Operation操作来完成，并将这些操作放到一个操作队列中。这样可以实现图片的并发下载。之前在做<a href="https://itunes.apple.com/us/app/hao-chang-yi-miao-bian-ge-shen/id788432982?ls=1&amp;mt=8" target="_blank" rel="external">好唱</a>项目时，伴奏的下载也是采用这用设计思路。</p>
+<h4 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h4><p>SDWebImage提供了对图片缓存的支持，而该功能是由SDImageCache类来完成的。该类负责处理内存缓存及磁盘缓存。其中磁盘缓存的写操作是异步的。</p>
+<h5 id="内存缓存"><a href="#内存缓存" class="headerlink" title="内存缓存"></a>内存缓存</h5><p>NSCache是一个类似于集合的容器,即缓存。它存储key-value,这一点非常类似 NSDictionary。 一般用 NSCache来缓存临时存储短时间但是使用创建成本高的对象,重用这些对象可以优化性能,因为他们的值不需要被重新计算。另外一方面,这些对象对于程序来说是不要紧的,在内存紧张的时候会被丢弃,如果对象被丢弃了,则下次使用的时候需要重新计算</p>
+<h5 id="磁盘缓存"><a href="#磁盘缓存" class="headerlink" title="磁盘缓存"></a>磁盘缓存</h5><p>磁盘缓存则是使用NSFileManager对象来实现的。图片存储的位置是位于Cache文件夹。此外SDImageCache还定义了一个串行队列，来异步存储图片</p>
+<h5 id="图片存储"><a href="#图片存储" class="headerlink" title="图片存储"></a>图片存储</h5><p>在iOS中，会先检测图片是PNG还是JPEG，并将其转换为相应的图片数据，最后将数据写入到磁盘中。判断是否是png格式的文件，除了看是不是.png后缀格式命名外，还能分析文件开头的部分数据，这部分数据就是文件签名，每个标准的PNG文件开头都有固定格式的数字签名。<a href="http://blog.csdn.net/benny5609/article/details/2143023" target="_blank" rel="external">详细参考</a>文件名的命名规则则是按照缓存的key做md5处理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">- (NSString *)cachedFileNameForKey:(NSString *)key &#123;</div><div class="line">    const char *str = [key UTF8String];</div><div class="line">    if (str == NULL) &#123;</div><div class="line">        str = &quot;&quot;;</div><div class="line">    &#125;</div><div class="line">    unsigned char r[CC_MD5_DIGEST_LENGTH];</div><div class="line">    CC_MD5(str, (CC_LONG)strlen(str), r);</div><div class="line">    NSString *filename = [NSString stringWithFormat:@&quot;%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%@&quot;,</div><div class="line">                          r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], r[10],</div><div class="line">                          r[11], r[12], r[13], r[14], r[15], [[key pathExtension] isEqualToString:@&quot;&quot;] ? @&quot;&quot; : [NSString stringWithFormat:@&quot;.%@&quot;, [key pathExtension]]];</div><div class="line"></div><div class="line">    return filename;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当查询图片时，该操作会在内存中放置一份缓存，如果确定需要缓存到磁盘，则将磁盘缓存操作作为一个task放到串行队列中处理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">- (void)storeImage:(UIImage *)image recalculateFromImage:(BOOL)recalculate imageData:(NSData *)imageData forKey:(NSString *)key toDisk:(BOOL)toDisk &#123;</div><div class="line">    if (!image || !key) &#123;</div><div class="line">        return;</div><div class="line">    &#125;</div><div class="line">    if (self.shouldCacheImagesInMemory) &#123;</div><div class="line">    // //查询图片大小，并存入内存(NSCache)中</div><div class="line">        NSUInteger cost = SDCacheCostForImage(image);</div><div class="line">        [self.memCache setObject:image forKey:key cost:cost];</div><div class="line">    &#125;</div><div class="line">// 加载到磁盘</div><div class="line">    if (toDisk) &#123;</div><div class="line">        dispatch_async(self.ioQueue, ^&#123;</div><div class="line">            NSData *data = imageData;</div><div class="line">// 是否要重新处理图片数据</div><div class="line">            if (image &amp;&amp; (recalculate || !data)) &#123;</div><div class="line">#if TARGET_OS_IPHONE</div><div class="line">// 确定图片是png还是jpeg. imageData为nil的话当做是png处理</div><div class="line">                int alphaInfo = CGImageGetAlphaInfo(image.CGImage);</div><div class="line">                BOOL hasAlpha = !(alphaInfo == kCGImageAlphaNone ||</div><div class="line">                                  alphaInfo == kCGImageAlphaNoneSkipFirst ||</div><div class="line">                                  alphaInfo == kCGImageAlphaNoneSkipLast);</div><div class="line">                BOOL imageIsPng = hasAlpha;</div><div class="line">                if ([imageData length] &gt;= [kPNGSignatureData length]) &#123;</div><div class="line">                    imageIsPng = ImageDataHasPNGPreffix(imageData);</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                if (imageIsPng) &#123;</div><div class="line">                    data = UIImagePNGRepresentation(image);</div><div class="line">                &#125;</div><div class="line">                else &#123;</div><div class="line">                    data = UIImageJPEGRepresentation(image, (CGFloat)1.0);</div><div class="line">                &#125;</div><div class="line">#else</div><div class="line">                data = [NSBitmapImageRep representationOfImageRepsInArray:image.representations usingType: NSJPEGFileType properties:nil];</div><div class="line">#endif</div><div class="line">            &#125;</div><div class="line">// 创建缓存文件并存储图片</div><div class="line">            [self storeImageDataToDisk:data forKey:key];</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="图片查询"><a href="#图片查询" class="headerlink" title="图片查询"></a>图片查询</h5><p>使用key作为参数，查询内存和磁盘中是否有对应的图片</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- (UIImage *)imageFromMemoryCacheForKey:(NSString *)key;</div><div class="line">- (UIImage *)imageFromDiskCacheForKey:(NSString *)key;</div></pre></td></tr></table></figure>
+<h5 id="图片移除"><a href="#图片移除" class="headerlink" title="图片移除"></a>图片移除</h5><p>使用如下操作可以移除内存或者磁盘上的图片。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">- (void)removeImageForKey:(NSString *)key;</div><div class="line">- (void)removeImageForKey:(NSString *)key withCompletion:(SDWebImageNoParamsBlock)completion;</div><div class="line">- (void)removeImageForKey:(NSString *)key fromDisk:(BOOL)fromDisk;</div><div class="line">- (void)removeImageForKey:(NSString *)key fromDisk:(BOOL)fromDisk withCompletion:(SDWebImageNoParamsBlock)completion;</div></pre></td></tr></table></figure></p>
+<h5 id="图片清理"><a href="#图片清理" class="headerlink" title="图片清理"></a>图片清理</h5><p>两种清理方式：<strong>完全清空</strong>和<strong>部分清空</strong></p>
+<p>完全清空是直接把文件夹移除掉</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- (void)clearMemory</div><div class="line">- (void)clearDiskOnCompletion:(SDWebImageNoParamsBlock)completion</div></pre></td></tr></table></figure>
+<p>部分清空是根据参数配置、移除文件。使文件的总大小小于最大使用空间。清理策略有两个文件缓存的有限期时间及最大缓存空间大小。<br><strong>文件的缓存有效期</strong>：默认是一周。如果文件的缓存时间超过这个时间值，则将其移除<br><strong>最大缓存空间大小</strong>：如果所有缓存文件的总大小超过最大缓存空间，则会按照文件最后修改时间的逆序，以每次一半的递归来移除那些过早的文件，直到缓存的实际大小小于我们设置的最大使用空间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line">- (void)cleanDiskWithCompletionBlock:(SDWebImageNoParamsBlock)completionBlock &#123;</div><div class="line">    dispatch_async(self.ioQueue, ^&#123;</div><div class="line">        NSURL *diskCacheURL = [NSURL fileURLWithPath:self.diskCachePath isDirectory:YES];</div><div class="line">        NSArray *resourceKeys = @[NSURLIsDirectoryKey, NSURLContentModificationDateKey, NSURLTotalFileAllocatedSizeKey];</div><div class="line"></div><div class="line">        // 通过文件的枚举器来获取缓存文件的有用的属性</div><div class="line">        NSDirectoryEnumerator *fileEnumerator = [_fileManager enumeratorAtURL:diskCacheURL</div><div class="line">                                                   includingPropertiesForKeys:resourceKeys</div><div class="line">                                                                      options:NSDirectoryEnumerationSkipsHiddenFiles</div><div class="line">                                                                 errorHandler:NULL];</div><div class="line"></div><div class="line">        NSDate *expirationDate = [NSDate dateWithTimeIntervalSinceNow:-self.maxCacheAge];</div><div class="line">        NSMutableDictionary *cacheFiles = [NSMutableDictionary dictionary];</div><div class="line">        NSUInteger currentCacheSize = 0;</div><div class="line">        // 枚举缓存文件夹中所有文件,移除过期的文件,存储文件属性便后面清理</div><div class="line">        NSMutableArray *urlsToDelete = [[NSMutableArray alloc] init];</div><div class="line">        for (NSURL *fileURL in fileEnumerator) &#123;</div><div class="line">            NSDictionary *resourceValues = [fileURL resourceValuesForKeys:resourceKeys error:NULL];</div><div class="line"></div><div class="line">            // 忽略文件夹</div><div class="line">            if ([resourceValues[NSURLIsDirectoryKey] boolValue]) &#123;</div><div class="line">                continue;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            // 移除过期文件</div><div class="line">            NSDate *modificationDate = resourceValues[NSURLContentModificationDateKey];</div><div class="line">            if ([[modificationDate laterDate:expirationDate] isEqualToDate:expirationDate]) &#123;</div><div class="line">                [urlsToDelete addObject:fileURL];</div><div class="line">                continue;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            // 存储文件的引用并计算所有文件的总大小，以备后用</div><div class="line">            NSNumber *totalAllocatedSize = resourceValues[NSURLTotalFileAllocatedSizeKey];</div><div class="line">            currentCacheSize += [totalAllocatedSize unsignedIntegerValue];</div><div class="line">            [cacheFiles setObject:resourceValues forKey:fileURL];</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        for (NSURL *fileURL in urlsToDelete) &#123;</div><div class="line">            [_fileManager removeItemAtURL:fileURL error:nil];</div><div class="line">        &#125;</div><div class="line"></div><div class="line">       // 如果磁盘缓存的大小大于我们配置的最大大小，则执行基于文件大小的清理，首先删除最老的文件</div><div class="line">        if (self.maxCacheSize &gt; 0 &amp;&amp; currentCacheSize &gt; self.maxCacheSize) &#123;</div><div class="line">        // 以设置的最大缓存大小的一半作为清理目标</div><div class="line">            const NSUInteger desiredCacheSize = self.maxCacheSize / 2;</div><div class="line"></div><div class="line">            // 剩下的缓存文件按照最后修改时间来排序</div><div class="line">            NSArray *sortedFiles = [cacheFiles keysSortedByValueWithOptions:NSSortConcurrent</div><div class="line">                                                            usingComparator:^NSComparisonResult(id obj1, id obj2) &#123;</div><div class="line">                                                                return [obj1[NSURLContentModificationDateKey] compare:obj2[NSURLContentModificationDateKey]];</div><div class="line">                                                            &#125;];</div><div class="line"></div><div class="line">            // 删除文件，直到缓存总大小降到我们期望的大小</div><div class="line">            for (NSURL *fileURL in sortedFiles) &#123;</div><div class="line">                if ([_fileManager removeItemAtURL:fileURL error:nil]) &#123;</div><div class="line">                    NSDictionary *resourceValues = cacheFiles[fileURL];</div><div class="line">                    NSNumber *totalAllocatedSize = resourceValues[NSURLTotalFileAllocatedSizeKey];</div><div class="line">                    currentCacheSize -= [totalAllocatedSize unsignedIntegerValue];</div><div class="line"></div><div class="line">                    if (currentCacheSize &lt; desiredCacheSize) &#123;</div><div class="line">                        break;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        if (completionBlock) &#123;</div><div class="line">            dispatch_async(dispatch_get_main_queue(), ^&#123;</div><div class="line">                completionBlock();</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>对于缓存操作总结：</p>
+<blockquote>
+<ol>
+<li>缓存分为内存缓存和磁盘缓存（以NSCache和文件的形式） </li>
+<li>读取先从内存查找、如果没有再从磁盘读取并放入内存</li>
+<li>提供完全移除和部分移除功能，部分移除根据配置、达到删除文件后的容量小于用户设定的最大值</li>
+</ol>
+</blockquote>
+<h4 id="SDWebImageManager"><a href="#SDWebImageManager" class="headerlink" title="SDWebImageManager"></a>SDWebImageManager</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@interface SDWebImageManager : NSObject</div><div class="line">@property (weak, nonatomic) id &lt;SDWebImageManagerDelegate&gt; delegate;</div><div class="line">@property (strong, nonatomic, readonly) SDImageCache *imageCache;</div><div class="line">@property (strong, nonatomic, readonly) SDWebImageDownloader *imageDownloader;</div></pre></td></tr></table></figure>
+<p>在开发应用中，SDWebImageManager 管理图片的<strong>下载</strong>和<strong>缓存</strong>，所以提供了<strong>SDImageCache</strong>和<strong>SDWebImageDownloader</strong>两个类的属性，我们经常用到的诸如UIImageView+WebCache等控件的分类都是基于SDWebImageManager对象的。SDWebImageManagerDelegate还声明了两个可选实现的方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// 缓存图片没有找到的时候，去哪里下载</div><div class="line">- (BOOL)imageManager:(SDWebImageManager *)imageManager shouldDownloadImageForURL:(NSURL *)imageURL;</div><div class="line"></div><div class="line">// 允许在图片已经被下载完成且被缓存到磁盘或内存前立即转换</div><div class="line">- (UIImage *)imageManager:(SDWebImageManager *)imageManager transformDownloadedImage:(UIImage *)image withURL:(NSURL *)imageURL;</div></pre></td></tr></table></figure>
+<p>在查看源码时，发现了有趣的宏定义。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">#define dispatch_main_sync_safe(block)\</div><div class="line">    if ([NSThread isMainThread]) &#123;\</div><div class="line">        block();\</div><div class="line">    &#125; else &#123;\</div><div class="line">        dispatch_sync(dispatch_get_main_queue(), block);\</div><div class="line">    &#125;</div><div class="line"></div><div class="line">#define dispatch_main_async_safe(block)\</div><div class="line">    if ([NSThread isMainThread]) &#123;\</div><div class="line">        block();\</div><div class="line">    &#125; else &#123;\</div><div class="line">        dispatch_async(dispatch_get_main_queue(), block);\</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>保证了在主线程执行。</p>
+<h4 id="补充点"><a href="#补充点" class="headerlink" title="补充点"></a>补充点</h4><p>之前一直不明白，为什么将图片从磁盘读取出来后需要做Decode，后来<a href="http://www.cocoanetics.com/2011/10/avoiding-image-decompression-sickness/" target="_blank" rel="external">参考</a><br>才明白。由于UIImage的imageWithData函数是每次画图的时候才将Data解压成ARGB的图像，所以在每次画图的时候，会有一个解压操作，这样效率很低，但是只有瞬时的内存需求。为了提高效率通过SDWebImageDecoder将包装在Data下的资源解压，然后画在另外一张图片上，这样这张新图片就不再需要重复解压了。这是典型的空间换时间的做法。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag">#iOS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/27/2016-03-27-httphuan-cun-ce-lue/" rel="next" title="HTTP缓存策略">
+                <i class="fa fa-chevron-left"></i> HTTP缓存策略
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/16/2016-04-16-iosduo-xian-cheng-kai-fa-[nil]xian-cheng-an-quan/" rel="prev" title="iOS多线程开发－线程安全">
+                iOS多线程开发－线程安全 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="袁伟" />
+          <p class="site-author-name" itemprop="name">袁伟</p>
+          <p class="site-description motion-element" itemprop="description">ZeroYuan</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SDWebImage-简介"><span class="nav-number">2.</span> <span class="nav-text">SDWebImage 简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#下载"><span class="nav-number">3.</span> <span class="nav-text">下载</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#下载选项"><span class="nav-number">3.1.</span> <span class="nav-text">下载选项</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#下载选项-1"><span class="nav-number">3.2.</span> <span class="nav-text">下载选项</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#下载管理器"><span class="nav-number">3.3.</span> <span class="nav-text">下载管理器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#下载回调"><span class="nav-number">3.4.</span> <span class="nav-text">下载回调</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#下载操作"><span class="nav-number">3.5.</span> <span class="nav-text">下载操作</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存"><span class="nav-number">4.</span> <span class="nav-text">缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#内存缓存"><span class="nav-number">4.1.</span> <span class="nav-text">内存缓存</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#磁盘缓存"><span class="nav-number">4.2.</span> <span class="nav-text">磁盘缓存</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#图片存储"><span class="nav-number">4.3.</span> <span class="nav-text">图片存储</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#图片查询"><span class="nav-number">4.4.</span> <span class="nav-text">图片查询</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#图片移除"><span class="nav-number">4.5.</span> <span class="nav-text">图片移除</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#图片清理"><span class="nav-number">4.6.</span> <span class="nav-text">图片清理</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SDWebImageManager"><span class="nav-number">5.</span> <span class="nav-text">SDWebImageManager</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#补充点"><span class="nav-number">6.</span> <span class="nav-text">补充点</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">袁伟</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

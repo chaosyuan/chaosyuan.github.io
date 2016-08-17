@@ -1,0 +1,618 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="AngularJS,promise," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="promisepromise是一种编程模式，以同步操作的流程形式来操作异步事件，避免了层层嵌套，可以链式操作异步事件。在编写javascript异步代码时，callback是最最简单的机制，可是用这种机制控制流程、异常处理等比较麻烦，影响到代码的可读性甚至是代码质量，而promise解决了这个问题。
+$q在javaScript中有个广泛流行的库Q，angular中的$q就是从它引入的.$q是做为a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AngularJS Promise对象($q)">
+<meta property="og:url" content="http://chaosyuan.github.io/2015/12/10/2015-12-10-angularjs-promisedui-xiang-$q/index.html">
+<meta property="og:site_name" content="袁伟">
+<meta property="og:description" content="promisepromise是一种编程模式，以同步操作的流程形式来操作异步事件，避免了层层嵌套，可以链式操作异步事件。在编写javascript异步代码时，callback是最最简单的机制，可是用这种机制控制流程、异常处理等比较麻烦，影响到代码的可读性甚至是代码质量，而promise解决了这个问题。
+$q在javaScript中有个广泛流行的库Q，angular中的$q就是从它引入的.$q是做为a">
+<meta property="og:updated_time" content="2016-08-10T03:03:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AngularJS Promise对象($q)">
+<meta name="twitter:description" content="promisepromise是一种编程模式，以同步操作的流程形式来操作异步事件，避免了层层嵌套，可以链式操作异步事件。在编写javascript异步代码时，callback是最最简单的机制，可是用这种机制控制流程、异常处理等比较麻烦，影响到代码的可读性甚至是代码质量，而promise解决了这个问题。
+$q在javaScript中有个广泛流行的库Q，angular中的$q就是从它引入的.$q是做为a">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://chaosyuan.github.io/2015/12/10/2015-12-10-angularjs-promisedui-xiang-$q/"/>
+
+  <title> AngularJS Promise对象($q) | 袁伟 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">袁伟</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">千里之行始于足下</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                AngularJS Promise对象($q)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-12-10T11:38:10+08:00" content="2015-12-10">
+              2015-12-10
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="promise"><a href="#promise" class="headerlink" title="promise"></a>promise</h4><p>promise是一种编程模式，以同步操作的流程形式来操作异步事件，避免了层层嵌套，可以链式操作异步事件。<br>在编写javascript异步代码时，callback是最最简单的机制，可是用这种机制控制流程、异常处理等比较麻烦，影响到代码的可读性甚至是代码质量，而promise解决了这个问题。</p>
+<h4 id="q"><a href="#q" class="headerlink" title="$q"></a>$q</h4><p>在javaScript中有个广泛流行的库<a href="https://github.com/kriskowal/q" target="_blank" rel="external">Q</a>，angular中的$q就是从它引入的.<br>$q是做为angularjs的一个内置服务而存在的，只是对promise异步编程模式的一个简化实现版.</p>
+<h5 id="defer"><a href="#defer" class="headerlink" title="defer"></a>defer</h5><p>defer对象(延迟对象)可以通$q.defer( )获取，下面是defer对象的api：</p>
+<a id="more"></a>
+<ol>
+<li>resolve(value):向promise对象发送消息成功完成任务，value即为发送的消息。</li>
+<li>reject(reason): 向promise对象发送消息已经不可能完成这个任务了(拒绝)，reason即为发送的消息（拒绝原因）。</li>
+<li>notify(value): 向promise对象发送消息现在任务完成的情况（通知），value即为发送的消息。</li>
+<li>all( ) 传入Promise的数组，批量执行，返回一个promise对象</li>
+<li>when( ) 传入一个不确定的参数，如果符合Promise标准，就返回一个promise对象</li>
+</ol>
+<p>关于状态有几个规定：</p>
+<ol>
+<li>状态的变更是不可逆的</li>
+<li>等待状态可以变成完成或者拒绝</li>
+</ol>
+<h5 id="promise-对象的方法"><a href="#promise-对象的方法" class="headerlink" title="promise 对象的方法"></a>promise 对象的方法</h5><p>promise就是这个defer对象的承诺对象，defer主要是用来发送消息的。promise对象可以通过defer.promise获取,消息发送完promise会调用现有的回调函数.</p>
+<pre><code>function getUserOrderList(){
+  var model = $q.defer();
+    Users.userOrderList.then(function(success){
+    model.resolve(success);
+  },function(error){
+    model.reject(error);
+  });
+  return model.promise;
+}
+</code></pre><p>then(successCallback,errorCallback,notifyCallback):参数为不同消息下的不同回调函数，defer发送不同的消息执行不同的回调函数，消息作为这些回调函数的参数传递。返回值为回一个promise对象,为支持链式调用而存在。就是一种对执行结果不确定的一种预先定义，如果成功，就执行successCallback；如果失败，就执行errorCallback，就像事先给出了一些承诺。</p>
+<p>all( )方法，可以把多个primise的数组合并成一个。当所有的promise执行成功后，会执行后面的回调。回调中的参数，是每个promise执行的结果。当批量的执行某些任务时，就可以使用这个方法</p>
+<pre><code> var downLoadLyric = function(){
+     console.log(&quot;开始下载歌词&quot;);
+     return &quot;下载歌词&quot;;
+};
+ var downLoadSong = function(){
+     console.log(&quot;开始下载伴奏&quot;);
+     return &quot;下载伴奏&quot;;
+};
+$q.all([downLoadLyric(),downLoadSong()])
+      .then(function(result){
+          console.log(result);
+    });
+</code></pre><p>执行的结果：</p>
+<pre><code>开始下载歌词
+开始下载伴奏
+Array [ &quot;下载歌词&quot;, &quot;下载伴奏&quot; ] 
+</code></pre><p>when( )可以传入一个参数，参数可以是一个值，也可以是一个符合promise标准的外部对象。当传入的参数不确定时，可以使用这个方法</p>
+<pre><code>var funcA = function(){
+       console.log(&quot;funcA&quot;);
+       return &quot;hello,funcA&quot;;
+    };
+$q.when(funcA())
+     .then(function(result){
+       console.log(result);
+   });
+</code></pre><p>   执行的结果：</p>
+<pre><code>hello,funcA
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/AngularJS/" rel="tag">#AngularJS</a>
+          
+            <a href="/tags/promise/" rel="tag">#promise</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/26/2015-11-26-angularjs-lu-you-ji-zhi/" rel="next" title="AngularJS 路由机制">
+                <i class="fa fa-chevron-left"></i> AngularJS 路由机制
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/" rel="prev" title="AngularJS Controller 之间通信机制">
+                AngularJS Controller 之间通信机制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="袁伟" />
+          <p class="site-author-name" itemprop="name">袁伟</p>
+          <p class="site-description motion-element" itemprop="description">ZeroYuan</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#promise"><span class="nav-number">1.</span> <span class="nav-text">promise</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#q"><span class="nav-number">2.</span> <span class="nav-text">$q</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#defer"><span class="nav-number">2.1.</span> <span class="nav-text">defer</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#promise-对象的方法"><span class="nav-number">2.2.</span> <span class="nav-text">promise 对象的方法</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">袁伟</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

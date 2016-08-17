@@ -1,0 +1,608 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前言UITableView是iOS再熟悉不过的视图了,在实际开发用的也比较频繁，在开发过程中碰到一些问题–比如屏幕掉帧、卡顿等现象。这些现象大幅度的降低了用户的性能体验，并提高了crash的频率。在公司之前的项目开发中。对其中的性能优化也只停留表面的层级上。并没有真正理解产生问题的原因。所以抽出时间。对UITableView的性能优化做一个总结。
+UITableView 执行顺序首先说一下tabl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS－UITableView性能优化">
+<meta property="og:url" content="http://chaosyuan.github.io/2016/04/29/2016-04-29-ios[nil]uitableviewxing-neng-you-hua/index.html">
+<meta property="og:site_name" content="袁伟">
+<meta property="og:description" content="前言UITableView是iOS再熟悉不过的视图了,在实际开发用的也比较频繁，在开发过程中碰到一些问题–比如屏幕掉帧、卡顿等现象。这些现象大幅度的降低了用户的性能体验，并提高了crash的频率。在公司之前的项目开发中。对其中的性能优化也只停留表面的层级上。并没有真正理解产生问题的原因。所以抽出时间。对UITableView的性能优化做一个总结。
+UITableView 执行顺序首先说一下tabl">
+<meta property="og:updated_time" content="2016-08-10T03:06:27.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS－UITableView性能优化">
+<meta name="twitter:description" content="前言UITableView是iOS再熟悉不过的视图了,在实际开发用的也比较频繁，在开发过程中碰到一些问题–比如屏幕掉帧、卡顿等现象。这些现象大幅度的降低了用户的性能体验，并提高了crash的频率。在公司之前的项目开发中。对其中的性能优化也只停留表面的层级上。并没有真正理解产生问题的原因。所以抽出时间。对UITableView的性能优化做一个总结。
+UITableView 执行顺序首先说一下tabl">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://chaosyuan.github.io/2016/04/29/2016-04-29-ios[nil]uitableviewxing-neng-you-hua/"/>
+
+  <title> iOS－UITableView性能优化 | 袁伟 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">袁伟</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">千里之行始于足下</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                iOS－UITableView性能优化
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-29T19:37:40+08:00" content="2016-04-29">
+              2016-04-29
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p><strong>UITableView</strong>是iOS再熟悉不过的视图了,在实际开发用的也比较频繁，在开发过程中碰到一些问题–比如屏幕掉帧、卡顿等现象。这些现象大幅度的降低了用户的性能体验，并提高了crash的频率。在公司之前的项目开发中。对其中的性能优化也只停留表面的层级上。并没有真正理解产生问题的原因。所以抽出时间。对UITableView的性能优化做一个总结。</p>
+<h4 id="UITableView-执行顺序"><a href="#UITableView-执行顺序" class="headerlink" title="UITableView 执行顺序"></a>UITableView 执行顺序</h4><p>首先说一下tableView的delegate以及dataSource方法的执行顺序。当tableview需要显示内容的时候，首先发送网络请求，向服务器请求数据，然后将数据转为可以使用的model后进行reload操作。这时候会先调用（默认section为1）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section</div></pre></td></tr></table></figure>
+<p>根据model的个数来获取cell的行数。然后询问 delegate 这些 cell 应该显示的高度</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath</div></pre></td></tr></table></figure>
+<p>由于UITableView 是个UIScrollView。滑动范围由属性contentSize来确定。所以tableView加载时需要指定 contentSize。它的contentSize取决于所有cell的高度和。然后调用</p>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath</div></pre></td></tr></table></figure>
+<p>创建并显示cell</p>
+<h4 id="性能产生的原因"><a href="#性能产生的原因" class="headerlink" title="性能产生的原因"></a>性能产生的原因</h4><p>产生性能主要有两方面：</p>
+<blockquote>
+<ol>
+<li>计算布局</li>
+<li>绘制显示</li>
+</ol>
+</blockquote>
+<p>大多数情况下是将model直接传给cell然后在cell里进行计算各控件的相对位置.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">-(void)setModel:(Model *)model&#123;</div><div class="line">    _model = model;</div><div class="line">    self.contentLabel.text = model.content;</div><div class="line">    ......</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>但是这样做的话假如滑动比较快，且内部控件比较复杂会导致CPU的计算量过大，从而由于掉帧而造成卡顿。这个之前我也很疑惑为什么会掉帧?后来查看部分资料及<a href="http://blog.ibireme.com/2015/11/12/smooth_user_interfaces_for_ios/" target="_blank" rel="external">yy大神</a>博客后，才明白这一部分理论。</p>
+<p>这里我简单的说一下，因为GPU一个机制叫做垂直同步(Vertical Hold。简写V-Sync)，当开启垂直同步时。显示器刷新一帧后就会产生一个垂直同步信号。GPU在渲染每一帧之前会等待垂直同步信号，只有显示器完成了一次刷新时，发出V-Sync信号后，GPU才进行新的一帧渲染和缓冲区更新（也就是说GPU的渲染能力会受到显示器刷新率的制约。这样能解决画面撕裂现象，也增加了画面流畅度，但需要消费更多的计算资源，也会带来部分延迟。</p>
+<p>当 V-Sync 信号到来后，CPU开始进行内部控件的创建、布局、图片解码、文本绘制等。然后CPU 会将计算好的内容提交到 GPU 去，由 GPU 进行变换、合成、渲染。随后 GPU 会把渲染结果提交到帧缓冲区，等待下一次 V-Sync 信号到来时显示到屏幕上。由于垂直同步的机制，如果在一个 VSync 时间内，CPU 或者 GPU 没有完成内容提交(也就是超过了1个VSync周期)，则那一帧就会被丢弃，等待下一次机会再显示，而这时显示屏会保留之前的内容不变。这就是会造成掉帧的原因。</p>
+<h4 id="如何性能优化"><a href="#如何性能优化" class="headerlink" title="如何性能优化"></a>如何性能优化</h4><p>性能优化的最终目的：平衡CPU和GPU的压力。正确地利用了CPU和GPU资源，使它们均匀地负载，这样使得FPS会保持在60帧。避免出现CPU满载GPU低负载或者GPU满载CPU低负载的情况。</p>
+<h4 id="计算布局性能优化"><a href="#计算布局性能优化" class="headerlink" title="计算布局性能优化"></a>计算布局性能优化</h4><p>计算布局优化也就是避免出现CPU满载GPU低负载的情况。<br>尽量不要使用Autolayout，可能使用进行手动布局可能会麻烦点，但是通过简单的加减乘除就可以获取控件相对位置和cell的高度。AutoLayout是苹果提倡使用。但是对于复杂视图来说常常会产生性能问题。子视图越多。CPU通过AutoLayout计算布局会约吃力。这是因为AutoLayout需要根据底层“Cassowary”的约束求解系统进行约束计算，从而得到一个唯一解。如果内部的子视图越多，它需要进行的计算量就越大，需要求解的约束越多，CPU计算布局耗费大量时间从而导致超过了一个VSync周期。如果使用手动布局，只是简单的线性计算（top/left/bottom/right）。减少了CPU的负载.</p>
+<p>将cell的高度以及子视图的布局封装为成一个对象，cell显示之前在异步线程计算好所有布局对象，并存入数组，每次调用tableView: heightForRowAtIndexPath :只需要从数组中取出，可避免重复的布局计算。<br>说到 cell高度计算及预缓存等功能，<a href="https://github.com/forkingdog/UITableView-FDTemplateLayoutCell" target="_blank" rel="external">forkingdog</a>开源了一个很不错的库。</p>
+<h4 id="绘制显示性能优化"><a href="#绘制显示性能优化" class="headerlink" title="绘制显示性能优化"></a>绘制显示性能优化</h4><p>绘制显示优化也就是避免出现GPU满载CPU低负载的情况。<br>在介绍GPU方面性能优化之前，我先说一下屏幕渲染。<br>OpenGL中,GPU<strong>屏幕渲染</strong>有两种方式：</p>
+<blockquote>
+<ol>
+<li><strong>On-Screen Rendering</strong> (<strong>当前屏幕渲染</strong>) 指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区进行</li>
+<li><strong>Off-Screen Rendering</strong> (<strong>离屏渲染</strong>) 指的是在GPU在当前屏幕缓冲区以外开辟一个缓冲区进行渲染操作.</li>
+</ol>
+</blockquote>
+<p>GPU方面性能优化体现在，在调用tableView: cellForRowAtIndexPath时，对cell内部视图绘制布局，以及图片的绘制解码等</p>
+<blockquote>
+<ol>
+<li>当多个视图(或者CALayer)重叠时，GPU会对其进行合成渲染，而渲染最慢的操作之一是混合，因此当视图结构太复杂就会消耗大量GPU资源。为此应当尽量减少视图数量和层次。当一个视图是不透明的，注意设定layer.opaque = YES（而不是网上普遍认为view.opaque = YES)。可以避免无用的Alpha通道合成，降低GPU负载</li>
+<li>当设置mask(遮罩)，shadows(阴影)，opacity(不透明),antialiasing(抗锯齿)等属性时,触发离屏渲染（offscreen rendering），而这个是在GPU中进行的，所以快速滑动tableView时，假如圆角对象较多，会导致GPU负载大增。这时候可以设置layer.shouldRasterize属性为YES。更为彻底的做法是直接在后台绘制圆角图片然后输出到主线程显示，避免使用圆角、阴影、遮罩等属性</li>
+<li>使用drawRect:方法, 因为CoreGraphic 方法通常都是线程安全的，所以可以直接将文字和图片放到后台线程进异步绘制。然后输出到主线程上。将GPU的部分渲染转接给CPU</li>
+</ol>
+</blockquote>
+<p>shouldRasterize（光栅化）: 将图转化为一个个栅格组成的图象。 光栅化特点：每个元素对应帧缓冲区中的一像素。</p>
+<p>shouldRasterize = YES在其它属性触发离屏渲染的同时,会将光栅化后的内容缓存起来,如果对应的layer或者 sublayers没有发生改变,在下一帧的时候可以直接复用,从而减少渲染的频率。对于经常变动的内容,不要开启,否则会造成性能浪费.</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>性能优化要注意平衡CPU和GPU的负载。对于网上一些文章得出的结论，需要理性分析。只有通过自己的思考和实践才能得出较好的定论。</p>
+<h4 id="详细参考"><a href="#详细参考" class="headerlink" title="详细参考"></a>详细参考</h4><ol>
+<li>YYKIt作者 <a href="http://blog.ibireme.com/2015/11/12/smooth_user_interfaces_for_ios/" target="_blank" rel="external">iOS 保持界面流畅的技巧</a>（个人收获比较大）</li>
+<li>seedante <a href="http://www.jianshu.com/p/ca51c9d3575b" target="_blank" rel="external">离屏渲染优化</a></li>
+<li><a href="http://blog.sunnyxx.com/2015/05/17/cell-height-calculation/" target="_blank" rel="external">优化UITableViewCell高度计算的那些事</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag">#iOS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/16/2016-04-16-iosduo-xian-cheng-kai-fa-[nil]xian-cheng-an-quan/" rel="next" title="iOS多线程开发－线程安全">
+                <i class="fa fa-chevron-left"></i> iOS多线程开发－线程安全
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/05/2016-05-05-yi-bu-hui-zhi-yyasynclayer/" rel="prev" title="异步绘制-YYAsyncLayer">
+                异步绘制-YYAsyncLayer <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="袁伟" />
+          <p class="site-author-name" itemprop="name">袁伟</p>
+          <p class="site-description motion-element" itemprop="description">ZeroYuan</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UITableView-执行顺序"><span class="nav-number">2.</span> <span class="nav-text">UITableView 执行顺序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#性能产生的原因"><span class="nav-number">3.</span> <span class="nav-text">性能产生的原因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何性能优化"><span class="nav-number">4.</span> <span class="nav-text">如何性能优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计算布局性能优化"><span class="nav-number">5.</span> <span class="nav-text">计算布局性能优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#绘制显示性能优化"><span class="nav-number">6.</span> <span class="nav-text">绘制显示性能优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#详细参考"><span class="nav-number">8.</span> <span class="nav-text">详细参考</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">袁伟</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

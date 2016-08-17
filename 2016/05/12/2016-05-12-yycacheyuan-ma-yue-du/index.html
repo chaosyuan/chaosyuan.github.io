@@ -1,0 +1,659 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在iOS 开发中总会用到各种缓存。通常一个缓存是由内存缓存和磁盘缓存组成，内存缓存提供容量小但高速的存取功能，磁盘缓存提供大容量但低速的持久化存储。YYCache或许是最好的选择之一。性能上有优势，用法也很简单。在阅读完源码之后，记录一下源码解析笔记。
+层级结构YYCache是对内存缓存和磁盘缓存的封装。YYMemoryCache为内存缓存，YYDiskCache为磁盘缓存，YYKVStora">
+<meta property="og:type" content="article">
+<meta property="og:title" content="YYCache源码阅读">
+<meta property="og:url" content="http://chaosyuan.github.io/2016/05/12/2016-05-12-yycacheyuan-ma-yue-du/index.html">
+<meta property="og:site_name" content="袁伟">
+<meta property="og:description" content="前言在iOS 开发中总会用到各种缓存。通常一个缓存是由内存缓存和磁盘缓存组成，内存缓存提供容量小但高速的存取功能，磁盘缓存提供大容量但低速的持久化存储。YYCache或许是最好的选择之一。性能上有优势，用法也很简单。在阅读完源码之后，记录一下源码解析笔记。
+层级结构YYCache是对内存缓存和磁盘缓存的封装。YYMemoryCache为内存缓存，YYDiskCache为磁盘缓存，YYKVStora">
+<meta property="og:updated_time" content="2016-08-10T03:06:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="YYCache源码阅读">
+<meta name="twitter:description" content="前言在iOS 开发中总会用到各种缓存。通常一个缓存是由内存缓存和磁盘缓存组成，内存缓存提供容量小但高速的存取功能，磁盘缓存提供大容量但低速的持久化存储。YYCache或许是最好的选择之一。性能上有优势，用法也很简单。在阅读完源码之后，记录一下源码解析笔记。
+层级结构YYCache是对内存缓存和磁盘缓存的封装。YYMemoryCache为内存缓存，YYDiskCache为磁盘缓存，YYKVStora">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://chaosyuan.github.io/2016/05/12/2016-05-12-yycacheyuan-ma-yue-du/"/>
+
+  <title> YYCache源码阅读 | 袁伟 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">袁伟</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">千里之行始于足下</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                YYCache源码阅读
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-12T21:36:54+08:00" content="2016-05-12">
+              2016-05-12
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>在iOS 开发中总会用到各种缓存。通常一个缓存是由内存缓存和磁盘缓存组成，内存缓存提供容量小但高速的存取功能，磁盘缓存提供大容量但低速的持久化存储。<a href="https://github.com/ibireme/YYCache" target="_blank" rel="external">YYCache</a>或许是最好的选择之一。性能上有优势，用法也很简单。在阅读完源码之后，记录一下源码解析笔记。</p>
+<h4 id="层级结构"><a href="#层级结构" class="headerlink" title="层级结构"></a>层级结构</h4><p>YYCache是对内存缓存和磁盘缓存的封装。YYMemoryCache为内存缓存，YYDiskCache为磁盘缓存，YYKVStorage为磁盘缓存的底层实现。下面看一下具体的实现细节。</p>
+<h4 id="YYCache"><a href="#YYCache" class="headerlink" title="YYCache"></a>YYCache</h4><a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">@property (copy, readonly) NSString *name;</div><div class="line"></div><div class="line">// memoryCache为内容缓存  diskCache为文件缓存</div><div class="line">@property (strong, readonly) YYMemoryCache *memoryCache;</div><div class="line">@property (strong, readonly) YYDiskCache *diskCache;</div><div class="line"></div><div class="line">// 通过下面三种方法来实例化YYCache对象</div><div class="line">- (nullable instancetype)initWithName:(NSString *)name;</div><div class="line">- (nullable instancetype)initWithPath:(NSString *)path NS_DESIGNATED_INITIALIZER;</div><div class="line">+ (nullable instancetype)cacheWithName:(NSString *)name;</div><div class="line"></div><div class="line">+ (nullable instancetype)cacheWithPath:(NSString *)path;</div><div class="line"></div><div class="line">// 禁止通过下面两个方式实例化对象</div><div class="line">- (instancetype)init UNAVAILABLE_ATTRIBUTE;</div><div class="line">+ (instancetype)new UNAVAILABLE_ATTRIBUTE;</div><div class="line"></div><div class="line">// 通过key判断是否缓存 第二个法是异步执行,异步回调</div><div class="line">- (BOOL)containsObjectForKey:(NSString *)key;</div><div class="line">- (void)containsObjectForKey:(NSString *)key withBlock:(nullable void(^)(NSString *key, BOOL contains))block;</div><div class="line"></div><div class="line">// 通过key读取缓存，第二个法是异步执行,异步回调</div><div class="line">- (nullable id&lt;NSCoding&gt;)objectForKey:(NSString *)key;</div><div class="line">- (void)objectForKey:(NSString *)key withBlock:(nullable void(^)(NSString *key, id&lt;NSCoding&gt; object))block;</div><div class="line"></div><div class="line">// 增、改--缓存对象(可缓存遵从NSCoding协议的对象)，第二个法是异步执行,异步回调</div><div class="line">- (void)setObject:(nullable id&lt;NSCoding&gt;)object forKey:(NSString *)key;</div><div class="line">- (void)setObject:(nullable id&lt;NSCoding&gt;)object forKey:(NSString *)key withBlock:(nullable void(^)(void))block;</div><div class="line"></div><div class="line">// 删除缓存</div><div class="line">- (void)removeObjectForKey:(NSString *)key;</div><div class="line">- (void)removeObjectForKey:(NSString *)key withBlock:(nullable void(^)(NSString *key))block;</div><div class="line">- (void)removeAllObjects;</div><div class="line">- (void)removeAllObjectsWithBlock:(void(^)(void))block;</div><div class="line">- (void)removeAllObjectsWithProgressBlock:(nullable void(^)(int removedCount, int totalCount))progress</div><div class="line">                                 endBlock:(nullable void(^)(BOOL error))end;</div></pre></td></tr></table></figure>
+<p>API设计的很简洁，使用起来十分方便。</p>
+<h4 id="YYMemoryCache"><a href="#YYMemoryCache" class="headerlink" title="YYMemoryCache"></a>YYMemoryCache</h4><p>YYMemoryCache是内存缓存，所以存取速度非常快。但不同于一般的第三方NSCache的key-value存储方式，而是采用的<strong>CFDictionary</strong>和<strong>双向链表</strong>相结合的方式进行内存缓存。这种做的好处就是能够满足<strong>LRU</strong>（Least Recently Used）<strong>淘汰算法</strong>。它的层级结构是YYMemoryCache -&gt;_YYLinkedMap -&gt;_YYLinkedMapNode.</p>
+<h5 id="YYLinkedMapNode"><a href="#YYLinkedMapNode" class="headerlink" title="_YYLinkedMapNode"></a>_YYLinkedMapNode</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@interface _YYLinkedMapNode : NSObject &#123;</div><div class="line">    @package</div><div class="line">    __unsafe_unretained _YYLinkedMapNode *_prev;</div><div class="line">    __unsafe_unretained _YYLinkedMapNode *_next;</div><div class="line">    id _key;</div><div class="line">    id _value;</div><div class="line">    NSUInteger _cost;</div><div class="line">    NSTimeInterval _time;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<ol>
+<li>@package 是为了不让framework外部对其进行操作（对于framework内部相当于protected 对于framework外部相当于private）</li>
+<li>_YYLinkedMapNode *_prev 定义了一个指针指向前一个节点, _YYLinkedMapNode _next指向后一个节点。还有一点是都使用__unsafe_unretained修饰的。这是为了防止循环引用，因为采用的数据结构是双向链表，很可能出现循环强引用，最后就都不会给释放。</li>
+<li>_key:缓存的键</li>
+<li>_value:缓存的值</li>
+<li>_cost存储这个value需要的内存开销</li>
+<li>_time 最后访问时间</li>
+</ol>
+</blockquote>
+<p> 通过以上6个成员变量，就能完成时间，空间，数量的淘汰算法了。    </p>
+<h5 id="YYLinkedMap"><a href="#YYLinkedMap" class="headerlink" title="_YYLinkedMap"></a>_YYLinkedMap</h5><p>_YYLinkedMapNode是一个节点，那么_YYLinkedMap就是链表。链表的作用是将所有节点串联起来形成双向链表数据结构。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">@interface _YYLinkedMap : NSObject &#123;</div><div class="line">    @package</div><div class="line">    CFMutableDictionaryRef _dic;// 用字典保存所有节点</div><div class="line">    NSUInteger _totalCost; // 总内存开销</div><div class="line">    NSUInteger _totalCount;// 总内存长度</div><div class="line">    _YYLinkedMapNode *_head; // MRU, 链表的头结点</div><div class="line">    _YYLinkedMapNode *_tail; // LRU, 链表的尾节点</div><div class="line">    BOOL _releaseOnMainThread; // 是否在主线程上，异步释放 _YYLinkedMapNode对象</div><div class="line">    BOOL _releaseAsynchronously;//是否异步释放 _YYLinkedMapNode对象</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="链表的操作"><a href="#链表的操作" class="headerlink" title="链表的操作"></a>链表的操作</h5><p><strong>insertNodeAtHead</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">- (void)insertNodeAtHead:(_YYLinkedMapNode *)node &#123;</div><div class="line">- </div><div class="line">    CFDictionarySetValue(_dic, (__bridge const void *)(node-&gt;_key), (__bridge const void *)(node));// 字典保存链表的节点node</div><div class="line">    _totalCost += node-&gt;_cost;// 叠加该缓存开销到总内存开销</div><div class="line">    _totalCount++; // 总缓存数+1</div><div class="line">    if (_head) &#123;</div><div class="line">        node-&gt;_next = _head; // 存在链表表头，取代当前表头</div><div class="line">        _head-&gt;_prev = node;</div><div class="line">        _head = node;  // 重新赋值链表表头临时变量_head</div><div class="line">    &#125; else &#123;</div><div class="line">        _head = _tail = node;  // 不存在链表表头</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>bringNodeToHead</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">- (void)bringNodeToHead:(_YYLinkedMapNode *)node &#123;</div><div class="line">    if (_head == node) return; // 当前节点已是链表头节点</div><div class="line">    </div><div class="line">    // 如果node是链表尾节点</div><div class="line">    if (_tail == node) &#123;</div><div class="line">        _tail = node-&gt;_prev; // 把node指向的上一个节点赋值给链表尾节点</div><div class="line">        _tail-&gt;_next = nil;// 把链表尾节点指向的下一个节点赋值nil</div><div class="line">    &#125; else &#123;</div><div class="line">        // 如果node是非链表尾节点和链表头节点</div><div class="line">        </div><div class="line">        //  把node指向的上一个节点赋值給node指向的下一个节点node指向的上一个节点</div><div class="line">        node-&gt;_next-&gt;_prev = node-&gt;_prev;</div><div class="line">        </div><div class="line">        //  把node指向的下一个节点赋值给node指向的上一个节点node指向的下一个节点</div><div class="line">        node-&gt;_prev-&gt;_next = node-&gt;_next;</div><div class="line">    &#125;</div><div class="line">    node-&gt;_next = _head; // 把链表头节点赋值给node指向的下一个节点</div><div class="line">    node-&gt;_prev = nil;   // 把node指向的上一个节点赋值nil</div><div class="line">    _head-&gt;_prev = node;// 把节点赋值给链表头节点的指向的上一个节点</div><div class="line">    _head = node;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>removeNode</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">- (void)removeNode:(_YYLinkedMapNode *)node &#123;</div><div class="line">    // 从字典中移除node</div><div class="line">    CFDictionaryRemoveValue(_dic, (__bridge const void *)(node-&gt;_key));</div><div class="line">    _totalCost -= node-&gt;_cost;// 减掉总内存消耗</div><div class="line">    _totalCount--;// 总缓存数-1</div><div class="line">    </div><div class="line">    if (node-&gt;_next) node-&gt;_next-&gt;_prev = node-&gt;_prev;</div><div class="line">    if (node-&gt;_prev) node-&gt;_prev-&gt;_next = node-&gt;_next;</div><div class="line">    // 把node指向的下一个节点赋值给链表的头节点</div><div class="line">    if (_head == node) _head = node-&gt;_next;</div><div class="line">    // 把node指向上的节点赋值给链表尾节点</div><div class="line">    if (_tail == node) _tail = node-&gt;_prev;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>removeAll</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">- (void)removeAll &#123;</div><div class="line">   </div><div class="line">    _totalCost = 0;  // 清空内存开销与缓存数量</div><div class="line">    _totalCount = 0;</div><div class="line">    _head = nil;    // 清空头尾节点</div><div class="line">    _tail = nil;</div><div class="line"></div><div class="line">    if (CFDictionaryGetCount(_dic) &gt; 0) &#123;</div><div class="line">        // 拷贝一份字典</div><div class="line">        CFMutableDictionaryRef holder = _dic;</div><div class="line">        // 重新分配新的空间</div><div class="line">        _dic = CFDictionaryCreateMutable(CFAllocatorGetDefault(), 0, &amp;kCFTypeDictionaryKeyCallBacks, &amp;kCFTypeDictionaryValueCallBacks);</div><div class="line"></div><div class="line">        if (_releaseAsynchronously) &#123;</div><div class="line">            // 异步释放缓存</div><div class="line">            dispatch_queue_t queue = _releaseOnMainThread ? dispatch_get_main_queue() : YYMemoryCacheGetReleaseQueue();</div><div class="line">            dispatch_async(queue, ^&#123;</div><div class="line">                CFRelease(holder); </div><div class="line">            &#125;);</div><div class="line">        &#125; else if (_releaseOnMainThread &amp;&amp; !pthread_main_np()) &#123;</div><div class="line">            dispatch_async(dispatch_get_main_queue(), ^&#123;</div><div class="line">                CFRelease(holder);  // 主线程上释放缓存</div><div class="line">            &#125;);</div><div class="line">        &#125; else &#123;</div><div class="line">            CFRelease(holder);  // 同步释放缓存</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>对一个Cache的操作分为三种：插入、替换、查找</p>
+<blockquote>
+<p>查找：每次数据项被查询到时，都将此数据项移动到链表头部<br>插入：当Cache未满时，新的数据项只需插到双链表头部即可<br>替换：当Cache已满时，将新的数据项插到双链表头部，并删除双链表的尾结点即可</p>
+</blockquote>
+<p>YYMemoryCache的实现都是通过调用上面的方法来实现的。</p>
+<h4 id="YYDiskCache"><a href="#YYDiskCache" class="headerlink" title="YYDiskCache"></a>YYDiskCache</h4><p>YYDiskCache（表层类）是对YYKVStorage（实现类）的封装,缓存方式为：数据库+文件。</p>
+<p>在说YYKVStorage之前先说一下<code>YYKVStorageItem</code><br><strong>YYKVStorageItem</strong>头文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@interface YYKVStorageItem : NSObject</div><div class="line">@property (nonatomic, strong) NSString *key;                // 缓存键值</div><div class="line">@property (nonatomic, strong) NSData *value;                // 缓存对象</div><div class="line">@property (nullable, nonatomic, strong) NSString *filename; //  缓存文件名 </div><div class="line">@property (nonatomic) int size;                             // 缓存大小</div><div class="line">@property (nonatomic) int modTime;                          // 最后修改的时间戳</div><div class="line">@property (nonatomic) int accessTime;                       // 最后访问的时间戳</div><div class="line">@property (nullable, nonatomic, strong) NSData *extendedData; // 拓展数据</div><div class="line">@end</div></pre></td></tr></table></figure>
+<p>YYKVStorageItem指的是每一个存储的单元，这个存储单元的属性比较完善。YYKVStorage像一个manager用来管理每一个YYKVStorageItem,我们可以通过YYKVStorage来操作单个的YYKVStorageItem。比如获取，保存，移除等等</p>
+<h5 id="YYKVStorage"><a href="#YYKVStorage" class="headerlink" title="YYKVStorage"></a>YYKVStorage</h5><p><strong>缓存类型</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">typedef NS_ENUM(NSUInteger, YYKVStorageType) &#123;</div><div class="line">    // 文件缓存(filename != null)</div><div class="line">    YYKVStorageTypeFile = 0,</div><div class="line">    // 数据库缓存</div><div class="line">    YYKVStorageTypeSQLite = 1,</div><div class="line">    // 如果filename == null,则用数据库缓存，否则用文件缓存</div><div class="line">    YYKVStorageTypeMixed = 2,</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p><strong>查询某个项</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">- (YYKVStorageItem *)getItemForKey:(NSString *)key &#123;</div><div class="line">    if (key.length == 0) return nil;</div><div class="line">    // 数据库查询</div><div class="line">    YYKVStorageItem *item = [self _dbGetItemWithKey:key excludeInlineData:NO];</div><div class="line">    if (item) &#123;</div><div class="line">        //  更新操作时间</div><div class="line">        [self _dbUpdateAccessTimeWithKey:key];</div><div class="line">        if (item.filename) &#123;</div><div class="line">            // 读取文件</div><div class="line">            item.value = [self _fileReadWithName:item.filename];</div><div class="line">            if (!item.value) &#123;</div><div class="line">                // 删除数据库记录</div><div class="line">                [self _dbDeleteItemWithKey:key];</div><div class="line">                item = nil;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return item;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>查询缓存的操作步骤：</p>
+<blockquote>
+<p>1.先判断key是否为空<br>2.通过Key查找到对应的缓存项<br>3.如果查找成功，更新访问时间，然后通过文件名，读取数据，如果数据为空，则通过key删除对应的文件</p>
+</blockquote>
+<p><strong>查询多个项</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">- (NSArray *)getItemForKeys:(NSArray *)keys &#123;</div><div class="line">    if (keys.count == 0) return nil;</div><div class="line">    NSMutableArray *items = [self _dbGetItemWithKeys:keys excludeInlineData:NO];</div><div class="line">    if (_type != YYKVStorageTypeSQLite) &#123;</div><div class="line">        for (NSInteger i = 0, max = items.count; i &lt; max; i++) &#123;</div><div class="line">            YYKVStorageItem *item = items[i];</div><div class="line">            if (item.filename) &#123;</div><div class="line">                item.value = [self _fileReadWithName:item.filename];</div><div class="line">                if (!item.value) &#123;</div><div class="line">                    if (item.key) [self _dbDeleteItemWithKey:item.key];</div><div class="line">                    [items removeObjectAtIndex:i];</div><div class="line">                    i--;</div><div class="line">                    max--;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    if (items.count &gt; 0) &#123;</div><div class="line">        [self _dbUpdateAccessTimeWithKeys:keys];</div><div class="line">    &#125;</div><div class="line">    return items.count ? items : nil;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>查询多个缓存项步骤：</p>
+<blockquote>
+<ol>
+<li>先判断需要查找的缓存数组是否为空</li>
+<li>然后在数据库里拿到所有缓存项</li>
+<li>遍历出每个缓存项，并确保值存在，不存在的删除掉</li>
+<li>最后更新所有缓存项的访问时间</li>
+</ol>
+</blockquote>
+<p><strong>添加缓存</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">- (BOOL)saveItemWithKey:(NSString *)key value:(NSData *)value filename:(NSString *)filename extendedData:(NSData *)extendedData &#123;</div><div class="line">    </div><div class="line">    //先判断key，value是否为空</div><div class="line">    if (key.length == 0 || value.length == 0) return NO;</div><div class="line">    // 缓存方式为YYKVStorageTypeFile并且文件名为空时 不缓存</div><div class="line">    if (_type == YYKVStorageTypeFile &amp;&amp; filename.length == 0) &#123;</div><div class="line">        return NO;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    if (filename.length) &#123;</div><div class="line">        </div><div class="line">         // 缓存数据写入文件</div><div class="line">        if (![self _fileWriteWithName:filename data:value]) &#123;</div><div class="line">            return NO;</div><div class="line">        &#125;</div><div class="line">        // 把key,filename,extendedData写入数据库,存在filenam,则不把value缓存进数据库</div><div class="line">        if (![self _dbSaveWithKey:key value:value fileName:filename extendedData:extendedData]) &#123;</div><div class="line">            //  如果数据库操作失败，删除之前的文件缓存</div><div class="line">            [self _fileDeleteWithName:filename];</div><div class="line">            return NO;</div><div class="line">        &#125;</div><div class="line">        return YES;</div><div class="line">    &#125; else &#123;</div><div class="line">        if (_type != YYKVStorageTypeSQLite) &#123;</div><div class="line">            // 根据key查找缓存文件名</div><div class="line">            NSString *filename = [self _dbGetFilenameWithKey:key];</div><div class="line">            if (filename) &#123;</div><div class="line">                // 删除文件缓存</div><div class="line">                [self _fileDeleteWithName:filename];</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        // 把缓存写入数据库</div><div class="line">        return [self _dbSaveWithKey:key value:value fileName:nil extendedData:extendedData];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>添加缓存的操作步骤：</p>
+<blockquote>
+<ol>
+<li>先判断key，value是否为空</li>
+<li>filename不为空的情况下，先将NSData写入磁盘文件，然后向数据库插入一条磁盘缓存文件的表记录。filename为空的情况下，根据key查询表中记录缓存项的filename字段,删除查询到的filename对应的缓存文件,更新key对应的缓存表记录的filename字段，清空为nil</li>
+</ol>
+</blockquote>
+<p><strong>删除缓存</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">- (BOOL)removeItemForKey:(NSString *)key &#123;</div><div class="line">    if (key.length == 0) return NO;</div><div class="line">    //  判断缓存方式</div><div class="line">    switch (_type) &#123;</div><div class="line">        case YYKVStorageTypeSQLite: &#123;</div><div class="line">            //  删除数据库记录</div><div class="line">            return [self _dbDeleteItemWithKey:key];</div><div class="line">        &#125; break;</div><div class="line">        case YYKVStorageTypeFile:</div><div class="line">        case YYKVStorageTypeMixed: &#123;</div><div class="line">            //  数据库缓存或文件缓存</div><div class="line">            // 查找缓存文件名</div><div class="line">            NSString *filename = [self _dbGetFilenameWithKey:key];</div><div class="line">            if (filename) &#123;</div><div class="line">                // 删除文件缓存</div><div class="line">                [self _fileDeleteWithName:filename];</div><div class="line">            &#125;</div><div class="line">               // 删除数据库记录</div><div class="line">            return [self _dbDeleteItemWithKey:key];</div><div class="line">        &#125; break;</div><div class="line">        default: return NO;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>删除缓存项的操作步骤：</p>
+<blockquote>
+<ol>
+<li>先判断key是否为空</li>
+<li>判断缓存方式是哪一种.如果是sqlite存储，删除sqlite里对应的缓存项。如果是文件存储，先获取文件名，然后删除。</li>
+</ol>
+</blockquote>
+<p><strong>删除所有项</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- (BOOL)removeAllItems &#123;</div><div class="line">    if (![self _dbClose]) return NO;</div><div class="line">    [self _reset];</div><div class="line">    if (![self _dbOpen]) return NO;</div><div class="line">    if (![self _dbInitialize]) return NO;</div><div class="line">    return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>删除所有目录的操作步骤：</p>
+<blockquote>
+<ol>
+<li>首先关闭数据库，并确认已经关闭</li>
+<li>格式化数据库，移除db.sqlite,db.sqlite-shm,db.sqlite-wal文件,将所有磁盘文件移动到Trash目录下,然后将删除Trash目录下文件的操作，放到子线程队列上异步执行</li>
+<li>初始化数据库</li>
+</ol>
+</blockquote>
+<h5 id="删除缓存策略"><a href="#删除缓存策略" class="headerlink" title="删除缓存策略"></a>删除缓存策略</h5><p>设计缓存时，一定会考虑删除策略，比如SDWebImage中就设计了比较好的删除策略。YYKVStorage的删除缓存策略如下：</p>
+<blockquote>
+<ul>
+<li>删除所有内存开销大于size的缓存</li>
+<li>删除所有时间比time小的缓存</li>
+<li>减小缓存占的容量开销，使总缓存的容量开销值不大于maxSize(删除原则：LRU 最久未使用的缓存将先删除)</li>
+<li>减小总缓存数量，使总缓存数量不大于maxCount(删除原则：LRU 最久未使用的缓存将先删除)</li>
+</ul>
+</blockquote>
+<p>补充：在沙盒下的SQLite数据库包含三个文件：db.sqlite，db.sqlite-wal ，db.sqlite-shm。在介绍这三个文件之前，说一下WAL机制。在引入WAL机制之前，SQLite使用rollback机制实现原子事务</p>
+<blockquote>
+<ul>
+<li>rollback 机制原理：在修改数据库文件中的数据之前，先将修改所在分页中的数据备份在另外一个地方，然后才将修改写入到数据库文件中；如果事务失败，则将备份数据拷贝回来，撤销修改；如果事务成功，则删除备份数据，提交修改。</li>
+<li>WAL机制原理：修改并不直接写入到数据库文件中，而是写入到另外一个称为WAL的文件中；如果事务失败，WAL中的记录会被忽略，撤销修改；如果事务成功，它将在随后的某个时间被写回到数据库文件中，提交修改 </li>
+</ul>
+</blockquote>
+<p><strong>db.sqlite</strong>：存放数据库本身的数据: 表、表记录、index、sequence …<br><strong>db.sqlite-wal</strong>：wal全称是Write Ahead Logging。很多数据库中用于实现原子事务的一种机制。同样数据库必须开启WAL模式，用于数据库实现实现原子事务，当创建第一个数据库连接时创建 db-wal文件，当最后一个数据库连接关闭时删除 db-wal文件<br><strong>db.sqlite-shm</strong>：存放的是Shared-Memory Files，数据库必须开启WAL模式，当多个线程/进程访问同一个数据库时，让每一个数据库连接可以进行内存数据共享，随着 db-wal文件创建而创建，删除而删除</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag">#iOS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/05/2016-05-05-yi-bu-hui-zhi-yyasynclayer/" rel="next" title="异步绘制-YYAsyncLayer">
+                <i class="fa fa-chevron-left"></i> 异步绘制-YYAsyncLayer
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/01/iOS-视图控制器转场/" rel="prev" title="iOS 视图控制器转场">
+                iOS 视图控制器转场 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="袁伟" />
+          <p class="site-author-name" itemprop="name">袁伟</p>
+          <p class="site-description motion-element" itemprop="description">ZeroYuan</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#层级结构"><span class="nav-number">2.</span> <span class="nav-text">层级结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#YYCache"><span class="nav-number">3.</span> <span class="nav-text">YYCache</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#YYMemoryCache"><span class="nav-number">4.</span> <span class="nav-text">YYMemoryCache</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#YYLinkedMapNode"><span class="nav-number">4.1.</span> <span class="nav-text">_YYLinkedMapNode</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#YYLinkedMap"><span class="nav-number">4.2.</span> <span class="nav-text">_YYLinkedMap</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#链表的操作"><span class="nav-number">4.3.</span> <span class="nav-text">链表的操作</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#YYDiskCache"><span class="nav-number">5.</span> <span class="nav-text">YYDiskCache</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#YYKVStorage"><span class="nav-number">5.1.</span> <span class="nav-text">YYKVStorage</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#删除缓存策略"><span class="nav-number">5.2.</span> <span class="nav-text">删除缓存策略</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">袁伟</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
