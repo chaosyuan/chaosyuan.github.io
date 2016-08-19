@@ -1,1167 +1,797 @@
-<!doctype html>
 
-
-
-  
-
-
-<html class="theme-next mist use-motion">
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
+  <meta charset="UTF-8">
   
-  
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
-
-
-
-
-  
-  
-  
-  
-
-  
+    <title>袁伟的技术博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
+    <meta name="author" content="袁伟">
     
-  
 
-  
-
-  
-
-  
-
-  
-
-  
     
-    
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
-
-
-
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Hexo, NexT" />
-
-
-
-
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
-
-
-
-
-
-
-<meta name="description" content="ZeroYuan">
+    <meta name="description" content="ZeroYuan">
 <meta property="og:type" content="website">
-<meta property="og:title" content="袁伟">
+<meta property="og:title" content="袁伟的技术博客">
 <meta property="og:url" content="http://chaosyuan.github.io/page/2/index.html">
-<meta property="og:site_name" content="袁伟">
+<meta property="og:site_name" content="袁伟的技术博客">
 <meta property="og:description" content="ZeroYuan">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="袁伟">
+<meta name="twitter:title" content="袁伟的技术博客">
 <meta name="twitter:description" content="ZeroYuan">
 
-
-
-<script type="text/javascript" id="hexo.configuration">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    scheme: 'Mist',
-    sidebar: {"position":"left","display":"post"},
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 0,
-      author: '博主'
-    }
-  };
-</script>
-
-
-
-
-  <link rel="canonical" href="http://chaosyuan.github.io/page/2/"/>
-
-  <title> 袁伟 </title>
+    
+    <link rel="alternative" href="/atom.xml" title="袁伟的技术博客" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
-  
-
-
-
-
-
-
-
-
-
-
-  
-  
-    
-  
-
-  <div class="container one-collumn sidebar-position-left 
-   page-home 
- ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-meta ">
-  
-
-  <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <span class="site-title">袁伟</span>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-  <p class="site-subtitle">千里之行始于足下</p>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="袁伟的技术博客">袁伟的技术博客</a></h1>
+				<h2 class="blog-motto">千里之行始于足下</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/tags">标签</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:chaosyuan.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
 </div>
-
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-            标签
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
-
-      
-    </ul>
-  
-
-  
-</nav>
-
- </div>
     </header>
+    <div id="container">
+      <div id="main">
 
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
-  <section id="posts" class="posts-expand">
+   
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/02/04/2016-02-04-shi-yong-yomangou-jian-webgong-zuo-liu/" itemprop="url">
-                  使用Yoman构建Web工作流
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-02-04T18:10:12+08:00" content="2016-02-04">
-              2016-02-04
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/02/04/2016-02-04-shi-yong-yomangou-jian-webgong-zuo-liu/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/04/2016-02-04-shi-yong-yomangou-jian-webgong-zuo-liu/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
+      <a href="/2016/02/16/2016-02-16-angularjs-zhi-ling-xiang-jie/" title="AngularJS 指令详解" itemprop="url">AngularJS 指令详解</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="袁伟" target="_blank" itemprop="author">袁伟</a>
+		
+  <p class="article-time">
+    <time datetime="2016-02-16T09:20:32.000Z" itemprop="datePublished"> 发表于 2016-02-16</time>
     
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
+  </p>
+</header>
+    <div class="article-content">
         
-          <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>最近公司的<a href="https://www.jucaifu.com/">web</a>应用上线了，抽空总结一下项目的构建流程。项目是用<a href="http://yeoman.io/">Yeoman</a>创建出来的。</p>
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>最近在公司的项目中用到AngularJs中的指令。所谓的指令在我理解看来。就是把浏览器能够识别的标签使用语法糖包装起来。在其它地方直接调用。这样极大方便了项目的开发和维护。在<a href="https://www.jucaifu.com/">聚财富</a>项目中对通用的组件进行抽离，封装成自定义指令。整个工程都可以复用。在项目工程中创建语义化以及高度重用的组件，对于提高代码质量有很大的帮助，也方便扩展及后期维护。目前市场上的前端框架也只有AngularJS 拥有自定义指令的功能，并且AngularJS 是目前唯一提供Web应用可复用能力的框架。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/02/16/2016-02-16-angularjs-zhi-ling-xiang-jie/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/AngularJS/">AngularJS</a><a href="/tags/web/">web</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/02/16/2016-02-16-angularjs-zhi-ling-xiang-jie/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/02/16/2016-02-16-angularjs-zhi-ling-xiang-jie/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/02/05/2016-02-05-gruntfile-dot-js-qian-xi/" title="Grunt 浅析" itemprop="url">Grunt 浅析</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="袁伟" target="_blank" itemprop="author">袁伟</a>
+		
+  <p class="article-time">
+    <time datetime="2016-02-05T09:57:36.000Z" itemprop="datePublished"> 发表于 2016-02-05</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h4 id="Grunt是什么"><a href="#Grunt是什么" class="headerlink" title="Grunt是什么"></a>Grunt是什么</h4><p>Grunt是一个基于JavaScript上的一个很强大的任务管理器(task runner)，就是用JavaScript去执行一些程序来完成一些任务。比如说验证HTML、CSS、JavaScript的语法，压缩CSS、JavaScript、图像，<a href="http://www.w3cplus.com/sassguide/">Sass</a>、<a href="http://less.bootcss.com/">LESS</a>和<a href="http://stylus-lang.com/">Stylus</a>编译成CSS等等，这些东西很适合用Grunt来解决。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/02/05/2016-02-05-gruntfile-dot-js-qian-xi/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/grunt/">grunt</a><a href="/tags/web/">web</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/02/05/2016-02-05-gruntfile-dot-js-qian-xi/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/02/05/2016-02-05-gruntfile-dot-js-qian-xi/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/02/04/2016-02-04-shi-yong-yomangou-jian-webgong-zuo-liu/" title="使用Yoman构建Web工作流" itemprop="url">使用Yoman构建Web工作流</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="袁伟" target="_blank" itemprop="author">袁伟</a>
+		
+  <p class="article-time">
+    <time datetime="2016-02-04T10:10:12.000Z" itemprop="datePublished"> 发表于 2016-02-04</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>最近公司的<a href="https://www.jucaifu.com/">web</a>应用上线了，抽空总结一下项目的构建流程。项目是用<a href="http://yeoman.io/">Yeoman</a>创建出来的。</p>
 <h4 id="Yeoman简介"><a href="#Yeoman简介" class="headerlink" title="Yeoman简介"></a>Yeoman简介</h4><p><a href="http://yeoman.io/">Yeoman</a>是Google的团队和外部贡献者团队合作开发的，它的目标是通过<a href="http://yeoman.io/">Yo</a>,<a href="http://gruntjs.com/">Grunt</a>和<a href="http://bower.io/">Bower</a>为开发者创建一个易用Web应用的工作流，可以让网络前端开发者快速打造一个漂亮的网络应用(web applications)。</p>
 <p>Yeoman的目的不仅是要为新项目建立工作流，同时还是为了解决前端开发所面临的诸多严重问题，比如各种零散的依赖关系. </p>
-<h4 id="Yeoman的作用"><a href="#Yeoman的作用" class="headerlink" title="Yeoman的作用"></a>Yeoman的作用</h4><ol>
-<li>Yo:Yeoman核心工具，构建目录结构或文件，生成项目的生产环境和编译环境.</li>
-<li>bower:Web开发的包管理器，类似于npm，npm专注于nodeJs模块，而bower专注于CSS、JavaScript、图像等前端相关内容的管理。需要注意的是，Bower的运行，依赖于版本控制工具git。要想成功安装Yeoman,需先安装 Git.</li>
-<li>grunt:自动化构建工具.当然也可以使用<a href="http://gulpjs.com/">gulp</a></li>
-</ol>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/02/04/2016-02-04-shi-yong-yomangou-jian-webgong-zuo-liu/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
         
-      
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/02/04/2016-02-04-shi-yong-yomangou-jian-webgong-zuo-liu/#more">Read More</a>
+          
+       </p>
     </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
 
-    <div>
-      
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Yeoman/">Yeoman</a><a href="/tags/grunt/">grunt</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/02/04/2016-02-04-shi-yong-yomangou-jian-webgong-zuo-liu/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/02/04/2016-02-04-shi-yong-yomangou-jian-webgong-zuo-liu/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/" title="AngularJS Controller 之间通信机制" itemprop="url">AngularJS Controller 之间通信机制</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="袁伟" target="_blank" itemprop="author">袁伟</a>
+		
+  <p class="article-time">
+    <time datetime="2016-01-06T03:44:17.000Z" itemprop="datePublished"> 发表于 2016-01-06</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>最近，使用angularJS框架开发聚财富后台管理系统时，需要按照业务需求区分controller。有时候不同controller之间需要进行通信。在项目之初的时候，也踩过几次坑。所以总结一下controller之间通信方式。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/#more">Read More</a>
+          
+       </p>
     </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
 
-    <div>
-      
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/AngularJS/">AngularJS</a><a href="/tags/Web/">Web</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/12/10/2015-12-10-angularjs-promisedui-xiang-$q/" title="AngularJS Promise对象($q)" itemprop="url">AngularJS Promise对象($q)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="袁伟" target="_blank" itemprop="author">袁伟</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-10T03:38:10.000Z" itemprop="datePublished"> 发表于 2015-12-10</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h4 id="promise"><a href="#promise" class="headerlink" title="promise"></a>promise</h4><p>promise是一种编程模式，以同步操作的流程形式来操作异步事件，避免了层层嵌套，可以链式操作异步事件。<br>在编写javascript异步代码时，callback是最最简单的机制，可是用这种机制控制流程、异常处理等比较麻烦，影响到代码的可读性甚至是代码质量，而promise解决了这个问题。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/12/10/2015-12-10-angularjs-promisedui-xiang-$q/#more">Read More</a>
+          
+       </p>
     </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
 
 
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/AngularJS/">AngularJS</a><a href="/tags/promise/">promise</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/12/10/2015-12-10-angularjs-promisedui-xiang-$q/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/10/2015-12-10-angularjs-promisedui-xiang-$q/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/" itemprop="url">
-                  AngularJS Controller 之间通信机制
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-01-06T11:44:17+08:00" content="2016-01-06">
-              2016-01-06
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
+      <a href="/2015/11/26/2015-11-26-angularjs-lu-you-ji-zhi/" title="AngularJS 路由机制" itemprop="url">AngularJS 路由机制</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="袁伟" target="_blank" itemprop="author">袁伟</a>
+		
+  <p class="article-time">
+    <time datetime="2015-11-26T11:55:58.000Z" itemprop="datePublished"> 发表于 2015-11-26</time>
     
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
+  </p>
+</header>
+    <div class="article-content">
         
-          <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>最近，使用angularJS框架开发聚财富后台管理系统时，需要按照业务需求区分controller。有时候不同controller之间需要进行通信。在项目之初的时候，也踩过几次坑。所以总结一下controller之间通信方式。</p>
-<h4 id="controller"><a href="#controller" class="headerlink" title="controller"></a>controller</h4><p> 在Angularjs中controller是个函数，用来向视图的作用域（$scope）添加额外的功能，一般用它来给作用域对象设置初始状态，并添加自定义行为。</p>
-<p> 在创建新的控制器时，angularJS会生成并传递一个新的\$scope对象给这个controller,在angularJS应用的中的任何一个部分，都有父级作用域的存在，顶级就是ng-app所在的层级，它的父级作用域就是\$rootScope.每个\$scope的\$root指向\$rootScope.</p>
-<p>cotroller之间的通信本质上是当前的controller所在的\$scope如何跟其它controller上的\$scope进行通信。</p>
-<p>控制器通信的方式有3种：</p>
-<blockquote>
-<ol>
-<li>利用作用域继承的方式。即子控制器继承父控制器中的内容.</li>
-<li>使用angularJS中的事件，也就是使用\$on,\$emit,$broadcast进行消息传递.</li>
-<li>使用angularJS中的服务.写一个服务单例然后通过注入(DI)来使用</li>
-</ol>
-</blockquote>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/12/10/2015-12-10-angularjs-promisedui-xiang-$q/" itemprop="url">
-                  AngularJS Promise对象($q)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-12-10T11:38:10+08:00" content="2015-12-10">
-              2015-12-10
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/12/10/2015-12-10-angularjs-promisedui-xiang-$q/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/10/2015-12-10-angularjs-promisedui-xiang-$q/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h4 id="promise"><a href="#promise" class="headerlink" title="promise"></a>promise</h4><p>promise是一种编程模式，以同步操作的流程形式来操作异步事件，避免了层层嵌套，可以链式操作异步事件。<br>在编写javascript异步代码时，callback是最最简单的机制，可是用这种机制控制流程、异常处理等比较麻烦，影响到代码的可读性甚至是代码质量，而promise解决了这个问题。</p>
-<h4 id="q"><a href="#q" class="headerlink" title="$q"></a>$q</h4><p>在javaScript中有个广泛流行的库<a href="https://github.com/kriskowal/q">Q</a>，angular中的$q就是从它引入的.<br>$q是做为angularjs的一个内置服务而存在的，只是对promise异步编程模式的一个简化实现版.</p>
-<h5 id="defer"><a href="#defer" class="headerlink" title="defer"></a>defer</h5><p>defer对象(延迟对象)可以通$q.defer( )获取，下面是defer对象的api：</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/12/10/2015-12-10-angularjs-promisedui-xiang-$q/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/11/26/2015-11-26-angularjs-lu-you-ji-zhi/" itemprop="url">
-                  AngularJS 路由机制
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-11-26T19:55:58+08:00" content="2015-11-26">
-              2015-11-26
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/11/26/2015-11-26-angularjs-lu-you-ji-zhi/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/26/2015-11-26-angularjs-lu-you-ji-zhi/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>前言</p>
+        <p>前言</p>
 <p>在谈路由机制前先说一下现在比较流行的单页面应用，就是所谓的Single Page APP。它的主要目的有</p>
 <ol>
 <li>单页面应用</li>
 <li>无刷新的视图切换 </li>
 <li>每个页面包含不同数据</li>
 </ol>
-<p>虽然使用Javascript和Ajax可以实现上述功能，但是Ajax的一个致命缺点就是导致浏览器后退按钮失效，解决此问题有两种方法: </p>
-<ol>
-<li>使用hash，监听hashchange事件来进行视图切换</li>
-<li>使用HTML5的history API，通过pushState()记录操作历史，监听popstate事件来进行视图切换</li>
-</ol>
-<p>这样便形成了通过地址栏进行导航的深度链接(deeplinking ),也就是AngularJS的路由机制。通过路由机制，一个单页应用的各个视图就可以很好的组织起来了</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/11/26/2015-11-26-angularjs-lu-you-ji-zhi/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
         
-      
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/11/26/2015-11-26-angularjs-lu-you-ji-zhi/#more">Read More</a>
+          
+       </p>
     </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
 
 
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/JavaScript/">JavaScript</a><a href="/tags/AngularJS/">AngularJS</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/11/26/2015-11-26-angularjs-lu-you-ji-zhi/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/11/26/2015-11-26-angularjs-lu-you-ji-zhi/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/11/23/2015-11-23-angularjs-factory-vs-service-vs-provider/" itemprop="url">
-                  AngularJS:Factory vs Service vs Provider
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-11-23T20:02:38+08:00" content="2015-11-23">
-              2015-11-23
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/11/23/2015-11-23-angularjs-factory-vs-service-vs-provider/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/23/2015-11-23-angularjs-factory-vs-service-vs-provider/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
+      <a href="/2015/11/23/2015-11-23-angularjs-factory-vs-service-vs-provider/" title="AngularJS:Factory vs Service vs Provider" itemprop="url">AngularJS:Factory vs Service vs Provider</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="袁伟" target="_blank" itemprop="author">袁伟</a>
+		
+  <p class="article-time">
+    <time datetime="2015-11-23T12:02:38.000Z" itemprop="datePublished"> 发表于 2015-11-23</time>
     
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
+  </p>
+</header>
+    <div class="article-content">
         
-          <p>最近在写公司后台的管理系统，由于初试AngularJS. 所以很自然地就就把业务逻辑写在 controller 和 scope 中。在git上找到AngularJs编码规范，细读之后，回头看来，代码写的是一塌糊涂。controller中充斥着大量的业务逻辑。controller本身只充当控制器的作用，controller 只在需要的时候才会初始化，一旦不需要就会被抛弃。因此，当每次切换或刷新页面的时候，Angular 会清空当前的 controller。因此controller 里是不能保存持久化数据的。这不属于它的作用范畴。业务逻辑处理应该抽离出来放在Service层，这样代码逻辑更加简洁，后期维护和测试也更加方便.</p>
-<h4 id="AngularJS-Service"><a href="#AngularJS-Service" class="headerlink" title="AngularJS Service"></a>AngularJS Service</h4><p>Angular 提供了3种方法来创建并注册我们自己的 Service.</p>
-<blockquote>
-<p>  1.Factory<br>  2.Service<br>  3.Provide</p>
-</blockquote>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/11/23/2015-11-23-angularjs-factory-vs-service-vs-provider/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+        <p>最近在写公司后台的管理系统，由于初试AngularJS. 所以很自然地就就把业务逻辑写在 controller 和 scope 中。在git上找到AngularJs编码规范，细读之后，回头看来，代码写的是一塌糊涂。controller中充斥着大量的业务逻辑。controller本身只充当控制器的作用，controller 只在需要的时候才会初始化，一旦不需要就会被抛弃。因此，当每次切换或刷新页面的时候，Angular 会清空当前的 controller。因此controller 里是不能保存持久化数据的。这不属于它的作用范畴。业务逻辑处理应该抽离出来放在Service层，这样代码逻辑更加简洁，后期维护和测试也更加方便.</p>
         
-      
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/11/23/2015-11-23-angularjs-factory-vs-service-vs-provider/#more">Read More</a>
+          
+       </p>
     </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
 
 
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/JavaScript/">JavaScript</a><a href="/tags/AngularJS/">AngularJS</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/11/23/2015-11-23-angularjs-factory-vs-service-vs-provider/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/11/23/2015-11-23-angularjs-factory-vs-service-vs-provider/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/11/21/2015-11-21-bo-ke-qian-yi-shuo-ming/" itemprop="url">
-                  博客迁移说明
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-11-21T19:39:47+08:00" content="2015-11-21">
-              2015-11-21
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/11/21/2015-11-21-bo-ke-qian-yi-shuo-ming/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/21/2015-11-21-bo-ke-qian-yi-shuo-ming/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
+      <a href="/2015/11/21/2015-11-21-bo-ke-qian-yi-shuo-ming/" title="博客迁移说明" itemprop="url">博客迁移说明</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="袁伟" target="_blank" itemprop="author">袁伟</a>
+		
+  <p class="article-time">
+    <time datetime="2015-11-21T11:39:47.000Z" itemprop="datePublished"> 发表于 2015-11-21</time>
     
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
+  </p>
+</header>
+    <div class="article-content">
         
-          <p>写博客也有一段时间了，之前在CSDN上，但是总是感觉不方便。因此决定之前的博客都不再更新，统一转移到这里。 之前的一些博客我也会挑一部分贴过来。欢迎大家以后多交流。<br>原Blog地址：<a href="http://blog.csdn.net/u014466582">http://blog.csdn.net/u014466582</a></p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/11/21/2015-11-21-bo-ke-qian-yi-shuo-ming/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+        <p>写博客也有一段时间了，之前在CSDN上，但是总是感觉不方便。因此决定之前的博客都不再更新，统一转移到这里。 之前的一些博客我也会挑一部分贴过来。欢迎大家以后多交流。<br>原Blog地址：<a href="http://blog.csdn.net/u014466582">http://blog.csdn.net/u014466582</a></p>
         
-      
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/11/21/2015-11-21-bo-ke-qian-yi-shuo-ming/#more">Read More</a>
+          
+       </p>
     </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
 
 
-    
-      
-
+  <div class="article-tags">
   
-  
+  <span></span> <a href="/tags/CSDN/">CSDN</a><a href="/tags/iOS/">iOS</a>
+  </div>
 
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/11/19/2015-11-19-carthage-bao-guan-li-gong-ju/" itemprop="url">
-                  Carthage 包管理工具
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-11-19T11:52:38+08:00" content="2015-11-19">
-              2015-11-19
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/11/19/2015-11-19-carthage-bao-guan-li-gong-ju/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/19/2015-11-19-carthage-bao-guan-li-gong-ju/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
+</div>
 
 
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>说到iOS开发的包管理，大家首先可能会想到Cocoapads,它确实是一个很强大的工具，但是这次主要说一下另外一个包管理工具Carthage.</p>
-<p> CocoaPods 和 Carthage的区别:</p>
-<p>CocoaPods 是一套整体解决方案，在 Podfile文件中指定好我们需要的第三方库。然后执行 pod update命令，就会进行下载，集成，CocoaPods默认会自动创建并更新你的应用程序和所有依赖的Xcode workspace。CocoaPods的方法非常易于使用。</p>
-<p>相比之下，Carthage 就要轻量很多，它也会一个叫做 Cartfile 描述文件，但 Carthage 不会对我们的项目结构进行任何修改，更不多创建 workspace。它只是根据我们描述文件中配置的第三方库，将他们下载到本地，然后使用 xcodebuild 构建成 framework 文件。然后由我们自己将这些库集成到项目中。Carthage 使用的是一种非侵入性的方式，它本身不会对我们的项目结构进行任何改动。</p>
-<p>CocoaPods为提高第三方开源库的可见性和参与度，创建一个更中心化的生态系统， CocoaPods 有一个中心服务器(cocoapods.org)，来管理各个包的元信息，依赖于每个第三方库自己的源地址，比如 Github。包管理依赖中心服务器，索引第三方库十分方便。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/11/19/2015-11-19-carthage-bao-guan-li-gong-ju/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
 
 
-    
-  </section>
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/11/21/2015-11-21-bo-ke-qian-yi-shuo-ming/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/11/21/2015-11-21-bo-ke-qian-yi-shuo-ming/" data-count-type="comments">&nbsp;</a>
+	
+</div>
 
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
   </nav>
 
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
 
-          </div>
-          
-
-
-          
-
-        </div>
-        
-          
   
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="chaosyuan" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
   </div>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
 
-      
-
-      
-
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.jpg"
-               alt="袁伟" />
-          <p class="site-author-name" itemprop="name">袁伟</p>
-          <p class="site-description motion-element" itemprop="description">ZeroYuan</p>
-        </div>
-        <nav class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="/archives">
-              <span class="site-state-item-count">17</span>
-              <span class="site-state-item-name">日志</span>
-            </a>
-          </div>
-
-          
-
-          
-            <div class="site-state-item site-state-tags">
-              <a href="/tags">
-                <span class="site-state-item-count">14</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
-
-        
-
-        <div class="links-of-author motion-element">
-          
-            
-              <span class="links-of-author-item">
-                <a href="https://github.com/chaosyuan" target="_blank" title="GitHub">
-                  
-                    <i class="fa fa-fw fa-github"></i>
-                  
-                  GitHub
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="http://weibo.com/u/5508924750?is_all=1" target="_blank" title="weibo">
-                  
-                    <i class="fa fa-fw fa-globe"></i>
-                  
-                  weibo
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="https://www.zhihu.com/people/yuanw-92/about" target="_blank" title="zhihu">
-                  
-                    <i class="fa fa-fw fa-globe"></i>
-                  
-                  zhihu
-                </a>
-              </span>
-            
-          
-        </div>
-
-        
-        
-
-        
-        
-          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
-            <div class="links-of-blogroll-title">
-              <i class="fa  fa-fw fa-globe"></i>
-              友情链接
-            </div>
-            <ul class="links-of-blogroll-list">
-              
-                <li class="links-of-blogroll-item">
-                  <a href="https://www.jucaifu.com/" title="聚财富" target="_blank">聚财富</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://www.haochang.tv/" title="好唱" target="_blank">好唱</a>
-                </li>
-              
-            </ul>
-          </div>
-        
-
-      </section>
-
-      
-
-    </div>
-  </aside>
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2016</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">袁伟</span>
-</div>
-
-<div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
-</div>
-
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
-  </a>
-</div>
-
-        
-
-        
-      </div>
-    </footer>
-
-    <div class="back-to-top">
-      <i class="fa fa-arrow-up"></i>
-    </div>
-  </div>
 
   
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AngularJS/" title="AngularJS">AngularJS<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/web/" title="web">web<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/grunt/" title="grunt">grunt<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Carthage/" title="Carthage">Carthage<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Web/" title="Web">Web<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSDN/" title="CSDN">CSDN<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Yeoman/" title="Yeoman">Yeoman<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/动画/" title="动画">动画<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ReactiveCocoa/" title="ReactiveCocoa">ReactiveCocoa<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CocoaPods/" title="CocoaPods">CocoaPods<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HTTP/" title="HTTP">HTTP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/promise/" title="promise">promise<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://onevcat.com/" target="_blank" title="瞄神">瞄神</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://blog.devtang.com/" target="_blank" title="巧叔">巧叔</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://objccn.io/" target="_blank" title="ObjC中国">ObjC中国</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://blog.sunnyxx.com/" target="_blank" title="sunnyxx">sunnyxx</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://blog.ibireme.com/" target="_blank" title="ibireme">ibireme</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://www.jucaifu.com/" target="_blank" title="聚财富">聚财富</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://www.haochang.tv/" target="_blank" title="好唱">好唱</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 做人做事,只有偏执到癫狂,才能达到顶峰 <br/>
+			</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/http://weibo.com/u/5508924750?is_all=1" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/https://github.com/chaosyuan" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/https://www.zhihu.com/people/yuanw-92/about" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="袁伟">袁伟</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
 
 <script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
 </script>
 
 
@@ -1172,88 +802,66 @@
 
 
 
-  
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
 
 
 
-  
-  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+<!-- Analytics Begin -->
 
 
 
-  
-  
-
-  
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
-
-
-
-  
-
-  
-    
-  
-
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"chaosyuan"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
-
-  
-    
-    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
-  
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
 
 
 
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
 
 
+<!-- MathJax End -->
 
-  
-  
+<!-- Tiny_search Begin -->
 
-  
+<!-- Tiny_search End -->
 
-  
-
-  
-
-</body>
-</html>
+  </body>
+ </html>

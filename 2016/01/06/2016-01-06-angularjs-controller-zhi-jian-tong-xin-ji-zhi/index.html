@@ -1,302 +1,105 @@
-<!doctype html>
 
-
-
-  
-
-
-<html class="theme-next mist use-motion">
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
+  <meta charset="UTF-8">
   
-  
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
-
-
-
-
-  
-  
-  
-  
-
-  
+    <title>AngularJS Controller 之间通信机制 | 袁伟的技术博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
+    <meta name="author" content="袁伟">
     
-  
 
-  
-
-  
-
-  
-
-  
-
-  
     
-    
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
-
-
-
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="AngularJS,Web," />
-
-
-
-
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
-
-
-
-
-
-
-<meta name="description" content="前言最近，使用angularJS框架开发聚财富后台管理系统时，需要按照业务需求区分controller。有时候不同controller之间需要进行通信。在项目之初的时候，也踩过几次坑。所以总结一下controller之间通信方式。
-controller 在Angularjs中controller是个函数，用来向视图的作用域（$scope）添加额外的功能，一般用它来给作用域对象设置初始状态，并添加自">
+    <meta name="description" content="前言最近，使用angularJS框架开发聚财富后台管理系统时，需要按照业务需求区分controller。有时候不同controller之间需要进行通信。在项目之初的时候，也踩过几次坑。所以总结一下controller之间通信方式。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AngularJS Controller 之间通信机制">
 <meta property="og:url" content="http://chaosyuan.github.io/2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/index.html">
-<meta property="og:site_name" content="袁伟">
-<meta property="og:description" content="前言最近，使用angularJS框架开发聚财富后台管理系统时，需要按照业务需求区分controller。有时候不同controller之间需要进行通信。在项目之初的时候，也踩过几次坑。所以总结一下controller之间通信方式。
-controller 在Angularjs中controller是个函数，用来向视图的作用域（$scope）添加额外的功能，一般用它来给作用域对象设置初始状态，并添加自">
-<meta property="og:updated_time" content="2016-08-10T03:17:57.000Z">
+<meta property="og:site_name" content="袁伟的技术博客">
+<meta property="og:description" content="前言最近，使用angularJS框架开发聚财富后台管理系统时，需要按照业务需求区分controller。有时候不同controller之间需要进行通信。在项目之初的时候，也踩过几次坑。所以总结一下controller之间通信方式。">
+<meta property="og:updated_time" content="2016-08-19T02:03:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AngularJS Controller 之间通信机制">
-<meta name="twitter:description" content="前言最近，使用angularJS框架开发聚财富后台管理系统时，需要按照业务需求区分controller。有时候不同controller之间需要进行通信。在项目之初的时候，也踩过几次坑。所以总结一下controller之间通信方式。
-controller 在Angularjs中controller是个函数，用来向视图的作用域（$scope）添加额外的功能，一般用它来给作用域对象设置初始状态，并添加自">
+<meta name="twitter:description" content="前言最近，使用angularJS框架开发聚财富后台管理系统时，需要按照业务需求区分controller。有时候不同controller之间需要进行通信。在项目之初的时候，也踩过几次坑。所以总结一下controller之间通信方式。">
 
-
-
-<script type="text/javascript" id="hexo.configuration">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    scheme: 'Mist',
-    sidebar: {"position":"left","display":"post"},
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 0,
-      author: '博主'
-    }
-  };
-</script>
-
-
-
-
-  <link rel="canonical" href="http://chaosyuan.github.io/2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/"/>
-
-  <title> AngularJS Controller 之间通信机制 | 袁伟 </title>
+    
+    <link rel="alternative" href="/atom.xml" title="袁伟的技术博客" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
-  
-
-
-
-
-
-
-
-
-
-
-  
-  
-    
-  
-
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-meta ">
-  
-
-  <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <span class="site-title">袁伟</span>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-  <p class="site-subtitle">千里之行始于足下</p>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="袁伟的技术博客">袁伟的技术博客</a></h1>
+				<h2 class="blog-motto">千里之行始于足下</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/tags">标签</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:chaosyuan.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
 </div>
-
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-            标签
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
-
-      
-    </ul>
-  
-
-  
-</nav>
-
- </div>
     </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
     
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
+      <a href="/2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/" title="AngularJS Controller 之间通信机制" itemprop="url">AngularJS Controller 之间通信机制</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="袁伟" target="_blank" itemprop="author">袁伟</a>
+		
+  <p class="article-time">
+    <time datetime="2016-01-06T03:44:17.000Z" itemprop="datePublished"> 发表于 2016-01-06</time>
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                AngularJS Controller 之间通信机制
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-01-06T11:44:17+08:00" content="2016-01-06">
-              2016-01-06
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>最近，使用angularJS框架开发聚财富后台管理系统时，需要按照业务需求区分controller。有时候不同controller之间需要进行通信。在项目之初的时候，也踩过几次坑。所以总结一下controller之间通信方式。</p>
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#controller"><span class="toc-number">2.</span> <span class="toc-text">controller</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作用域继承"><span class="toc-number">3.</span> <span class="toc-text">作用域继承</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基于事件"><span class="toc-number">4.</span> <span class="toc-text">基于事件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基于服务"><span class="toc-number">5.</span> <span class="toc-text">基于服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#参考文献"><span class="toc-number">6.</span> <span class="toc-text">参考文献</span></a></li></ol>
+		
+		</div>
+		
+		<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>最近，使用angularJS框架开发聚财富后台管理系统时，需要按照业务需求区分controller。有时候不同controller之间需要进行通信。在项目之初的时候，也踩过几次坑。所以总结一下controller之间通信方式。</p>
+<a id="more"></a>
 <h4 id="controller"><a href="#controller" class="headerlink" title="controller"></a>controller</h4><p> 在Angularjs中controller是个函数，用来向视图的作用域（$scope）添加额外的功能，一般用它来给作用域对象设置初始状态，并添加自定义行为。</p>
 <p> 在创建新的控制器时，angularJS会生成并传递一个新的\$scope对象给这个controller,在angularJS应用的中的任何一个部分，都有父级作用域的存在，顶级就是ng-app所在的层级，它的父级作用域就是\$rootScope.每个\$scope的\$root指向\$rootScope.</p>
 <p>cotroller之间的通信本质上是当前的controller所在的\$scope如何跟其它controller上的\$scope进行通信。</p>
@@ -308,7 +111,6 @@ controller 在Angularjs中controller是个函数，用来向视图的作用域�
 <li>使用angularJS中的服务.写一个服务单例然后通过注入(DI)来使用</li>
 </ol>
 </blockquote>
-<a id="more"></a>
 <h4 id="作用域继承"><a href="#作用域继承" class="headerlink" title="作用域继承"></a>作用域继承</h4><p>由于作用域的继承是基于js的原型继承方式，分为两种情况（值类型和引用类型）.</p>
 <ul>
 <li>当作用域上面的值为基本类型的时候，修改父作用域上面的值会影响到子作用域，反之，修改子作用域只会影响子作用域的值，不会影响父作用域上面的值.</li>
@@ -333,379 +135,461 @@ controller 在Angularjs中controller是个函数，用来向视图的作用域�
 <li><a href="http://www.angularjs.cn/A07b" target="_blank" rel="external">http://www.angularjs.cn/A07b</a></li>
 <li><a href="http://www.cnblogs.com/whitewolf/archive/2013/04/16/3024843.html" target="_blank" rel="external">Angularjs Controller 间通信机制</a></li>
 </ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
 
-      
-    </div>
 
-    <div>
-      
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/AngularJS/">AngularJS</a><a href="/tags/Web/">Web</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://chaosyuan.github.io/2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/" data-title="AngularJS Controller 之间通信机制 | 袁伟的技术博客" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/02/04/2016-02-04-shi-yong-yomangou-jian-webgong-zuo-liu/" title="使用Yoman构建Web工作流">
+  <strong>上一篇：</strong><br/>
+  <span>
+  使用Yoman构建Web工作流</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/12/10/2015-12-10-angularjs-promisedui-xiang-$q/"  title="AngularJS Promise对象($q)">
+ <strong>下一篇：</strong><br/> 
+ <span>AngularJS Promise对象($q)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/" data-title="AngularJS Controller 之间通信机制" data-url="http://chaosyuan.github.io/2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#controller"><span class="toc-number">2.</span> <span class="toc-text">controller</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作用域继承"><span class="toc-number">3.</span> <span class="toc-text">作用域继承</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基于事件"><span class="toc-number">4.</span> <span class="toc-text">基于事件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基于服务"><span class="toc-number">5.</span> <span class="toc-text">基于服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#参考文献"><span class="toc-number">6.</span> <span class="toc-text">参考文献</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="chaosyuan" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AngularJS/" title="AngularJS">AngularJS<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/web/" title="web">web<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/grunt/" title="grunt">grunt<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Carthage/" title="Carthage">Carthage<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Web/" title="Web">Web<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSDN/" title="CSDN">CSDN<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Yeoman/" title="Yeoman">Yeoman<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/动画/" title="动画">动画<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ReactiveCocoa/" title="ReactiveCocoa">ReactiveCocoa<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CocoaPods/" title="CocoaPods">CocoaPods<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HTTP/" title="HTTP">HTTP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/promise/" title="promise">promise<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
         
-
-      
-    </div>
-
-    <div>
-      
+          <li>
+            
+            	<a href="https://onevcat.com/" target="_blank" title="瞄神">瞄神</a>
+            
+          </li>
         
-
-      
-    </div>
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/AngularJS/" rel="tag">#AngularJS</a>
-          
-            <a href="/tags/Web/" rel="tag">#Web</a>
-          
-        </div>
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
+          <li>
             
-              <a href="/2015/12/10/2015-12-10-angularjs-promisedui-xiang-$q/" rel="next" title="AngularJS Promise对象($q)">
-                <i class="fa fa-chevron-left"></i> AngularJS Promise对象($q)
-              </a>
+            	<a href="http://blog.devtang.com/" target="_blank" title="巧叔">巧叔</a>
             
-          </div>
-
-          <div class="post-nav-prev post-nav-item">
+          </li>
+        
+          <li>
             
-              <a href="/2016/02/04/2016-02-04-shi-yong-yomangou-jian-webgong-zuo-liu/" rel="prev" title="使用Yoman构建Web工作流">
-                使用Yoman构建Web工作流 <i class="fa fa-chevron-right"></i>
-              </a>
+            	<a href="https://objccn.io/" target="_blank" title="ObjC中国">ObjC中国</a>
             
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div class="post-spread">
-      
-        <div class="ds-share flat" data-thread-key="2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/"
-     data-title="AngularJS Controller 之间通信机制"
-     data-content=""
-     data-url="http://chaosyuan.github.io/2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/">
-  <div class="ds-share-inline">
-    <ul  class="ds-share-icons-16">
-
-      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
-      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
-      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
-      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
-      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
-
+          </li>
+        
+          <li>
+            
+            	<a href="http://blog.sunnyxx.com/" target="_blank" title="sunnyxx">sunnyxx</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://blog.ibireme.com/" target="_blank" title="ibireme">ibireme</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://www.jucaifu.com/" target="_blank" title="聚财富">聚财富</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://www.haochang.tv/" target="_blank" title="好唱">好唱</a>
+            
+          </li>
+        
     </ul>
-    <div class="ds-share-icons-more">
-    </div>
-  </div>
 </div>
-      
-    </div>
-  </div>
-
-
-          </div>
-          
-
-  <p>热评文章</p>
-  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
-
-
-          
-  <div class="comments" id="comments">
-    
-      <div class="ds-thread" data-thread-key="2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/"
-           data-title="AngularJS Controller 之间通信机制" data-url="http://chaosyuan.github.io/2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/">
-      </div>
-    
-  </div>
-
-
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
-
-      <section class="site-overview sidebar-panel ">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.jpg"
-               alt="袁伟" />
-          <p class="site-author-name" itemprop="name">袁伟</p>
-          <p class="site-description motion-element" itemprop="description">ZeroYuan</p>
-        </div>
-        <nav class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="/archives">
-              <span class="site-state-item-count">17</span>
-              <span class="site-state-item-name">日志</span>
-            </a>
-          </div>
-
-          
-
-          
-            <div class="site-state-item site-state-tags">
-              <a href="/tags">
-                <span class="site-state-item-count">14</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
-
-        
-
-        <div class="links-of-author motion-element">
-          
-            
-              <span class="links-of-author-item">
-                <a href="https://github.com/chaosyuan" target="_blank" title="GitHub">
-                  
-                    <i class="fa fa-fw fa-github"></i>
-                  
-                  GitHub
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="http://weibo.com/u/5508924750?is_all=1" target="_blank" title="weibo">
-                  
-                    <i class="fa fa-fw fa-globe"></i>
-                  
-                  weibo
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="https://www.zhihu.com/people/yuanw-92/about" target="_blank" title="zhihu">
-                  
-                    <i class="fa fa-fw fa-globe"></i>
-                  
-                  zhihu
-                </a>
-              </span>
-            
-          
-        </div>
-
-        
-        
-
-        
-        
-          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
-            <div class="links-of-blogroll-title">
-              <i class="fa  fa-fw fa-globe"></i>
-              友情链接
-            </div>
-            <ul class="links-of-blogroll-list">
-              
-                <li class="links-of-blogroll-item">
-                  <a href="https://www.jucaifu.com/" title="聚财富" target="_blank">聚财富</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://www.haochang.tv/" title="好唱" target="_blank">好唱</a>
-                </li>
-              
-            </ul>
-          </div>
-        
-
-      </section>
-
-      
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-            
-              
-            
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#controller"><span class="nav-number">2.</span> <span class="nav-text">controller</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#作用域继承"><span class="nav-number">3.</span> <span class="nav-text">作用域继承</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于事件"><span class="nav-number">4.</span> <span class="nav-text">基于事件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于服务"><span class="nav-number">5.</span> <span class="nav-text">基于服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考文献"><span class="nav-number">6.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
-            
-          </div>
-        </section>
-      
-
-    </div>
-  </aside>
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2016</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">袁伟</span>
-</div>
-
-<div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
-</div>
-
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
-  </a>
-</div>
-
-        
-
-        
-      </div>
-    </footer>
-
-    <div class="back-to-top">
-      <i class="fa fa-arrow-up"></i>
-    </div>
-  </div>
 
   
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 做人做事,只有偏执到癫狂,才能达到顶峰 <br/>
+			</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/http://weibo.com/u/5508924750?is_all=1" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/https://github.com/chaosyuan" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/https://www.zhihu.com/people/yuanw-92/about" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="袁伟">袁伟</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
 
 <script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
 </script>
 
 
 
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"chaosyuan"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
 
 
 
 
 
 
-  
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
 
 
 
-  
-  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+<!-- Analytics Begin -->
 
 
 
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
 
 
 
-  
+<!-- Analytics End -->
 
-  
-    
-  
+<!-- Totop Begin -->
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"chaosyuan"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
 
-  
-    
-    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
-  
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
 
 
+<!-- MathJax End -->
 
+<!-- Tiny_search Begin -->
 
+<!-- Tiny_search End -->
 
-
-  
-  
-
-  
-
-  
-
-  
-
-</body>
+  </body>
 </html>

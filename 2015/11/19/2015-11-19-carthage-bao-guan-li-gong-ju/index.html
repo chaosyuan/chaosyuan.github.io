@@ -1,99 +1,22 @@
-<!doctype html>
 
-
-
-  
-
-
-<html class="theme-next mist use-motion">
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
+  <meta charset="UTF-8">
   
-  
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
-
-
-
-
-  
-  
-  
-  
-
-  
+    <title>Carthage 包管理工具 | 袁伟的技术博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
+    <meta name="author" content="袁伟">
     
-  
 
-  
-
-  
-
-  
-
-  
-
-  
     
-    
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
-
-
-
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="CocoaPods,Carthage," />
-
-
-
-
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
-
-
-
-
-
-
-<meta name="description" content="说到iOS开发的包管理，大家首先可能会想到Cocoapads,它确实是一个很强大的工具，但是这次主要说一下另外一个包管理工具Carthage.
- CocoaPods 和 Carthage的区别:
-CocoaPods 是一套整体解决方案，在 Podfile文件中指定好我们需要的第三方库。然后执行 pod update命令，就会进行下载，集成，CocoaPods默认会自动创建并更新你的应用程序和所有依">
+    <meta name="description" content="说到iOS开发的包管理，大家首先可能会想到Cocoapads,它确实是一个很强大的工具，但是这次主要说一下另外一个包管理工具Carthage.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Carthage 包管理工具">
 <meta property="og:url" content="http://chaosyuan.github.io/2015/11/19/2015-11-19-carthage-bao-guan-li-gong-ju/index.html">
-<meta property="og:site_name" content="袁伟">
-<meta property="og:description" content="说到iOS开发的包管理，大家首先可能会想到Cocoapads,它确实是一个很强大的工具，但是这次主要说一下另外一个包管理工具Carthage.
- CocoaPods 和 Carthage的区别:
-CocoaPods 是一套整体解决方案，在 Podfile文件中指定好我们需要的第三方库。然后执行 pod update命令，就会进行下载，集成，CocoaPods默认会自动创建并更新你的应用程序和所有依">
+<meta property="og:site_name" content="袁伟的技术博客">
+<meta property="og:description" content="说到iOS开发的包管理，大家首先可能会想到Cocoapads,它确实是一个很强大的工具，但是这次主要说一下另外一个包管理工具Carthage.">
 <meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/CarthageSet.png">
 <meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/CarthageUpdate.png">
 <meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/Buildfile.png">
@@ -104,218 +27,94 @@ CocoaPods 是一套整体解决方案，在 Podfile文件中指定好我们需�
 <meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/SRCRooT.png">
 <meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/resultScroot.png">
 <meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/dsymFrameWork.png">
-<meta property="og:updated_time" content="2016-08-10T03:01:43.000Z">
+<meta property="og:updated_time" content="2016-08-19T02:04:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Carthage 包管理工具">
-<meta name="twitter:description" content="说到iOS开发的包管理，大家首先可能会想到Cocoapads,它确实是一个很强大的工具，但是这次主要说一下另外一个包管理工具Carthage.
- CocoaPods 和 Carthage的区别:
-CocoaPods 是一套整体解决方案，在 Podfile文件中指定好我们需要的第三方库。然后执行 pod update命令，就会进行下载，集成，CocoaPods默认会自动创建并更新你的应用程序和所有依">
+<meta name="twitter:description" content="说到iOS开发的包管理，大家首先可能会想到Cocoapads,它确实是一个很强大的工具，但是这次主要说一下另外一个包管理工具Carthage.">
 <meta name="twitter:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/CarthageSet.png">
 
-
-
-<script type="text/javascript" id="hexo.configuration">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    scheme: 'Mist',
-    sidebar: {"position":"left","display":"post"},
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 0,
-      author: '博主'
-    }
-  };
-</script>
-
-
-
-
-  <link rel="canonical" href="http://chaosyuan.github.io/2015/11/19/2015-11-19-carthage-bao-guan-li-gong-ju/"/>
-
-  <title> Carthage 包管理工具 | 袁伟 </title>
+    
+    <link rel="alternative" href="/atom.xml" title="袁伟的技术博客" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
-  
-
-
-
-
-
-
-
-
-
-
-  
-  
-    
-  
-
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-meta ">
-  
-
-  <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <span class="site-title">袁伟</span>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-  <p class="site-subtitle">千里之行始于足下</p>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="袁伟的技术博客">袁伟的技术博客</a></h1>
+				<h2 class="blog-motto">千里之行始于足下</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/tags">标签</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:chaosyuan.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
 </div>
-
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-            标签
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
-
-      
-    </ul>
-  
-
-  
-</nav>
-
- </div>
     </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
     
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
+      <a href="/2015/11/19/2015-11-19-carthage-bao-guan-li-gong-ju/" title="Carthage 包管理工具" itemprop="url">Carthage 包管理工具</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="袁伟" target="_blank" itemprop="author">袁伟</a>
+		
+  <p class="article-time">
+    <time datetime="2015-11-19T03:52:38.000Z" itemprop="datePublished"> 发表于 2015-11-19</time>
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                Carthage 包管理工具
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-11-19T11:52:38+08:00" content="2015-11-19">
-              2015-11-19
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/11/19/2015-11-19-carthage-bao-guan-li-gong-ju/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/19/2015-11-19-carthage-bao-guan-li-gong-ju/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <p>说到iOS开发的包管理，大家首先可能会想到Cocoapads,它确实是一个很强大的工具，但是这次主要说一下另外一个包管理工具Carthage.</p>
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			
+		
+		</div>
+		
+		<p>说到iOS开发的包管理，大家首先可能会想到Cocoapads,它确实是一个很强大的工具，但是这次主要说一下另外一个包管理工具Carthage.</p>
+<a id="more"></a>
 <p> CocoaPods 和 Carthage的区别:</p>
 <p>CocoaPods 是一套整体解决方案，在 Podfile文件中指定好我们需要的第三方库。然后执行 pod update命令，就会进行下载，集成，CocoaPods默认会自动创建并更新你的应用程序和所有依赖的Xcode workspace。CocoaPods的方法非常易于使用。</p>
 <p>相比之下，Carthage 就要轻量很多，它也会一个叫做 Cartfile 描述文件，但 Carthage 不会对我们的项目结构进行任何修改，更不多创建 workspace。它只是根据我们描述文件中配置的第三方库，将他们下载到本地，然后使用 xcodebuild 构建成 framework 文件。然后由我们自己将这些库集成到项目中。Carthage 使用的是一种非侵入性的方式，它本身不会对我们的项目结构进行任何改动。</p>
 <p>CocoaPods为提高第三方开源库的可见性和参与度，创建一个更中心化的生态系统， CocoaPods 有一个中心服务器(cocoapods.org)，来管理各个包的元信息，依赖于每个第三方库自己的源地址，比如 Github。包管理依赖中心服务器，索引第三方库十分方便。</p>
-<a id="more"></a>
 <p>与之相比，Carthage创建的是去中心化的依赖管理器。它没有总项目的列表，这能够减少维护工作并且避免任何中心化带来的问题。不过，这样也有一些缺点，就是项目的发现将更困难，想查找第三方库的时候，也没有一个中心服务器来帮助我们进行索引，而是必须从网络上自行查找，用户将依赖于Github的趋势页面或者类似的代码库来寻找项目。此外，Carthage是用swift语言编写的，Carthage只正式支持动态框架，动态框架能够在任何版本的OS X上使用，但只能在iOS 8及以上版本使用</p>
 <p>创建Carthage的原因是想要一种尽可能简单的工具——一个只关心本职工作的依赖管理器，而不是取代部分Xcode的功能，或者需要让框架作者做一些额外的工作。CocoaPods提供的一些特性很棒，但由于附加的复杂性，它们将不会被包含在Carthage当中。</p>
 <p>Carthage 和 CocoaPods 各有优劣，如何选择，就要看自己的需求了。</p>
@@ -339,375 +138,453 @@ CocoaPods 是一套整体解决方案，在 Podfile文件中指定好我们需�
 <p>还可以将 Carthage 所集成的第三方库生成的符号文件添加到项目中，这样在调试的时候，就可以步入第三方库内部的代码了。</p>
 <p>具体步骤，还是进入 Build Phrases ，然后在右上角点击 New Copy Files Phrase，然后将 Carthage/Build/iOS 目录中的 Alamofire.framework.dSYM 符号文件拖动进来:<br><img src="http://7xoc8b.com1.z0.glb.clouddn.com/dsymFrameWork.png" alt="enter image description here"></p>
 <p>在项目运行后，就可以在断点中步入 SwiftyJSON 内部的代码了。<br>这样就通过 Carthage 将 Alamofire 库顺利的集成到项目中了</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
 
-      
-    </div>
 
-    <div>
-      
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/CocoaPods/">CocoaPods</a><a href="/tags/Carthage/">Carthage</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://chaosyuan.github.io/2015/11/19/2015-11-19-carthage-bao-guan-li-gong-ju/" data-title="Carthage 包管理工具 | 袁伟的技术博客" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/11/21/2015-11-21-bo-ke-qian-yi-shuo-ming/" title="博客迁移说明">
+  <strong>上一篇：</strong><br/>
+  <span>
+  博客迁移说明</span>
+</a>
+</div>
+
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/11/19/2015-11-19-carthage-bao-guan-li-gong-ju/" data-title="Carthage 包管理工具" data-url="http://chaosyuan.github.io/2015/11/19/2015-11-19-carthage-bao-guan-li-gong-ju/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ 
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="chaosyuan" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AngularJS/" title="AngularJS">AngularJS<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/web/" title="web">web<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/grunt/" title="grunt">grunt<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Carthage/" title="Carthage">Carthage<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Web/" title="Web">Web<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSDN/" title="CSDN">CSDN<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Yeoman/" title="Yeoman">Yeoman<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/动画/" title="动画">动画<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ReactiveCocoa/" title="ReactiveCocoa">ReactiveCocoa<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CocoaPods/" title="CocoaPods">CocoaPods<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HTTP/" title="HTTP">HTTP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/promise/" title="promise">promise<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
         
-
-      
-    </div>
-
-    <div>
-      
+          <li>
+            
+            	<a href="https://onevcat.com/" target="_blank" title="瞄神">瞄神</a>
+            
+          </li>
         
-
-      
-    </div>
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/CocoaPods/" rel="tag">#CocoaPods</a>
-          
-            <a href="/tags/Carthage/" rel="tag">#Carthage</a>
-          
-        </div>
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
+          <li>
             
-          </div>
-
-          <div class="post-nav-prev post-nav-item">
+            	<a href="http://blog.devtang.com/" target="_blank" title="巧叔">巧叔</a>
             
-              <a href="/2015/11/21/2015-11-21-bo-ke-qian-yi-shuo-ming/" rel="prev" title="博客迁移说明">
-                博客迁移说明 <i class="fa fa-chevron-right"></i>
-              </a>
+          </li>
+        
+          <li>
             
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div class="post-spread">
-      
-        <div class="ds-share flat" data-thread-key="2015/11/19/2015-11-19-carthage-bao-guan-li-gong-ju/"
-     data-title="Carthage 包管理工具"
-     data-content=""
-     data-url="http://chaosyuan.github.io/2015/11/19/2015-11-19-carthage-bao-guan-li-gong-ju/">
-  <div class="ds-share-inline">
-    <ul  class="ds-share-icons-16">
-
-      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
-      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
-      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
-      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
-      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
-
+            	<a href="https://objccn.io/" target="_blank" title="ObjC中国">ObjC中国</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://blog.sunnyxx.com/" target="_blank" title="sunnyxx">sunnyxx</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://blog.ibireme.com/" target="_blank" title="ibireme">ibireme</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://www.jucaifu.com/" target="_blank" title="聚财富">聚财富</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://www.haochang.tv/" target="_blank" title="好唱">好唱</a>
+            
+          </li>
+        
     </ul>
-    <div class="ds-share-icons-more">
-    </div>
-  </div>
 </div>
-      
-    </div>
-  </div>
-
-
-          </div>
-          
-
-  <p>热评文章</p>
-  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
-
-
-          
-  <div class="comments" id="comments">
-    
-      <div class="ds-thread" data-thread-key="2015/11/19/2015-11-19-carthage-bao-guan-li-gong-ju/"
-           data-title="Carthage 包管理工具" data-url="http://chaosyuan.github.io/2015/11/19/2015-11-19-carthage-bao-guan-li-gong-ju/">
-      </div>
-    
-  </div>
-
-
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
-
-      <section class="site-overview sidebar-panel ">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.jpg"
-               alt="袁伟" />
-          <p class="site-author-name" itemprop="name">袁伟</p>
-          <p class="site-description motion-element" itemprop="description">ZeroYuan</p>
-        </div>
-        <nav class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="/archives">
-              <span class="site-state-item-count">17</span>
-              <span class="site-state-item-name">日志</span>
-            </a>
-          </div>
-
-          
-
-          
-            <div class="site-state-item site-state-tags">
-              <a href="/tags">
-                <span class="site-state-item-count">14</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
-
-        
-
-        <div class="links-of-author motion-element">
-          
-            
-              <span class="links-of-author-item">
-                <a href="https://github.com/chaosyuan" target="_blank" title="GitHub">
-                  
-                    <i class="fa fa-fw fa-github"></i>
-                  
-                  GitHub
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="http://weibo.com/u/5508924750?is_all=1" target="_blank" title="weibo">
-                  
-                    <i class="fa fa-fw fa-globe"></i>
-                  
-                  weibo
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="https://www.zhihu.com/people/yuanw-92/about" target="_blank" title="zhihu">
-                  
-                    <i class="fa fa-fw fa-globe"></i>
-                  
-                  zhihu
-                </a>
-              </span>
-            
-          
-        </div>
-
-        
-        
-
-        
-        
-          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
-            <div class="links-of-blogroll-title">
-              <i class="fa  fa-fw fa-globe"></i>
-              友情链接
-            </div>
-            <ul class="links-of-blogroll-list">
-              
-                <li class="links-of-blogroll-item">
-                  <a href="https://www.jucaifu.com/" title="聚财富" target="_blank">聚财富</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://www.haochang.tv/" title="好唱" target="_blank">好唱</a>
-                </li>
-              
-            </ul>
-          </div>
-        
-
-      </section>
-
-      
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-            
-              
-            
-            
-              <p class="post-toc-empty">此文章未包含目录</p>
-            
-          </div>
-        </section>
-      
-
-    </div>
-  </aside>
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2016</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">袁伟</span>
-</div>
-
-<div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
-</div>
-
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
-  </a>
-</div>
-
-        
-
-        
-      </div>
-    </footer>
-
-    <div class="back-to-top">
-      <i class="fa fa-arrow-up"></i>
-    </div>
-  </div>
 
   
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 做人做事,只有偏执到癫狂,才能达到顶峰 <br/>
+			</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/http://weibo.com/u/5508924750?is_all=1" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/https://github.com/chaosyuan" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/https://www.zhihu.com/people/yuanw-92/about" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="袁伟">袁伟</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
 
 <script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
 </script>
 
 
 
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"chaosyuan"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
 
 
 
 
 
 
-  
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
 
 
 
-  
-  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+<!-- Analytics Begin -->
 
 
 
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
 
 
 
-  
+<!-- Analytics End -->
 
-  
-    
-  
+<!-- Totop Begin -->
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"chaosyuan"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
 
-  
-    
-    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
-  
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
 
 
+<!-- MathJax End -->
 
+<!-- Tiny_search Begin -->
 
+<!-- Tiny_search End -->
 
-
-  
-  
-
-  
-
-  
-
-  
-
-</body>
+  </body>
 </html>
