@@ -1045,9 +1045,9 @@ yuanweideMBP:~ yuanwei$ npm -v
     </summary>
     
     
-      <category term="Yeoman" scheme="http://chaosyuan.github.io/tags/Yeoman/"/>
-    
       <category term="grunt" scheme="http://chaosyuan.github.io/tags/grunt/"/>
+    
+      <category term="Yeoman" scheme="http://chaosyuan.github.io/tags/Yeoman/"/>
     
   </entry>
   
