@@ -557,13 +557,13 @@ NSBlockOperation *operation2 = [NSBlockOperation blockOperationWithBlock:^{
     <link href="http://chaosyuan.github.io/2016/03/27/2016-03-27-httphuan-cun-ce-lue/"/>
     <id>http://chaosyuan.github.io/2016/03/27/2016-03-27-httphuan-cun-ce-lue/</id>
     <published>2016-03-27T11:00:22.000Z</published>
-    <updated>2016-08-19T02:01:56.000Z</updated>
+    <updated>2016-08-23T05:57:50.000Z</updated>
     
     <content type="html"><![CDATA[<h4 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h4><p>最近在开发公司<a href="https://www.jucaifu.com/" target="_blank" rel="external">web</a>时，对HTTP缓存不是很了解，之后仔细看了HTTP缓存策略.记录下来。浏览器一般缓存图片、CSS、JS等静态文件，因为这些文件的更新频率相对来说比较低，合理利用浏览器的缓存可以优化网站性能，提升体验。</p>
 <a id="more"></a>
 <h4 id="HTTP协议-Header"><a href="#HTTP协议-Header" class="headerlink" title="HTTP协议(Header)"></a>HTTP协议(Header)</h4><p>HTTP缓存主要由HTTP协议的头（Header）信息来制定，缓存分为两部分，分别是本地缓存和缓存协商。在介绍缓存之前，先说一下服务端Header 取值</p>
 <blockquote>
-<p>Expires：后面跟一个绝对时间字符串，表示过期时间.比如：Mon, 22 Jun 2026 01:05:00 GMT。</p>
+<p>Expires：后面跟一个绝对时间字符串，表示文档在浏览器中的过期时间.比如：Mon, 22 Jun 2026 01:05:00 GMT。</p>
 <p>Cache-Control：除了提供了同Expires相同并更精确的缓存功能，还提供了验证机制，它可以取以下这些值：<br>max-age：功能和Expires类似，但是后面跟一个以“秒”为单位的相对时间，来供浏览器计算过期时间。<br>no-cache：不使用本地缓存。需要使用缓存协商，先与服务器确认返回的响应是否被更改，如果之前的响应中存在ETag，那么请求的时候会与服务端验证，如果资源未被更改，则可以避免重新下载。<br>no-store：直接禁止浏览器缓存数据，每次用户请求该资源，都会向服务器发送一个请求，每次都会下载完整的资源。<br>private：表示只有用户客户端可以缓存，而 CDN 等不可。<br>public：表示用户客户端和 CDN 都可以缓存当前资源。</p>
 </blockquote>
 <p>需要注意：如果同时出现Cache-Control和Expires，Cache-Control的优先级要高于Expires</p>
@@ -1613,9 +1613,9 @@ $q.when(funcA())
     </summary>
     
     
-      <category term="AngularJS" scheme="http://chaosyuan.github.io/tags/AngularJS/"/>
-    
       <category term="JavaScript" scheme="http://chaosyuan.github.io/tags/JavaScript/"/>
+    
+      <category term="AngularJS" scheme="http://chaosyuan.github.io/tags/AngularJS/"/>
     
   </entry>
   
@@ -1649,9 +1649,9 @@ $q.when(funcA())
     </summary>
     
     
-      <category term="AngularJS" scheme="http://chaosyuan.github.io/tags/AngularJS/"/>
-    
       <category term="JavaScript" scheme="http://chaosyuan.github.io/tags/JavaScript/"/>
+    
+      <category term="AngularJS" scheme="http://chaosyuan.github.io/tags/AngularJS/"/>
     
   </entry>
   
