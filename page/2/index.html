@@ -141,6 +141,66 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/02/25/2016-02-25-block-nei-cun-guan-li/" title="block 实现原理及内存管理" itemprop="url">block 实现原理及内存管理</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="袁伟" target="_blank" itemprop="author">袁伟</a>
+		
+  <p class="article-time">
+    <time datetime="2016-02-25T11:11:14.000Z" itemprop="datePublished"> 发表于 2016-02-25</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h4 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h4><p>block 顾名思义就是代码块，将同一逻辑的代码放在一个块，使代码更简洁紧凑，易于阅读，而且它比函数使用更方便，代码更美观。使用起来十分的方便。同时也是iOS 开发中坑最多的地方之一，因此有必要了解下 block 的实现原理，才能从根本上避免挖坑和踩坑。</p>
+<p>block 只是 Objective-C 对<a href="http://www.ruanyifeng.com/blog/2009/08/learning_javascript_closures.html">闭包</a>的实现，并不是 iOS 独有的概念，在 C++、Java 等语言也有实现闭包，只是名称不同</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/02/25/2016-02-25-block-nei-cun-guan-li/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a><a href="/tags/block/">block</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/02/25/2016-02-25-block-nei-cun-guan-li/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/02/25/2016-02-25-block-nei-cun-guan-li/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/02/16/2016-02-16-angularjs-zhi-ling-xiang-jie/" title="AngularJS 指令详解" itemprop="url">AngularJS 指令详解</a>
   </h1>
   <p class="article-author">By
@@ -289,7 +349,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Yeoman/">Yeoman</a><a href="/tags/grunt/">grunt</a>
+  <span></span> <a href="/tags/grunt/">grunt</a><a href="/tags/Yeoman/">Yeoman</a>
   </div>
 
 </div>
@@ -497,65 +557,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/11/23/2015-11-23-angularjs-factory-vs-service-vs-provider/" title="AngularJS:Factory vs Service vs Provider" itemprop="url">AngularJS:Factory vs Service vs Provider</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="袁伟" target="_blank" itemprop="author">袁伟</a>
-		
-  <p class="article-time">
-    <time datetime="2015-11-23T12:02:38.000Z" itemprop="datePublished"> 发表于 2015-11-23</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>最近在写公司后台的管理系统，由于初试AngularJS. 所以很自然地就就把业务逻辑写在 controller 和 scope 中。在git上找到AngularJs编码规范，细读之后，回头看来，代码写的是一塌糊涂。controller中充斥着大量的业务逻辑。controller本身只充当控制器的作用，controller 只在需要的时候才会初始化，一旦不需要就会被抛弃。因此，当每次切换或刷新页面的时候，Angular 会清空当前的 controller。因此controller 里是不能保存持久化数据的。这不属于它的作用范畴。业务逻辑处理应该抽离出来放在Service层，这样代码逻辑更加简洁，后期维护和测试也更加方便.</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/11/23/2015-11-23-angularjs-factory-vs-service-vs-provider/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/JavaScript/">JavaScript</a><a href="/tags/AngularJS/">AngularJS</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/11/23/2015-11-23-angularjs-factory-vs-service-vs-provider/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/11/23/2015-11-23-angularjs-factory-vs-service-vs-provider/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
@@ -586,7 +587,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/iOS/" title="iOS">iOS<sup>9</sup></a></li>
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>10</sup></a></li>
 			
 		
 			
@@ -598,10 +599,6 @@
 			
 		
 			
-				<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>2</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/grunt/" title="grunt">grunt<sup>2</sup></a></li>
 			
 		
@@ -610,7 +607,11 @@
 			
 		
 			
-				<li><a href="/tags/Yeoman/" title="Yeoman">Yeoman<sup>1</sup></a></li>
+				<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/promise/" title="promise">promise<sup>1</sup></a></li>
 			
 		
 			
@@ -618,7 +619,11 @@
 			
 		
 			
-				<li><a href="/tags/promise/" title="promise">promise<sup>1</sup></a></li>
+				<li><a href="/tags/Carthage/" title="Carthage">Carthage<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Yeoman/" title="Yeoman">Yeoman<sup>1</sup></a></li>
 			
 		
 			
@@ -630,11 +635,11 @@
 			
 		
 			
-				<li><a href="/tags/ReactiveCocoa/" title="ReactiveCocoa">ReactiveCocoa<sup>1</sup></a></li>
+				<li><a href="/tags/block/" title="block">block<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Carthage/" title="Carthage">Carthage<sup>1</sup></a></li>
+				<li><a href="/tags/ReactiveCocoa/" title="ReactiveCocoa">ReactiveCocoa<sup>1</sup></a></li>
 			
 		
 			
