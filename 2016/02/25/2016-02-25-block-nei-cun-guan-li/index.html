@@ -22,7 +22,7 @@ block 只是 Objective-C 对闭包的实现，并不是 iOS 独有的概念，�
 <meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/nomalBlock.png">
 <meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/neiCunFenPei.png">
 <meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/forwardingSelfHelp.png">
-<meta property="og:updated_time" content="2016-08-26T09:40:37.000Z">
+<meta property="og:updated_time" content="2016-08-26T09:42:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="block 实现原理及内存管理">
 <meta name="twitter:description" content="写在前面block 顾名思义就是代码块，将同一逻辑的代码放在一个块，使代码更简洁紧凑，易于阅读，而且它比函数使用更方便，代码更美观。使用起来十分的方便。同时也是iOS 开发中坑最多的地方之一，因此有必要了解下 block 的实现原理，才能从根本上避免挖坑和踩坑。
@@ -101,7 +101,7 @@ block 只是 Objective-C 对闭包的实现，并不是 iOS 独有的概念，�
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#写在前面"><span class="toc-number">1.</span> <span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#block-结构体详解"><span class="toc-number">2.</span> <span class="toc-text">block 结构体详解</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#struct-block-impl"><span class="toc-number">2.1.</span> <span class="toc-text">struct __block_impl</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#struct-main-block-impl-0"><span class="toc-number">2.2.</span> <span class="toc-text">struct __main_block_impl_0</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#static-void-main-block-func-0"><span class="toc-number">2.3.</span> <span class="toc-text">static void __main_block_func_0</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#static-struct-main-block-desc-0"><span class="toc-number">2.4.</span> <span class="toc-text">static struct __main_block_desc_0</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#最基础的-block-执行流程"><span class="toc-number">2.5.</span> <span class="toc-text">最基础的 block 执行流程</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#block-获取外部变量"><span class="toc-number">3.</span> <span class="toc-text">block 获取外部变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#block-修改外部变量"><span class="toc-number">4.</span> <span class="toc-text">block 修改外部变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#block-内存分配"><span class="toc-number">5.</span> <span class="toc-text">block 内存分配</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#NSConcreteGlobalBlock"><span class="toc-number">5.1.</span> <span class="toc-text">_NSConcreteGlobalBlock</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#NSConcreteStackBlock"><span class="toc-number">5.2.</span> <span class="toc-text">_NSConcreteStackBlock</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#NSConcreteMallocBlock"><span class="toc-number">5.3.</span> <span class="toc-text">_NSConcreteMallocBlock</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#block-自动拷贝和手动拷贝"><span class="toc-number">6.</span> <span class="toc-text">block 自动拷贝和手动拷贝</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ObjC对象的内存管理"><span class="toc-number">7.</span> <span class="toc-text">ObjC对象的内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#retain-cycle"><span class="toc-number">7.1.</span> <span class="toc-text">retain cycle</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#提前释放"><span class="toc-number">7.2.</span> <span class="toc-text">提前释放</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#总结"><span class="toc-number">8.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#参考文献："><span class="toc-number">9.</span> <span class="toc-text">参考文献：</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#写在前面"><span class="toc-number">1.</span> <span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#block-结构体详解"><span class="toc-number">2.</span> <span class="toc-text">block 结构体详解</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#struct-block-impl"><span class="toc-number">2.1.</span> <span class="toc-text">struct __block_impl</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#struct-main-block-impl-0"><span class="toc-number">2.2.</span> <span class="toc-text">struct __main_block_impl_0</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#static-void-main-block-func-0"><span class="toc-number">2.3.</span> <span class="toc-text">static void __main_block_func_0</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#static-struct-main-block-desc-0"><span class="toc-number">2.4.</span> <span class="toc-text">static struct __main_block_desc_0</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#最基础的-block-执行流程"><span class="toc-number">2.5.</span> <span class="toc-text">最基础的 block 执行流程</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#block-获取外部变量"><span class="toc-number">3.</span> <span class="toc-text">block 获取外部变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#block-修改外部变量"><span class="toc-number">4.</span> <span class="toc-text">block 修改外部变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#block-内存分配"><span class="toc-number">5.</span> <span class="toc-text">block 内存分配</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#NSConcreteGlobalBlock"><span class="toc-number">5.1.</span> <span class="toc-text">_NSConcreteGlobalBlock</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#NSConcreteStackBlock"><span class="toc-number">5.2.</span> <span class="toc-text">_NSConcreteStackBlock</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#NSConcreteMallocBlock"><span class="toc-number">5.3.</span> <span class="toc-text">_NSConcreteMallocBlock</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#block-自动拷贝和手动拷贝"><span class="toc-number">6.</span> <span class="toc-text">block 自动拷贝和手动拷贝</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ObjC对象的内存管理"><span class="toc-number">7.</span> <span class="toc-text">ObjC对象的内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#retain-cycle"><span class="toc-number">7.1.</span> <span class="toc-text">retain cycle</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#提前释放"><span class="toc-number">7.2.</span> <span class="toc-text">提前释放</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#总结"><span class="toc-number">8.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#参考文献"><span class="toc-number">9.</span> <span class="toc-text">参考文献</span></a></li></ol>
 		
 		</div>
 		
@@ -243,7 +243,7 @@ block 只是 Objective-C 对闭包的实现，并不是 iOS 独有的概念，�
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">     +-----------+           +-----------+</div><div class="line">     | request   |           |   Block   |   objA</div><div class="line">--X-&gt;|           | --------&gt; |           |&lt;--------</div><div class="line">     | retain 0  | &lt; - - - - | retain 1  |</div><div class="line">     |           |   weak    |           |</div><div class="line">     +-----------+           +-----------+</div></pre></td></tr></table></figure>
 <p>这时request已被完全释放，但Block仍被objA持有，没有释放，如果这时触发了Block，在Block中将访问已经销毁的request，这将导致程序crash。为了避免这种情况，所以开发时必须要注意对象和Block的生命周期</p>
 <h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>以上是个人的实践和理解，如果有不正确的地方，欢迎批评指正。</p>
-<h4 id="参考文献："><a href="#参考文献：" class="headerlink" title="参考文献："></a>参考文献：</h4><ol>
+<h4 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h4><ol>
 <li><a href="http://blog.csdn.net/jasonblog/article/details/7756763" target="_blank" rel="external">iOS中block实现的探究</a></li>
 <li><a href="http://blog.devtang.com/2013/07/28/a-look-inside-blocks/" target="_blank" rel="external">谈Objective-C block的实现</a></li>
 <li><a href="http://tanqisen.github.io/blog/2013/04/19/gcd-block-cycle-retain/" target="_blank" rel="external">正确使用Block避免Cycle Retain和Crash</a></li>
@@ -309,7 +309,7 @@ block 只是 Objective-C 对闭包的实现，并不是 iOS 独有的概念，�
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#写在前面"><span class="toc-number">1.</span> <span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#block-结构体详解"><span class="toc-number">2.</span> <span class="toc-text">block 结构体详解</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#struct-block-impl"><span class="toc-number">2.1.</span> <span class="toc-text">struct __block_impl</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#struct-main-block-impl-0"><span class="toc-number">2.2.</span> <span class="toc-text">struct __main_block_impl_0</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#static-void-main-block-func-0"><span class="toc-number">2.3.</span> <span class="toc-text">static void __main_block_func_0</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#static-struct-main-block-desc-0"><span class="toc-number">2.4.</span> <span class="toc-text">static struct __main_block_desc_0</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#最基础的-block-执行流程"><span class="toc-number">2.5.</span> <span class="toc-text">最基础的 block 执行流程</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#block-获取外部变量"><span class="toc-number">3.</span> <span class="toc-text">block 获取外部变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#block-修改外部变量"><span class="toc-number">4.</span> <span class="toc-text">block 修改外部变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#block-内存分配"><span class="toc-number">5.</span> <span class="toc-text">block 内存分配</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#NSConcreteGlobalBlock"><span class="toc-number">5.1.</span> <span class="toc-text">_NSConcreteGlobalBlock</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#NSConcreteStackBlock"><span class="toc-number">5.2.</span> <span class="toc-text">_NSConcreteStackBlock</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#NSConcreteMallocBlock"><span class="toc-number">5.3.</span> <span class="toc-text">_NSConcreteMallocBlock</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#block-自动拷贝和手动拷贝"><span class="toc-number">6.</span> <span class="toc-text">block 自动拷贝和手动拷贝</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ObjC对象的内存管理"><span class="toc-number">7.</span> <span class="toc-text">ObjC对象的内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#retain-cycle"><span class="toc-number">7.1.</span> <span class="toc-text">retain cycle</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#提前释放"><span class="toc-number">7.2.</span> <span class="toc-text">提前释放</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#总结"><span class="toc-number">8.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#参考文献："><span class="toc-number">9.</span> <span class="toc-text">参考文献：</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#写在前面"><span class="toc-number">1.</span> <span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#block-结构体详解"><span class="toc-number">2.</span> <span class="toc-text">block 结构体详解</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#struct-block-impl"><span class="toc-number">2.1.</span> <span class="toc-text">struct __block_impl</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#struct-main-block-impl-0"><span class="toc-number">2.2.</span> <span class="toc-text">struct __main_block_impl_0</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#static-void-main-block-func-0"><span class="toc-number">2.3.</span> <span class="toc-text">static void __main_block_func_0</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#static-struct-main-block-desc-0"><span class="toc-number">2.4.</span> <span class="toc-text">static struct __main_block_desc_0</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#最基础的-block-执行流程"><span class="toc-number">2.5.</span> <span class="toc-text">最基础的 block 执行流程</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#block-获取外部变量"><span class="toc-number">3.</span> <span class="toc-text">block 获取外部变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#block-修改外部变量"><span class="toc-number">4.</span> <span class="toc-text">block 修改外部变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#block-内存分配"><span class="toc-number">5.</span> <span class="toc-text">block 内存分配</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#NSConcreteGlobalBlock"><span class="toc-number">5.1.</span> <span class="toc-text">_NSConcreteGlobalBlock</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#NSConcreteStackBlock"><span class="toc-number">5.2.</span> <span class="toc-text">_NSConcreteStackBlock</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#NSConcreteMallocBlock"><span class="toc-number">5.3.</span> <span class="toc-text">_NSConcreteMallocBlock</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#block-自动拷贝和手动拷贝"><span class="toc-number">6.</span> <span class="toc-text">block 自动拷贝和手动拷贝</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ObjC对象的内存管理"><span class="toc-number">7.</span> <span class="toc-text">ObjC对象的内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#retain-cycle"><span class="toc-number">7.1.</span> <span class="toc-text">retain cycle</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#提前释放"><span class="toc-number">7.2.</span> <span class="toc-text">提前释放</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#总结"><span class="toc-number">8.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#参考文献"><span class="toc-number">9.</span> <span class="toc-text">参考文献</span></a></li></ol>
  
   </div>
 
@@ -351,23 +351,11 @@ block 只是 Objective-C 对闭包的实现，并不是 iOS 独有的概念，�
 			
 		
 			
-				<li><a href="/tags/grunt/" title="grunt">grunt<sup>2</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/动画/" title="动画">动画<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Web/" title="Web">Web<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Carthage/" title="Carthage">Carthage<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Yeoman/" title="Yeoman">Yeoman<sup>1</sup></a></li>
+				<li><a href="/tags/grunt/" title="grunt">grunt<sup>2</sup></a></li>
 			
 		
 			
@@ -375,11 +363,23 @@ block 只是 Objective-C 对闭包的实现，并不是 iOS 独有的概念，�
 			
 		
 			
-				<li><a href="/tags/CocoaPods/" title="CocoaPods">CocoaPods<sup>1</sup></a></li>
+				<li><a href="/tags/Web/" title="Web">Web<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/block/" title="block">block<sup>1</sup></a></li>
+				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Yeoman/" title="Yeoman">Yeoman<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Carthage/" title="Carthage">Carthage<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CocoaPods/" title="CocoaPods">CocoaPods<sup>1</sup></a></li>
 			
 		
 			
@@ -387,11 +387,15 @@ block 只是 Objective-C 对闭包的实现，并不是 iOS 独有的概念，�
 			
 		
 			
-				<li><a href="/tags/promise/" title="promise">promise<sup>1</sup></a></li>
+				<li><a href="/tags/block/" title="block">block<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/HTTP/" title="HTTP">HTTP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/promise/" title="promise">promise<sup>1</sup></a></li>
 			
 		
 		</ul>
