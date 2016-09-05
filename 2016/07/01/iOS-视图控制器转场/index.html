@@ -11,27 +11,27 @@
     
 
     
-    <meta name="description" content="前言最近闲暇之余,仔细研究了下iOS 视图控制器转场动画。详细考onevcat 及 seedante，结合自己的思考和实践。把相关学习心得记录一下。
+    <meta name="description" content="前言最近闲暇之余,仔细研究了下iOS 视图控制器转场动画。详细参考onevcat 及 seedante，结合自己的思考和实践。把相关学习心得记录一下。
 转场在 storyboard 中,每个 View Controller 都是一个 Scene，所谓转场（View Controller Transition） 便是从一个 Scene 转换到另外一个 Scene。
-转场过程中，作为容器的父 VC 维护">
+转场过程中，作为容器的父 VC 维">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS 视图控制器转场">
 <meta property="og:url" content="http://chaosyuan.github.io/2016/07/01/iOS-视图控制器转场/index.html">
 <meta property="og:site_name" content="袁伟的技术博客">
-<meta property="og:description" content="前言最近闲暇之余,仔细研究了下iOS 视图控制器转场动画。详细考onevcat 及 seedante，结合自己的思考和实践。把相关学习心得记录一下。
+<meta property="og:description" content="前言最近闲暇之余,仔细研究了下iOS 视图控制器转场动画。详细参考onevcat 及 seedante，结合自己的思考和实践。把相关学习心得记录一下。
 转场在 storyboard 中,每个 View Controller 都是一个 Scene，所谓转场（View Controller Transition） 便是从一个 Scene 转换到另外一个 Scene。
-转场过程中，作为容器的父 VC 维护">
+转场过程中，作为容器的父 VC 维">
 <meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/collectionViewScale.gif">
 <meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/collectionViewPushPop.gif">
 <meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/PresentationControlAnimate.gif">
 <meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/interativePresent.gif">
 <meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/interativefullPushPop.gif">
-<meta property="og:updated_time" content="2016-08-19T01:59:20.000Z">
+<meta property="og:updated_time" content="2016-09-05T08:23:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS 视图控制器转场">
-<meta name="twitter:description" content="前言最近闲暇之余,仔细研究了下iOS 视图控制器转场动画。详细考onevcat 及 seedante，结合自己的思考和实践。把相关学习心得记录一下。
+<meta name="twitter:description" content="前言最近闲暇之余,仔细研究了下iOS 视图控制器转场动画。详细参考onevcat 及 seedante，结合自己的思考和实践。把相关学习心得记录一下。
 转场在 storyboard 中,每个 View Controller 都是一个 Scene，所谓转场（View Controller Transition） 便是从一个 Scene 转换到另外一个 Scene。
-转场过程中，作为容器的父 VC 维护">
+转场过程中，作为容器的父 VC 维">
 <meta name="twitter:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/collectionViewScale.gif">
 
     
@@ -110,7 +110,7 @@
 		
 		</div>
 		
-		<h5 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h5><p>最近闲暇之余,仔细研究了下iOS 视图控制器转场动画。详细考<a href="https://onevcat.com/2013/10/vc-transition-in-ios7/" target="_blank" rel="external">onevcat</a> 及 <a href="http://www.jianshu.com/p/9333c5f983de" target="_blank" rel="external">seedante</a>，结合自己的思考和实践。把相关学习心得记录一下。</p>
+		<h5 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h5><p>最近闲暇之余,仔细研究了下iOS 视图控制器转场动画。详细参考<a href="https://onevcat.com/2013/10/vc-transition-in-ios7/" target="_blank" rel="external">onevcat</a> 及 <a href="http://www.jianshu.com/p/9333c5f983de" target="_blank" rel="external">seedante</a>，结合自己的思考和实践。把相关学习心得记录一下。</p>
 <h5 id="转场"><a href="#转场" class="headerlink" title="转场"></a>转场</h5><p>在 storyboard 中,每个 View Controller 都是一个 Scene，所谓转场（View Controller Transition） 便是从一个 Scene 转换到另外一个 Scene。</p>
 <p>转场过程中，作为容器的父 VC 维护着多个子 VC，但在视图结构上，只保留一个子 VC 的视图，所以转场的本质是下一场景(子 VC)的视图替换当前场景(子 VC)的视图以及相应的控制器(子 VC)的替换，表现为当前视图消失和下一视图出现，基于此进行动画,动画的方式非常多.</p>
 <a id="more"></a>
@@ -276,15 +276,11 @@
 			
 		
 			
-				<li><a href="/tags/动画/" title="动画">动画<sup>2</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/grunt/" title="grunt">grunt<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/CSDN/" title="CSDN">CSDN<sup>1</sup></a></li>
+				<li><a href="/tags/动画/" title="动画">动画<sup>2</sup></a></li>
 			
 		
 			
@@ -296,11 +292,11 @@
 			
 		
 			
-				<li><a href="/tags/Yeoman/" title="Yeoman">Yeoman<sup>1</sup></a></li>
+				<li><a href="/tags/Carthage/" title="Carthage">Carthage<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Carthage/" title="Carthage">Carthage<sup>1</sup></a></li>
+				<li><a href="/tags/CSDN/" title="CSDN">CSDN<sup>1</sup></a></li>
 			
 		
 			
@@ -308,7 +304,7 @@
 			
 		
 			
-				<li><a href="/tags/ReactiveCocoa/" title="ReactiveCocoa">ReactiveCocoa<sup>1</sup></a></li>
+				<li><a href="/tags/Yeoman/" title="Yeoman">Yeoman<sup>1</sup></a></li>
 			
 		
 			
@@ -316,11 +312,15 @@
 			
 		
 			
-				<li><a href="/tags/HTTP/" title="HTTP">HTTP<sup>1</sup></a></li>
+				<li><a href="/tags/ReactiveCocoa/" title="ReactiveCocoa">ReactiveCocoa<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/promise/" title="promise">promise<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HTTP/" title="HTTP">HTTP<sup>1</sup></a></li>
 			
 		
 		</ul>
