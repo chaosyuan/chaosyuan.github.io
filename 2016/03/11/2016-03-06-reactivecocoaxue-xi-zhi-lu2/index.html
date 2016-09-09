@@ -1,0 +1,611 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>ReactiveCocoa学习之路（二） | 袁伟的技术博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="袁伟">
+    
+
+    
+    <meta name="description" content="写在前面上一篇中主要学习了ReactiveCocoa的基础部分。RAC并不是单一功能的模块，它是一个Framework,提供了一整套解决方案。核心思想是响应数据的变化。在这个基础上有了Signal的概念。进而减少了状态变量及状态之间的依赖。现在许多公司开始使用RAC + MVVM建构来实现。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ReactiveCocoa学习之路（二）">
+<meta property="og:url" content="http://chaosyuan.github.io/2016/03/11/2016-03-06-reactivecocoaxue-xi-zhi-lu2/index.html">
+<meta property="og:site_name" content="袁伟的技术博客">
+<meta property="og:description" content="写在前面上一篇中主要学习了ReactiveCocoa的基础部分。RAC并不是单一功能的模块，它是一个Framework,提供了一整套解决方案。核心思想是响应数据的变化。在这个基础上有了Signal的概念。进而减少了状态变量及状态之间的依赖。现在许多公司开始使用RAC + MVVM建构来实现。">
+<meta property="og:updated_time" content="2016-09-08T09:39:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ReactiveCocoa学习之路（二）">
+<meta name="twitter:description" content="写在前面上一篇中主要学习了ReactiveCocoa的基础部分。RAC并不是单一功能的模块，它是一个Framework,提供了一整套解决方案。核心思想是响应数据的变化。在这个基础上有了Signal的概念。进而减少了状态变量及状态之间的依赖。现在许多公司开始使用RAC + MVVM建构来实现。">
+
+    
+    <link rel="alternative" href="/atom.xml" title="袁伟的技术博客" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="袁伟的技术博客">袁伟的技术博客</a></h1>
+				<h2 class="blog-motto">千里之行始于足下</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/tags">标签</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:chaosyuan.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/03/11/2016-03-06-reactivecocoaxue-xi-zhi-lu2/" title="ReactiveCocoa学习之路（二）" itemprop="url">ReactiveCocoa学习之路（二）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="袁伟" target="_blank" itemprop="author">袁伟</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-11T10:26:21.000Z" itemprop="datePublished"> 发表于 2016-03-11</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#写在前面"><span class="toc-number">1.</span> <span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#简单用法"><span class="toc-number">2.</span> <span class="toc-text">简单用法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#文本框事件"><span class="toc-number">2.1.</span> <span class="toc-text">文本框事件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#手势"><span class="toc-number">2.2.</span> <span class="toc-text">手势</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#通知中心"><span class="toc-number">2.3.</span> <span class="toc-text">通知中心</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#定时器"><span class="toc-number">2.4.</span> <span class="toc-text">定时器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#代理"><span class="toc-number">2.5.</span> <span class="toc-text">代理</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#KVO"><span class="toc-number">2.6.</span> <span class="toc-text">KVO</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基本用法"><span class="toc-number">3.</span> <span class="toc-text">基本用法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#需求-分析-步骤"><span class="toc-number">3.1.</span> <span class="toc-text">需求+分析+步骤</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#控制器代码"><span class="toc-number">3.2.</span> <span class="toc-text">控制器代码</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#视图模型-viewModel-代码"><span class="toc-number">3.3.</span> <span class="toc-text">视图模型(viewModel)代码</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#参考文献"><span class="toc-number">5.</span> <span class="toc-text">参考文献</span></a></li></ol>
+		
+		</div>
+		
+		<h4 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h4><p>上一篇中主要学习了ReactiveCocoa的基础部分。RAC并不是单一功能的模块，它是一个Framework,提供了一整套解决方案。核心思想是响应数据的变化。在这个基础上有了Signal的概念。进而减少了状态变量及状态之间的依赖。现在许多公司开始使用RAC + MVVM建构来实现。</p>
+<a id="more"></a>
+<p>在学习ReactiveCocoa过程中，发现RAC与AngularJS有个非常相似的特性：数据与视图绑定。就是当数据变化时，视图不需要额外的处理，便可正确地呈现最新的数据。语言虽然不一样，但编程思想却是相通的。</p>
+<p>学习了原理和思想，实际上手可能有一定的难度，于是决定先写一些简单的demo实践一下。</p>
+<h4 id="简单用法"><a href="#简单用法" class="headerlink" title="简单用法"></a>简单用法</h4><p>下面的Demo使用了<a href="https://github.com/SnapKit/Masonry" target="_blank" rel="external">Masonry</a>布局与打印插件 <a href="https://github.com/DeveloperLx/LxDBAnything" target="_blank" rel="external">LxDBAnything</a>,网络库<a href="https://github.com/AFNetworking/AFNetworking" target="_blank" rel="external">AFNetworking</a>等</p>
+<h5 id="文本框事件"><a href="#文本框事件" class="headerlink" title="文本框事件"></a>文本框事件</h5><p>在RAC中，可以非常简单的实现文本框的监听，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">UITextField *textField = (&#123;</div><div class="line">    UITextField *textField = [[UITextField alloc] init];</div><div class="line">    textField.backgroundColor = [UIColor whiteColor];</div><div class="line">    textField.borderStyle =  UITextBorderStyleLine;</div><div class="line">    textField;</div><div class="line">&#125;);</div><div class="line">[self.view addSubview:textField];</div><div class="line"></div><div class="line">@weakify(self); // __typeof(self)  __weak weakSelf = self;</div><div class="line">[textField mas_makeConstraints:^(MASConstraintMaker *make) &#123;</div><div class="line">    @strongify(self);</div><div class="line">    make.size.mas_equalTo(CGSizeMake(180, 38));</div><div class="line">    make.center.equalTo(self.view);</div><div class="line">&#125;];</div><div class="line">[[textField rac_signalForControlEvents:UIControlEventEditingChanged] subscribeNext:^(id x) &#123;</div><div class="line">    LxDBAnyVar(x);</div><div class="line">&#125;];</div><div class="line">[textField.rac_textSignal subscribeNext:^(id x) &#123;</div><div class="line">     LxDBAnyVar(x);</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<p>执行结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">📍__30-[ViewController textFieldRac]_block_invoke29 + 48🎈 x = &lt;UITextField: 0x7fa60a42b9b0; frame = (97.5 314.5; 180 38); text = &apos;1&apos;; clipsToBounds = YES; opaque = NO; gestureRecognizers = &lt;NSArray: 0x7fa60a5a6fd0&gt;; layer = &lt;CALayer: 0x7fa60a416c10&gt;&gt;</div><div class="line">📍__30-[ViewController textFieldRac]_block_invoke_2 + 51🎈 x = 1</div><div class="line">📍__30-[ViewController textFieldRac]_block_invoke29 + 48🎈 x = &lt;UITextField: 0x7fa60a42b9b0; frame = (97.5 314.5; 180 38); text = &apos;12&apos;; clipsToBounds = YES; opaque = NO; gestureRecognizers = &lt;NSArray: 0x7fa60a5a6fd0&gt;; layer = &lt;CALayer: 0x7fa60a416c10&gt;&gt;</div><div class="line">📍__30-[ViewController textFieldRac]_block_invoke_2 + 51🎈 x = 12</div></pre></td></tr></table></figure></p>
+<p>上述代码中很容易的监听到textFiled中发生的变化，其中x的类型默认为id类型。<a href="http://zeroyuan.com/2016/03/02/2016-03-02-reactivecocoaxue-xi-zhi-lu1/" target="_blank" rel="external">在上一篇中文章中</a>，我也写出其中的实现原理。</p>
+<h5 id="手势"><a href="#手势" class="headerlink" title="手势"></a>手势</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">self.view.userInteractionEnabled = true;</div><div class="line">UIView *buttomView = (&#123;</div><div class="line">    UIView *view = [[UIView alloc] init];</div><div class="line">    view.backgroundColor = [UIColor purpleColor];</div><div class="line">    view;</div><div class="line">&#125;);</div><div class="line">[self.view addSubview:buttomView];</div><div class="line"></div><div class="line">@weakify(self);</div><div class="line">[buttomView mas_makeConstraints:^(MASConstraintMaker *make) &#123;</div><div class="line">    @strongify(self);</div><div class="line">    make.size.mas_equalTo(CGSizeMake(100, 100));</div><div class="line">    make.center.equalTo(self.view);</div><div class="line">&#125;];</div><div class="line"></div><div class="line">UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] init];</div><div class="line">[tap.rac_gestureSignal subscribeNext:^(UITapGestureRecognizer *ges) &#123;</div><div class="line">    </div><div class="line">    LxDBAnyVar(ges);</div><div class="line">&#125;];</div><div class="line"></div><div class="line">[buttomView addGestureRecognizer:tap];</div></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">📍__28-[ViewController gestureRac]_block_invoke + 64🎈 ges = &lt;UITapGestureRecognizer: 0x7fd4a1536b50; state = Ended; view = &lt;UIView 0x7fd4a15327b0&gt;; target= &lt;(action=sendNext:, target=&lt;RACPassthroughSubscriber 0x7fd4a1537fa0&gt;)&gt;&gt;</div></pre></td></tr></table></figure>
+<h5 id="通知中心"><a href="#通知中心" class="headerlink" title="通知中心"></a>通知中心</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[[[NSNotificationCenter defaultCenter] rac_addObserverForName:UIApplicationDidEnterBackgroundNotification object:nil] subscribeNext:^(NSNotification *notify) &#123;</div><div class="line">    LxDBAnyVar(notify);</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">📍__33-[ViewController notifyCenterRac]_block_invoke + 87🎈 notify = NSConcreteNotification 0x7ffb2ad15830 &#123;name = UIApplicationDidEnterBackgroundNotification; object = &lt;UIApplication: 0x7ffb2ae046d0&gt;&#125;</div></pre></td></tr></table></figure>
+<p>注册一个应用进入后台的通知，当进入后台时会通知相应，用RAC写通知的时候，可以不用移除监听者removeObserver，因为RAC通知的监听者是RAC自己，它会帮你管理释放方法。<strong>rac_addObserverForName</strong>的具体实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">- (RACSignal *)rac_addObserverForName:(NSString *)notificationName object:(id)object &#123;</div><div class="line">    @unsafeify(object);</div><div class="line">    return [[RACSignal createSignal:^(id&lt;RACSubscriber&gt; subscriber) &#123;</div><div class="line">        @strongify(object);</div><div class="line">        id observer = [self addObserverForName:notificationName object:object queue:nil usingBlock:^(NSNotification *note) &#123;</div><div class="line">            [subscriber sendNext:note];</div><div class="line">        &#125;];</div><div class="line"></div><div class="line">        return [RACDisposable disposableWithBlock:^&#123;</div><div class="line">            // 移除监听者</div><div class="line">            [self removeObserver:observer];</div><div class="line">        &#125;];</div><div class="line">        // 别名rac_addObserverForName 方便debug</div><div class="line">    &#125;] setNameWithFormat:@&quot;-rac_addObserverForName: %@ object: &lt;%@: %p&gt;&quot;, notificationName, [object class], object];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="定时器"><a href="#定时器" class="headerlink" title="定时器"></a>定时器</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">// 延时3秒后再做某一件事</div><div class="line">[[RACScheduler mainThreadScheduler] afterDelay:3.0 schedule:^&#123;</div><div class="line">    LxDBAnyVar(@&quot;hello world&quot;);</div><div class="line">&#125;];</div><div class="line"></div><div class="line">// 每个1秒调用一次</div><div class="line">[[RACSignal interval:1.0 onScheduler:[RACScheduler mainThreadScheduler]] subscribeNext:^(NSData *data) &#123;</div><div class="line">    </div><div class="line">    LxDBAnyVar(data);</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<h5 id="代理"><a href="#代理" class="headerlink" title="代理"></a>代理</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@&quot;message&quot; delegate:self cancelButtonTitle:@&quot;取消&quot; destructiveButtonTitle:nil otherButtonTitles:@&quot;first&quot;,@&quot;second&quot;, nil];</div><div class="line">sheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;</div><div class="line">[sheet showInView:self.view];</div><div class="line"></div><div class="line">[[self rac_signalForSelector:@selector(actionSheet:clickedButtonAtIndex:) fromProtocol:@protocol(UIActionSheetDelegate)] subscribeNext:^(RACTuple *tuple) &#123;</div><div class="line">    LxDBAnyVar(tuple);</div><div class="line">    LxDBAnyVar(tuple.first);</div><div class="line">    LxDBAnyVar(tuple.second);</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<p>用RAC去写代理的时候，会有局限性。RAC只能取代void的代理</p>
+<h5 id="KVO"><a href="#KVO" class="headerlink" title="KVO"></a>KVO</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">UIScrollView *scrollview = [[UIScrollView alloc] init];</div><div class="line">  scrollview.delegate = self;</div><div class="line">  scrollview.backgroundColor = [UIColor purpleColor];</div><div class="line">  [self.view addSubview:scrollview];</div><div class="line">  </div><div class="line">  @weakify(self);</div><div class="line">  [scrollview mas_makeConstraints:^(MASConstraintMaker *make) &#123;</div><div class="line">      @strongify(self);</div><div class="line">      make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(70, 10, 70, 10));</div><div class="line">  &#125;];</div><div class="line">  </div><div class="line">  </div><div class="line">  UIView *contentView = [[UIView alloc] init];</div><div class="line">  contentView.backgroundColor = [UIColor redColor];</div><div class="line">  [scrollview addSubview:contentView];</div><div class="line">  </div><div class="line">  [contentView mas_makeConstraints:^(MASConstraintMaker *make) &#123;</div><div class="line">      @strongify(self);</div><div class="line">      make.edges.equalTo(scrollview);</div><div class="line">      make.size.mas_equalTo(CGSizeMake(CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame)));</div><div class="line">  &#125;];</div><div class="line">  </div><div class="line">  [RACObserve(scrollview, contentOffset) subscribeNext:^(id x) &#123;</div><div class="line">      LxDBAnyVar(x);</div><div class="line">  &#125;];</div></pre></td></tr></table></figure>
+<p>用RAC写KVO十分方便，不用自己手动移除removeObserver，使用keypath时会有代码提示，比较方便。</p>
+<h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><h5 id="需求-分析-步骤"><a href="#需求-分析-步骤" class="headerlink" title="需求+分析+步骤"></a>需求+分析+步骤</h5><p>使用RAC + MVVM来写一个网络请求Demo</p>
+<ul>
+<li>需求：请求聚财富产品列表信息</li>
+<li>分析：请求一样，交给VM模型管理</li>
+<li>步骤：<blockquote>
+<ol>
+<li>控制器提供一个视图模型（ViewModel）,处理界面的业务逻辑</li>
+<li>viewModel提供一个命令，处理请求业务逻辑</li>
+<li>在创建命令的block中，会把请求包装成一个信号，等请求成功的时候，将数据用信号传递出去</li>
+<li>请求数据成功，把字典转换成模型，保存到视图模型中，控制器想用就直接从视图模型中获取</li>
+<li>控制器想展示内容到tableView，直接让视图模型成为tableView的数据源，把所有的业务逻辑分离到视图模型去做，这样就减少了控制器中的代码了</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+<h5 id="控制器代码"><a href="#控制器代码" class="headerlink" title="控制器代码"></a>控制器代码</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">@interface TestOneViewController ()</div><div class="line"></div><div class="line">@property (nonatomic,strong) weatherViewModel *requestViewModel;</div><div class="line"></div><div class="line">@end</div><div class="line"></div><div class="line">@implementation TestOneViewController</div><div class="line"></div><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">    </div><div class="line">    UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds];</div><div class="line">    tableView.dataSource = self.requestViewModel;</div><div class="line">    self.requestViewModel.tableView = tableView;</div><div class="line">    [self.view addSubview:tableView];</div><div class="line">    </div><div class="line">    // 执行请求</div><div class="line">    [self.requestViewModel.command execute:nil];</div><div class="line">&#125;</div><div class="line">- (weatherViewModel *)requestViewModel&#123;</div><div class="line">    if (!_requestViewModel) &#123;</div><div class="line">        _requestViewModel = [[weatherViewModel alloc] init];</div><div class="line">    &#125;</div><div class="line">    return _requestViewModel;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="视图模型-viewModel-代码"><a href="#视图模型-viewModel-代码" class="headerlink" title="视图模型(viewModel)代码"></a>视图模型(viewModel)代码</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div></pre></td><td class="code"><pre><div class="line">@interface weatherViewModel : NSObject&lt;UITableViewDataSource&gt;</div><div class="line"></div><div class="line">/**</div><div class="line"> *  请求命令</div><div class="line"> */</div><div class="line">@property (nonatomic,strong,readonly) RACCommand *command;</div><div class="line">/**</div><div class="line"> *  模型数组</div><div class="line"> */</div><div class="line">@property (nonatomic,strong,readonly) NSArray *dataList;</div><div class="line">/**</div><div class="line"> *  控制器中的tableView</div><div class="line"> */</div><div class="line">@property (nonatomic,weak) UITableView *tableView;</div><div class="line"></div><div class="line">@end</div><div class="line"></div><div class="line">@implementation weatherViewModel</div><div class="line"></div><div class="line">- (instancetype)init</div><div class="line">&#123;</div><div class="line">    self = [super init];</div><div class="line">    if (self) &#123;</div><div class="line">        [self initialBind];</div><div class="line">    &#125;</div><div class="line">    return self;</div><div class="line">&#125;</div><div class="line">- (void)initialBind&#123;</div><div class="line">    </div><div class="line">    _command = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) &#123;</div><div class="line">        </div><div class="line">        RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id&lt;RACSubscriber&gt; subscriber) &#123;</div><div class="line">            </div><div class="line">            // NSMutableDictionary *parameters = [NSMutableDictionary dictionary];</div><div class="line">            </div><div class="line">              // 发送请求</div><div class="line">            [[AFHTTPSessionManager manager] GET:@&quot;https://www.jucaifu.com/jcf-api-web/web/product/list/%7b%22type%22:0,%22token%22:null,%22pageFilter%22:%7b%22page%22:1,%22size%22:7%7d,%22tags%22:%5b%221%22,%224%22,%222%22%5d%7d&quot; parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) &#123;</div><div class="line">                </div><div class="line">                // 请求成功后 将数据用信号传递出去</div><div class="line">                [subscriber sendNext:responseObject];</div><div class="line">                [subscriber sendCompleted];</div><div class="line">                </div><div class="line">            &#125; failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) &#123;</div><div class="line">                // 请求失败</div><div class="line">                LxDBAnyVar(error);</div><div class="line">            &#125;];</div><div class="line">              return nil;</div><div class="line">        &#125;];</div><div class="line">      </div><div class="line">        // 在返回数据信号时，把数据中的字典映射成模型信号，传递出去</div><div class="line">        return [signal map:^id(NSDictionary *dicInfo) &#123;</div><div class="line">            NSMutableArray *dataList = [dicInfo[@&quot;body&quot;] objectForKey:@&quot;result&quot;];</div><div class="line">            </div><div class="line">            // 使用yymodel将字典转模型，遍历字典中的所有元素，全部映射成模型，并且生成数组</div><div class="line">            NSArray *modelArr = [[dataList.rac_sequence map:^id(id value) &#123;</div><div class="line">                return [weatherModel yy_modelWithDictionary:value];</div><div class="line">            &#125;] array];</div><div class="line">            return modelArr;</div><div class="line">        &#125;];</div><div class="line">    &#125;];</div><div class="line">    </div><div class="line">     // 获取请求的数据</div><div class="line">    [_command.executionSignals.switchToLatest subscribeNext:^(NSArray *x) &#123;</div><div class="line">        </div><div class="line">        LxDBAnyVar(x);</div><div class="line">        // 刷新tableView</div><div class="line">        _dataList = x;</div><div class="line">        [self.tableView reloadData];</div><div class="line">    &#125;];</div><div class="line">&#125;</div><div class="line"></div><div class="line">#pragma mark -UITableViewDataSource</div><div class="line">- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section</div><div class="line">&#123;</div><div class="line">    return [self.dataList count];</div><div class="line">&#125;</div><div class="line">- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath&#123;</div><div class="line">    static NSString *cellID = @&quot;cell&quot;;</div><div class="line">    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];</div><div class="line">    if (!cell) &#123;</div><div class="line">        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];</div><div class="line">    &#125;</div><div class="line">    weatherModel *model = self.dataList[indexPath.row];</div><div class="line">    cell.detailTextLabel.text = model.productName;</div><div class="line">    cell.textLabel.text = model.riskType;</div></pre></td></tr></table></figure>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>demo中有一些细节没有处理。使用RAC+MVVM架构，使得ViewController更轻量。由于对RAC的认知还处于初步阶段，面对RAC众多的api要想完全理解下来还是挺困难的。而且刚开始不熟悉的情况下很难针对某些特定的场景，想出比较合理的RAC处理方式。如有不正确或者缺漏的地方，还请大家批评指正。</p>
+<h4 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h4><ol>
+<li><a href="http://www.iiiyu.com/2013/09/11/learning-ios-notes-twenty-eight/" target="_blank" rel="external">iOS学习笔记(28) ReactiveCocoa</a> </li>
+<li><a href="http://tech.meituan.com/talk-about-reactivecocoas-cold-signal-and-hot-signal-part-1.html" target="_blank" rel="external">细说ReactiveCocoa的冷信号与热信号</a></li>
+<li><a href="https://objccn.io/issue-1-1/" target="_blank" rel="external">更轻量的 View Controllers</a></li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a><a href="/tags/ReactiveCocoa/">ReactiveCocoa</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://chaosyuan.github.io/2016/03/11/2016-03-06-reactivecocoaxue-xi-zhi-lu2/" data-title="ReactiveCocoa学习之路（二） | 袁伟的技术博客" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/03/19/2016-03-19-coreanimationdong-hua-ru-men/" title="CoreAnimation动画入门">
+  <strong>上一篇：</strong><br/>
+  <span>
+  CoreAnimation动画入门</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/03/02/2016-03-02-reactivecocoaxue-xi-zhi-lu1/"  title="ReactiveCocoa学习之路（一）">
+ <strong>下一篇：</strong><br/> 
+ <span>ReactiveCocoa学习之路（一）
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/03/11/2016-03-06-reactivecocoaxue-xi-zhi-lu2/" data-title="ReactiveCocoa学习之路（二）" data-url="http://chaosyuan.github.io/2016/03/11/2016-03-06-reactivecocoaxue-xi-zhi-lu2/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#写在前面"><span class="toc-number">1.</span> <span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#简单用法"><span class="toc-number">2.</span> <span class="toc-text">简单用法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#文本框事件"><span class="toc-number">2.1.</span> <span class="toc-text">文本框事件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#手势"><span class="toc-number">2.2.</span> <span class="toc-text">手势</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#通知中心"><span class="toc-number">2.3.</span> <span class="toc-text">通知中心</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#定时器"><span class="toc-number">2.4.</span> <span class="toc-text">定时器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#代理"><span class="toc-number">2.5.</span> <span class="toc-text">代理</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#KVO"><span class="toc-number">2.6.</span> <span class="toc-text">KVO</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基本用法"><span class="toc-number">3.</span> <span class="toc-text">基本用法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#需求-分析-步骤"><span class="toc-number">3.1.</span> <span class="toc-text">需求+分析+步骤</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#控制器代码"><span class="toc-number">3.2.</span> <span class="toc-text">控制器代码</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#视图模型-viewModel-代码"><span class="toc-number">3.3.</span> <span class="toc-text">视图模型(viewModel)代码</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#参考文献"><span class="toc-number">5.</span> <span class="toc-text">参考文献</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="chaosyuan" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AngularJS/" title="AngularJS">AngularJS<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/web/" title="web">web<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/grunt/" title="grunt">grunt<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ReactiveCocoa/" title="ReactiveCocoa">ReactiveCocoa<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/动画/" title="动画">动画<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Web/" title="Web">Web<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Carthage/" title="Carthage">Carthage<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Yeoman/" title="Yeoman">Yeoman<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSDN/" title="CSDN">CSDN<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CocoaPods/" title="CocoaPods">CocoaPods<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/block/" title="block">block<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/promise/" title="promise">promise<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HTTP/" title="HTTP">HTTP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://onevcat.com/" target="_blank" title="瞄神">瞄神</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://blog.devtang.com/" target="_blank" title="巧叔">巧叔</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://objccn.io/" target="_blank" title="ObjC中国">ObjC中国</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://blog.sunnyxx.com/" target="_blank" title="sunnyxx">sunnyxx</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://blog.ibireme.com/" target="_blank" title="ibireme">ibireme</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://www.jucaifu.com/" target="_blank" title="聚财富">聚财富</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://www.haochang.tv/" target="_blank" title="好唱">好唱</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 做人做事,只有偏执到癫狂,才能达到顶峰 <br/>
+			</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/u/5508924750?is_all=1" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/chaosyuan" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/yuanw-92/about" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="袁伟">袁伟</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"chaosyuan"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
