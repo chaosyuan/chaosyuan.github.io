@@ -1212,7 +1212,7 @@ NSBlockOperation *operation2 = [NSBlockOperation blockOperationWithBlock:^{
     <link href="http://chaosyuan.github.io/2016/02/25/2016-02-25-block-nei-cun-guan-li/"/>
     <id>http://chaosyuan.github.io/2016/02/25/2016-02-25-block-nei-cun-guan-li/</id>
     <published>2016-02-25T11:11:14.000Z</published>
-    <updated>2016-08-26T09:42:33.000Z</updated>
+    <updated>2016-09-12T06:51:50.000Z</updated>
     
     <content type="html"><![CDATA[<h4 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h4><p>block 顾名思义就是代码块，将同一逻辑的代码放在一个块，使代码更简洁紧凑，易于阅读，而且它比函数使用更方便，代码更美观。使用起来十分的方便。同时也是iOS 开发中坑最多的地方之一，因此有必要了解下 block 的实现原理，才能从根本上避免挖坑和踩坑。</p>
 <p>block 只是 Objective-C 对<a href="http://www.ruanyifeng.com/blog/2009/08/learning_javascript_closures.html" target="_blank" rel="external">闭包</a>的实现，并不是 iOS 独有的概念，在 C++、Java 等语言也有实现闭包，只是名称不同</p>
@@ -1225,7 +1225,7 @@ NSBlockOperation *operation2 = [NSBlockOperation blockOperationWithBlock:^{
 <ul>
 <li><p>isa：指向对象所属的类，表明 block 本身也是一个 OC 对象。block按照内存位置，可分为三种类型：</p>
 <blockquote>
-<p>NSConcreteStackBlock  全局区block<br>NSConcreteGlobalBlock  栈区block<br>NSConcreteMallocBlock 堆区Block</p>
+<p>NSConcreteGlobalBlock  全局区block<br>NSConcreteStackBlock  栈区block<br>NSConcreteMallocBlock 堆区Block</p>
 </blockquote>
 </li>
 <li><p>Flags：按bit位表示一些block的附加信息，比如判断block类型、判断block引用计数、判断block是否需要执行辅助函数等</p>
@@ -1636,9 +1636,9 @@ yuanweideMBP:~ yuanwei$ npm -v
     </summary>
     
     
-      <category term="Yeoman" scheme="http://chaosyuan.github.io/tags/Yeoman/"/>
-    
       <category term="grunt" scheme="http://chaosyuan.github.io/tags/grunt/"/>
+    
+      <category term="Yeoman" scheme="http://chaosyuan.github.io/tags/Yeoman/"/>
     
   </entry>
   

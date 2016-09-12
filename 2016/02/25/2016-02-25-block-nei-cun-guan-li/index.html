@@ -22,7 +22,7 @@ block 只是 Objective-C 对闭包的实现，并不是 iOS 独有的概念，�
 <meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/nomalBlock.png">
 <meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/neiCunFenPei.png">
 <meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/forwardingSelfHelp.png">
-<meta property="og:updated_time" content="2016-08-26T09:42:33.000Z">
+<meta property="og:updated_time" content="2016-09-12T06:51:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="block 实现原理及内存管理">
 <meta name="twitter:description" content="写在前面block 顾名思义就是代码块，将同一逻辑的代码放在一个块，使代码更简洁紧凑，易于阅读，而且它比函数使用更方便，代码更美观。使用起来十分的方便。同时也是iOS 开发中坑最多的地方之一，因此有必要了解下 block 的实现原理，才能从根本上避免挖坑和踩坑。
@@ -116,7 +116,7 @@ block 只是 Objective-C 对闭包的实现，并不是 iOS 独有的概念，�
 <ul>
 <li><p>isa：指向对象所属的类，表明 block 本身也是一个 OC 对象。block按照内存位置，可分为三种类型：</p>
 <blockquote>
-<p>NSConcreteStackBlock  全局区block<br>NSConcreteGlobalBlock  栈区block<br>NSConcreteMallocBlock 堆区Block</p>
+<p>NSConcreteGlobalBlock  全局区block<br>NSConcreteStackBlock  栈区block<br>NSConcreteMallocBlock 堆区Block</p>
 </blockquote>
 </li>
 <li><p>Flags：按bit位表示一些block的附加信息，比如判断block类型、判断block引用计数、判断block是否需要执行辅助函数等</p>
@@ -347,11 +347,11 @@ block 只是 Objective-C 对闭包的实现，并不是 iOS 独有的概念，�
 			
 		
 			
-				<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>2</sup></a></li>
+				<li><a href="/tags/动画/" title="动画">动画<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/grunt/" title="grunt">grunt<sup>2</sup></a></li>
+				<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>2</sup></a></li>
 			
 		
 			
@@ -359,31 +359,7 @@ block 只是 Objective-C 对闭包的实现，并不是 iOS 独有的概念，�
 			
 		
 			
-				<li><a href="/tags/动画/" title="动画">动画<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Web/" title="Web">Web<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Carthage/" title="Carthage">Carthage<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Yeoman/" title="Yeoman">Yeoman<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/CSDN/" title="CSDN">CSDN<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/CocoaPods/" title="CocoaPods">CocoaPods<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/block/" title="block">block<sup>1</sup></a></li>
+				<li><a href="/tags/grunt/" title="grunt">grunt<sup>2</sup></a></li>
 			
 		
 			
@@ -391,11 +367,35 @@ block 只是 Objective-C 对闭包的实现，并不是 iOS 独有的概念，�
 			
 		
 			
+				<li><a href="/tags/Carthage/" title="Carthage">Carthage<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
 			
 		
 			
+				<li><a href="/tags/block/" title="block">block<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Web/" title="Web">Web<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Yeoman/" title="Yeoman">Yeoman<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CocoaPods/" title="CocoaPods">CocoaPods<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/HTTP/" title="HTTP">HTTP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSDN/" title="CSDN">CSDN<sup>1</sup></a></li>
 			
 		
 		</ul>
