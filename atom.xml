@@ -1636,9 +1636,9 @@ yuanweideMBP:~ yuanwei$ npm -v
     </summary>
     
     
-      <category term="grunt" scheme="http://chaosyuan.github.io/tags/grunt/"/>
-    
       <category term="Yeoman" scheme="http://chaosyuan.github.io/tags/Yeoman/"/>
+    
+      <category term="grunt" scheme="http://chaosyuan.github.io/tags/grunt/"/>
     
   </entry>
   
@@ -1698,6 +1698,88 @@ yuanweideMBP:~ yuanwei$ npm -v
       <category term="AngularJS" scheme="http://chaosyuan.github.io/tags/AngularJS/"/>
     
       <category term="Web" scheme="http://chaosyuan.github.io/tags/Web/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>UICollectionView 学习总结</title>
+    <link href="http://chaosyuan.github.io/2015/12/26/2015-12-26-uicollectionview-xue-xi-zong-jie/"/>
+    <id>http://chaosyuan.github.io/2015/12/26/2015-12-26-uicollectionview-xue-xi-zong-jie/</id>
+    <published>2015-12-26T09:33:04.000Z</published>
+    <updated>2016-10-17T04:15:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>该文章与UICollectionView UI开发相关，本来开始并没打算写的，因为网上好多关于CollectionView的文章，分析的都很全面、很深刻，再写也就是班门弄斧。但还是写了。主要是对<strong>Layout</strong>布局做一个总结，加深理解和运用。</p>
+<h4 id="UICollectionView简介"><a href="#UICollectionView简介" class="headerlink" title="UICollectionView简介"></a>UICollectionView简介</h4><p>UICollectionView是iOS6的时候引入的，它同UITableView共享一套API设计，都是基于datasource和delegate，都继承自UIScrollView。但它要更加强大。TableView的布局形式比较单一，局限于行列表。CollectionView布局更加灵活，用于展示集合视图，可以高度定制内容的展现。TableView只能对于每一行进行复用。而CollectionView对于每一个Item都是一次复用。</p>
+<a id="more"></a>
+<h4 id="UICollectionView感性的认知"><a href="#UICollectionView感性的认知" class="headerlink" title="UICollectionView感性的认知"></a>UICollectionView感性的认知</h4><p>借用网上的的书架例子，很经典的说明了CollectionView的表现形式，如下图：</p>
+<p><img src="http://7xoc8b.com1.z0.glb.clouddn.com/collectionbookView.jpg" alt="图片源自网络"></p>
+<p>一个标准的CollectionView包含三个部分，它们都是UIView的子类</p>
+<ul>
+<li><strong>Cells</strong> 用于展示内容的主体，cell的尺寸和内容可以各不相同</li>
+<li><strong>Supplementary Views</strong> 附加视图，类似于Tableview每个Section的HeaderView或者FooterView,用来标记Section的View</li>
+<li><strong>Decoration Views</strong> 装饰视图，负责给cell 或者supplementary Views添加辅助(背景)用的，灵活性较强。</li>
+</ul>
+<p>三个元素组成的结构图：<br><img src="http://7xoc8b.com1.z0.glb.clouddn.com/collectionSupplement.jpg" alt="图片源自网络"></p>
+<h4 id="UICollectionView创建"><a href="#UICollectionView创建" class="headerlink" title="UICollectionView创建"></a>UICollectionView创建</h4><p>CollectionView的创建基本和TabbleView创建类似，遵循三个协议</p>
+<blockquote>
+<ul>
+<li>UICollectionViewDataSource </li>
+<li>UICollectionViewDelegate</li>
+<li>UICollectionViewDelegateFlowLayout**（视图布局）</li>
+</ul>
+</blockquote>
+<h4 id="UICollectionView视图布局"><a href="#UICollectionView视图布局" class="headerlink" title="UICollectionView视图布局"></a>UICollectionView视图布局</h4><p>UICollectionView的布局是其精髓所在，系统默认使用线性布局<strong>UICollectionViewFlowLayout</strong>，它是一个具体的layout对象。我们只需要提供cell的大小，以及行间距、列间距，它就会自己计算出每个cell的位置以及UICollectionView的滑动范围contentSize，在使用线性布局的时候比较方便，但它只能提供一个方向的滑动布局(<strong>scrollDirection</strong>,<strong>只有线性布局有这个属性</strong>)。在开发过程中，很难满足需求。所以基本使用自定义布局。</p>
+<p>自定义布局使用<strong>UICollectionViewLayout</strong>类，上面的UICollectionViewFlowLayout继承自UICollectionViewLayout，由于UICollectionViewLayout是一个抽象类，不能直接使用，一般是使用它的子类，实现子类的方法。</p>
+<h5 id="自定义布局实现的原理"><a href="#自定义布局实现的原理" class="headerlink" title="自定义布局实现的原理"></a>自定义布局实现的原理</h5><blockquote>
+<p>UICollectionView向UICollectionViewLayout询问布局，当询问过程发生时，Layout 对象会创建 UICollectionViewLayoutAttributes 实例，一个UICollectionViewLayoutAttributes对象管理着一个对应的Item layout相关信息(一对一关系)</p>
+</blockquote>
+<h5 id="自定义布局需要实现的方法"><a href="#自定义布局需要实现的方法" class="headerlink" title="自定义布局需要实现的方法"></a>自定义布局需要实现的方法</h5><p><a href="https://developer.apple.com/reference/uikit/uicollectionviewlayout" target="_blank" rel="external">UICollectionViewLayout官方文档</a>给出了需要实现的方法</p>
+<p><img src="http://7xoc8b.com1.z0.glb.clouddn.com/UICollectionViewLayoutMethod.png" alt="enter image description here"></p>
+<p><strong>collectionViewContentSize</strong></p>
+<blockquote>
+<p> collectionViewContentSize 返回Layout的size</p>
+</blockquote>
+<p><strong>layoutAttributesForElements(in:)</strong></p>
+<blockquote>
+<p>在滑动的过程在，cell会不断重用,调用layoutAttributesForElementsInRect方法。返回collectionView的可见范围内有item对应的layoutAttrure对象装成的数组。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">- (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect&#123;</div><div class="line">    </div><div class="line">    NSUInteger count = [self.collectionView numberOfItemsInSection:0];</div><div class="line">    NSMutableArray *list = [NSMutableArray array];</div><div class="line">    for (int i = 0; i &lt; count; i++) &#123;</div><div class="line">        </div><div class="line">        // 创建i位置上  item对应的indexpath</div><div class="line">        NSIndexPath *indexpath = [NSIndexPath indexPathForItem:i inSection:0];</div><div class="line"></div><div class="line">        // 创建i位置上 item对应的</div><div class="line">        UICollectionViewLayoutAttributes *atrs = [self layoutAttributesForItemAtIndexPath:indexpath];</div><div class="line">        // 添加布局属性</div><div class="line">        [list addObject:atrs];</div><div class="line">    &#125;</div><div class="line">    return list;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="其他方法"><a href="#其他方法" class="headerlink" title="其他方法"></a>其他方法</h5><p><strong>prepareLayout</strong></p>
+<blockquote>
+<p>为layout显示做准备工作，可以在该方法里设置一些属性</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">// 提前初始化一些参数</div><div class="line">- (void)prepareLayout&#123;</div><div class="line">    [super prepareLayout];</div><div class="line">    </div><div class="line">    // 只有线性布局才会有这个属性</div><div class="line">    self.scrollDirection = UICollectionViewScrollDirectionHorizontal;</div><div class="line">    </div><div class="line">    // 设置cell的大小</div><div class="line">    CGFloat itemW = self.collectionView.frame.size.height * 0.8;</div><div class="line">    self.itemSize = CGSizeMake(itemW, itemW);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>shouldInvalidateLayoutForBoundsChange</strong></p>
+<blockquote>
+<p>是否需要根据bounds的改变而重新计算布局属性。默认值NO.</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//  当collectionView的bounds发生改变时，是否要刷新布局</div><div class="line">- (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds</div><div class="line">&#123;</div><div class="line">    return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>layoutAttributesForItemAtIndexPath</strong></p>
+<blockquote>
+<p>传入indexPath，返回indexpath上对应的cell的布局属性（layoutAttributes对象）</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">// 返回indexpath上cell的布局属性</div><div class="line">- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath&#123;</div><div class="line">    </div><div class="line">    // 半径</div><div class="line">    CGFloat radius = 100;</div><div class="line">    // 圆心</div><div class="line">    CGFloat centerX = self.collectionView.frame.size.width * 0.5f;</div><div class="line">     // 创建i位置cell对应的布局属性</div><div class="line">    CGFloat centerY = self.collectionView.frame.size.height * 0.5f;</div><div class="line">    </div><div class="line">    UICollectionViewLayoutAttributes *attrs = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];</div><div class="line">    attrs.size = CGSizeMake(80, 80);</div><div class="line">    </div><div class="line">    NSUInteger count = [self.collectionView numberOfItemsInSection:0];</div><div class="line">    </div><div class="line">    if (count == 1) &#123;</div><div class="line">        attrs.center = CGPointMake(centerX, centerY);</div><div class="line">    &#125;else&#123;</div><div class="line">        CGFloat angle = 2 * M_PI / count * indexPath.item;</div><div class="line">        CGFloat attrsCenterX = centerX - radius * cos(angle);</div><div class="line">        CGFloat attrsCenterY = centerY - radius * sin(angle);</div><div class="line">        attrs.center = CGPointMake(attrsCenterX, attrsCenterY);</div><div class="line">    &#125;</div><div class="line">    return attrs;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>targetContentOffsetForProposedContentOffset:proposedContentOffset</strong></p>
+<blockquote>
+<p>返回layout最终的偏移量，所谓的最终，手指离开屏幕时layout的偏移量不是最终的，因为它有惯性，当它停止时才是最终偏移量</p>
+</blockquote>
+<p>效果图：</p>
+<p><img src="http://7xoc8b.com1.z0.glb.clouddn.com/CollectionviwLine.gif" alt="线性布局"></p>
+<p><img src="http://7xoc8b.com1.z0.glb.clouddn.com/CollectionviwCircle.gif" alt="环形布局"></p>
+<p>最后附上：<a href="https://github.com/chaosyuan/YWCollectionView" target="_blank" rel="external">Demo地址</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h4&gt;&lt;p&gt;该文章与UICollectionView UI开发相关，本来开始并没打算写的，因为网上好多关于CollectionView的文章，分析的都很全面、很深刻，再写也就是班门弄斧。但还是写了。主要是对&lt;strong&gt;Layout&lt;/strong&gt;布局做一个总结，加深理解和运用。&lt;/p&gt;
+&lt;h4 id=&quot;UICollectionView简介&quot;&gt;&lt;a href=&quot;#UICollectionView简介&quot; class=&quot;headerlink&quot; title=&quot;UICollectionView简介&quot;&gt;&lt;/a&gt;UICollectionView简介&lt;/h4&gt;&lt;p&gt;UICollectionView是iOS6的时候引入的，它同UITableView共享一套API设计，都是基于datasource和delegate，都继承自UIScrollView。但它要更加强大。TableView的布局形式比较单一，局限于行列表。CollectionView布局更加灵活，用于展示集合视图，可以高度定制内容的展现。TableView只能对于每一行进行复用。而CollectionView对于每一个Item都是一次复用。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="iOS" scheme="http://chaosyuan.github.io/tags/iOS/"/>
+    
+      <category term="UI" scheme="http://chaosyuan.github.io/tags/UI/"/>
     
   </entry>
   
@@ -1929,30 +2011,6 @@ $q.when(funcA())
       <category term="JavaScript" scheme="http://chaosyuan.github.io/tags/JavaScript/"/>
     
       <category term="AngularJS" scheme="http://chaosyuan.github.io/tags/AngularJS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>博客迁移说明</title>
-    <link href="http://chaosyuan.github.io/2015/11/21/2015-11-21-bo-ke-qian-yi-shuo-ming/"/>
-    <id>http://chaosyuan.github.io/2015/11/21/2015-11-21-bo-ke-qian-yi-shuo-ming/</id>
-    <published>2015-11-21T11:39:47.000Z</published>
-    <updated>2016-08-10T03:02:15.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>写博客也有一段时间了，之前在CSDN上，但是总是感觉不方便。因此决定之前的博客都不再更新，统一转移到这里。 之前的一些博客我也会挑一部分贴过来。欢迎大家以后多交流。<br>原Blog地址：<a href="http://blog.csdn.net/u014466582" target="_blank" rel="external">http://blog.csdn.net/u014466582</a></p>
-<a id="more"></a>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;写博客也有一段时间了，之前在CSDN上，但是总是感觉不方便。因此决定之前的博客都不再更新，统一转移到这里。 之前的一些博客我也会挑一部分贴过来。欢迎大家以后多交流。&lt;br&gt;原Blog地址：&lt;a href=&quot;http://blog.csdn.net/u014466582&quot;&gt;http://blog.csdn.net/u014466582&lt;/a&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="CSDN" scheme="http://chaosyuan.github.io/tags/CSDN/"/>
-    
-      <category term="iOS" scheme="http://chaosyuan.github.io/tags/iOS/"/>
     
   </entry>
   

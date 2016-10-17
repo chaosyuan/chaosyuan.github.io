@@ -1,0 +1,638 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>UICollectionView 学习总结 | 袁伟的技术博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="袁伟">
+    
+
+    
+    <meta name="description" content="前言该文章与UICollectionView UI开发相关，本来开始并没打算写的，因为网上好多关于CollectionView的文章，分析的都很全面、很深刻，再写也就是班门弄斧。但还是写了。主要是对Layout布局做一个总结，加深理解和运用。
+UICollectionView简介UICollectionView是iOS6的时候引入的，它同UITableView共享一套API设计，都是基于datas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UICollectionView 学习总结">
+<meta property="og:url" content="http://chaosyuan.github.io/2015/12/26/2015-12-26-uicollectionview-xue-xi-zong-jie/index.html">
+<meta property="og:site_name" content="袁伟的技术博客">
+<meta property="og:description" content="前言该文章与UICollectionView UI开发相关，本来开始并没打算写的，因为网上好多关于CollectionView的文章，分析的都很全面、很深刻，再写也就是班门弄斧。但还是写了。主要是对Layout布局做一个总结，加深理解和运用。
+UICollectionView简介UICollectionView是iOS6的时候引入的，它同UITableView共享一套API设计，都是基于datas">
+<meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/collectionbookView.jpg">
+<meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/collectionSupplement.jpg">
+<meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/UICollectionViewLayoutMethod.png">
+<meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/CollectionviwLine.gif">
+<meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/CollectionviwCircle.gif">
+<meta property="og:updated_time" content="2016-10-17T04:15:41.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UICollectionView 学习总结">
+<meta name="twitter:description" content="前言该文章与UICollectionView UI开发相关，本来开始并没打算写的，因为网上好多关于CollectionView的文章，分析的都很全面、很深刻，再写也就是班门弄斧。但还是写了。主要是对Layout布局做一个总结，加深理解和运用。
+UICollectionView简介UICollectionView是iOS6的时候引入的，它同UITableView共享一套API设计，都是基于datas">
+<meta name="twitter:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/collectionbookView.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="袁伟的技术博客" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="袁伟的技术博客">袁伟的技术博客</a></h1>
+				<h2 class="blog-motto">千里之行始于足下</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/tags">标签</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:chaosyuan.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/12/26/2015-12-26-uicollectionview-xue-xi-zong-jie/" title="UICollectionView 学习总结" itemprop="url">UICollectionView 学习总结</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="袁伟" target="_blank" itemprop="author">袁伟</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-26T09:33:04.000Z" itemprop="datePublished"> 发表于 2015-12-26</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#UICollectionView简介"><span class="toc-number">2.</span> <span class="toc-text">UICollectionView简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#UICollectionView感性的认知"><span class="toc-number">3.</span> <span class="toc-text">UICollectionView感性的认知</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#UICollectionView创建"><span class="toc-number">4.</span> <span class="toc-text">UICollectionView创建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#UICollectionView视图布局"><span class="toc-number">5.</span> <span class="toc-text">UICollectionView视图布局</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#自定义布局实现的原理"><span class="toc-number">5.1.</span> <span class="toc-text">自定义布局实现的原理</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#自定义布局需要实现的方法"><span class="toc-number">5.2.</span> <span class="toc-text">自定义布局需要实现的方法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#其他方法"><span class="toc-number">5.3.</span> <span class="toc-text">其他方法</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>该文章与UICollectionView UI开发相关，本来开始并没打算写的，因为网上好多关于CollectionView的文章，分析的都很全面、很深刻，再写也就是班门弄斧。但还是写了。主要是对<strong>Layout</strong>布局做一个总结，加深理解和运用。</p>
+<h4 id="UICollectionView简介"><a href="#UICollectionView简介" class="headerlink" title="UICollectionView简介"></a>UICollectionView简介</h4><p>UICollectionView是iOS6的时候引入的，它同UITableView共享一套API设计，都是基于datasource和delegate，都继承自UIScrollView。但它要更加强大。TableView的布局形式比较单一，局限于行列表。CollectionView布局更加灵活，用于展示集合视图，可以高度定制内容的展现。TableView只能对于每一行进行复用。而CollectionView对于每一个Item都是一次复用。</p>
+<a id="more"></a>
+<h4 id="UICollectionView感性的认知"><a href="#UICollectionView感性的认知" class="headerlink" title="UICollectionView感性的认知"></a>UICollectionView感性的认知</h4><p>借用网上的的书架例子，很经典的说明了CollectionView的表现形式，如下图：</p>
+<p><img src="http://7xoc8b.com1.z0.glb.clouddn.com/collectionbookView.jpg" alt="图片源自网络"></p>
+<p>一个标准的CollectionView包含三个部分，它们都是UIView的子类</p>
+<ul>
+<li><strong>Cells</strong> 用于展示内容的主体，cell的尺寸和内容可以各不相同</li>
+<li><strong>Supplementary Views</strong> 附加视图，类似于Tableview每个Section的HeaderView或者FooterView,用来标记Section的View</li>
+<li><strong>Decoration Views</strong> 装饰视图，负责给cell 或者supplementary Views添加辅助(背景)用的，灵活性较强。</li>
+</ul>
+<p>三个元素组成的结构图：<br><img src="http://7xoc8b.com1.z0.glb.clouddn.com/collectionSupplement.jpg" alt="图片源自网络"></p>
+<h4 id="UICollectionView创建"><a href="#UICollectionView创建" class="headerlink" title="UICollectionView创建"></a>UICollectionView创建</h4><p>CollectionView的创建基本和TabbleView创建类似，遵循三个协议</p>
+<blockquote>
+<ul>
+<li>UICollectionViewDataSource </li>
+<li>UICollectionViewDelegate</li>
+<li>UICollectionViewDelegateFlowLayout**（视图布局）</li>
+</ul>
+</blockquote>
+<h4 id="UICollectionView视图布局"><a href="#UICollectionView视图布局" class="headerlink" title="UICollectionView视图布局"></a>UICollectionView视图布局</h4><p>UICollectionView的布局是其精髓所在，系统默认使用线性布局<strong>UICollectionViewFlowLayout</strong>，它是一个具体的layout对象。我们只需要提供cell的大小，以及行间距、列间距，它就会自己计算出每个cell的位置以及UICollectionView的滑动范围contentSize，在使用线性布局的时候比较方便，但它只能提供一个方向的滑动布局(<strong>scrollDirection</strong>,<strong>只有线性布局有这个属性</strong>)。在开发过程中，很难满足需求。所以基本使用自定义布局。</p>
+<p>自定义布局使用<strong>UICollectionViewLayout</strong>类，上面的UICollectionViewFlowLayout继承自UICollectionViewLayout，由于UICollectionViewLayout是一个抽象类，不能直接使用，一般是使用它的子类，实现子类的方法。</p>
+<h5 id="自定义布局实现的原理"><a href="#自定义布局实现的原理" class="headerlink" title="自定义布局实现的原理"></a>自定义布局实现的原理</h5><blockquote>
+<p>UICollectionView向UICollectionViewLayout询问布局，当询问过程发生时，Layout 对象会创建 UICollectionViewLayoutAttributes 实例，一个UICollectionViewLayoutAttributes对象管理着一个对应的Item layout相关信息(一对一关系)</p>
+</blockquote>
+<h5 id="自定义布局需要实现的方法"><a href="#自定义布局需要实现的方法" class="headerlink" title="自定义布局需要实现的方法"></a>自定义布局需要实现的方法</h5><p><a href="https://developer.apple.com/reference/uikit/uicollectionviewlayout" target="_blank" rel="external">UICollectionViewLayout官方文档</a>给出了需要实现的方法</p>
+<p><img src="http://7xoc8b.com1.z0.glb.clouddn.com/UICollectionViewLayoutMethod.png" alt="enter image description here"></p>
+<p><strong>collectionViewContentSize</strong></p>
+<blockquote>
+<p> collectionViewContentSize 返回Layout的size</p>
+</blockquote>
+<p><strong>layoutAttributesForElements(in:)</strong></p>
+<blockquote>
+<p>在滑动的过程在，cell会不断重用,调用layoutAttributesForElementsInRect方法。返回collectionView的可见范围内有item对应的layoutAttrure对象装成的数组。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">- (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect&#123;</div><div class="line">    </div><div class="line">    NSUInteger count = [self.collectionView numberOfItemsInSection:0];</div><div class="line">    NSMutableArray *list = [NSMutableArray array];</div><div class="line">    for (int i = 0; i &lt; count; i++) &#123;</div><div class="line">        </div><div class="line">        // 创建i位置上  item对应的indexpath</div><div class="line">        NSIndexPath *indexpath = [NSIndexPath indexPathForItem:i inSection:0];</div><div class="line"></div><div class="line">        // 创建i位置上 item对应的</div><div class="line">        UICollectionViewLayoutAttributes *atrs = [self layoutAttributesForItemAtIndexPath:indexpath];</div><div class="line">        // 添加布局属性</div><div class="line">        [list addObject:atrs];</div><div class="line">    &#125;</div><div class="line">    return list;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="其他方法"><a href="#其他方法" class="headerlink" title="其他方法"></a>其他方法</h5><p><strong>prepareLayout</strong></p>
+<blockquote>
+<p>为layout显示做准备工作，可以在该方法里设置一些属性</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">// 提前初始化一些参数</div><div class="line">- (void)prepareLayout&#123;</div><div class="line">    [super prepareLayout];</div><div class="line">    </div><div class="line">    // 只有线性布局才会有这个属性</div><div class="line">    self.scrollDirection = UICollectionViewScrollDirectionHorizontal;</div><div class="line">    </div><div class="line">    // 设置cell的大小</div><div class="line">    CGFloat itemW = self.collectionView.frame.size.height * 0.8;</div><div class="line">    self.itemSize = CGSizeMake(itemW, itemW);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>shouldInvalidateLayoutForBoundsChange</strong></p>
+<blockquote>
+<p>是否需要根据bounds的改变而重新计算布局属性。默认值NO.</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//  当collectionView的bounds发生改变时，是否要刷新布局</div><div class="line">- (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds</div><div class="line">&#123;</div><div class="line">    return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>layoutAttributesForItemAtIndexPath</strong></p>
+<blockquote>
+<p>传入indexPath，返回indexpath上对应的cell的布局属性（layoutAttributes对象）</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">// 返回indexpath上cell的布局属性</div><div class="line">- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath&#123;</div><div class="line">    </div><div class="line">    // 半径</div><div class="line">    CGFloat radius = 100;</div><div class="line">    // 圆心</div><div class="line">    CGFloat centerX = self.collectionView.frame.size.width * 0.5f;</div><div class="line">     // 创建i位置cell对应的布局属性</div><div class="line">    CGFloat centerY = self.collectionView.frame.size.height * 0.5f;</div><div class="line">    </div><div class="line">    UICollectionViewLayoutAttributes *attrs = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];</div><div class="line">    attrs.size = CGSizeMake(80, 80);</div><div class="line">    </div><div class="line">    NSUInteger count = [self.collectionView numberOfItemsInSection:0];</div><div class="line">    </div><div class="line">    if (count == 1) &#123;</div><div class="line">        attrs.center = CGPointMake(centerX, centerY);</div><div class="line">    &#125;else&#123;</div><div class="line">        CGFloat angle = 2 * M_PI / count * indexPath.item;</div><div class="line">        CGFloat attrsCenterX = centerX - radius * cos(angle);</div><div class="line">        CGFloat attrsCenterY = centerY - radius * sin(angle);</div><div class="line">        attrs.center = CGPointMake(attrsCenterX, attrsCenterY);</div><div class="line">    &#125;</div><div class="line">    return attrs;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>targetContentOffsetForProposedContentOffset:proposedContentOffset</strong></p>
+<blockquote>
+<p>返回layout最终的偏移量，所谓的最终，手指离开屏幕时layout的偏移量不是最终的，因为它有惯性，当它停止时才是最终偏移量</p>
+</blockquote>
+<p>效果图：</p>
+<p><img src="http://7xoc8b.com1.z0.glb.clouddn.com/CollectionviwLine.gif" alt="线性布局"></p>
+<p><img src="http://7xoc8b.com1.z0.glb.clouddn.com/CollectionviwCircle.gif" alt="环形布局"></p>
+<p>最后附上：<a href="https://github.com/chaosyuan/YWCollectionView" target="_blank" rel="external">Demo地址</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a><a href="/tags/UI/">UI</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://chaosyuan.github.io/2015/12/26/2015-12-26-uicollectionview-xue-xi-zong-jie/" data-title="UICollectionView 学习总结 | 袁伟的技术博客" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/" title="AngularJS Controller 之间通信机制">
+  <strong>上一篇：</strong><br/>
+  <span>
+  AngularJS Controller 之间通信机制</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/12/19/2015-12-19-chang-yong-gitming-ling-qing-dan/"  title="常用Git命令清单">
+ <strong>下一篇：</strong><br/> 
+ <span>常用Git命令清单
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/12/26/2015-12-26-uicollectionview-xue-xi-zong-jie/" data-title="UICollectionView 学习总结" data-url="http://chaosyuan.github.io/2015/12/26/2015-12-26-uicollectionview-xue-xi-zong-jie/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#UICollectionView简介"><span class="toc-number">2.</span> <span class="toc-text">UICollectionView简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#UICollectionView感性的认知"><span class="toc-number">3.</span> <span class="toc-text">UICollectionView感性的认知</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#UICollectionView创建"><span class="toc-number">4.</span> <span class="toc-text">UICollectionView创建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#UICollectionView视图布局"><span class="toc-number">5.</span> <span class="toc-text">UICollectionView视图布局</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#自定义布局实现的原理"><span class="toc-number">5.1.</span> <span class="toc-text">自定义布局实现的原理</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#自定义布局需要实现的方法"><span class="toc-number">5.2.</span> <span class="toc-text">自定义布局需要实现的方法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#其他方法"><span class="toc-number">5.3.</span> <span class="toc-text">其他方法</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="chaosyuan" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AngularJS/" title="AngularJS">AngularJS<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/web/" title="web">web<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/grunt/" title="grunt">grunt<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ReactiveCocoa/" title="ReactiveCocoa">ReactiveCocoa<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/动画/" title="动画">动画<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CocoaPods/" title="CocoaPods">CocoaPods<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/UI/" title="UI">UI<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Yeoman/" title="Yeoman">Yeoman<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Carthage/" title="Carthage">Carthage<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSDN/" title="CSDN">CSDN<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/block/" title="block">block<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HTTP/" title="HTTP">HTTP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/promise/" title="promise">promise<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Web/" title="Web">Web<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://onevcat.com/" target="_blank" title="瞄神">瞄神</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://blog.devtang.com/" target="_blank" title="巧叔">巧叔</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://objccn.io/" target="_blank" title="ObjC中国">ObjC中国</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://blog.sunnyxx.com/" target="_blank" title="sunnyxx">sunnyxx</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://blog.ibireme.com/" target="_blank" title="ibireme">ibireme</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://www.jucaifu.com/" target="_blank" title="聚财富">聚财富</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://www.haochang.tv/" target="_blank" title="好唱">好唱</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 做人做事,只有偏执到癫狂,才能达到顶峰 <br/>
+			</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/u/5508924750?is_all=1" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/chaosyuan" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/yuanw-92/about" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="袁伟">袁伟</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"chaosyuan"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
