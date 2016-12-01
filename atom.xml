@@ -1534,10 +1534,10 @@ NSBlockOperation *operation2 = [NSBlockOperation blockOperationWithBlock:^{
   
   <entry>
     <title>使用Yoman构建Web工作流</title>
-    <link href="http://chaosyuan.github.io/2016/02/04/2016-02-04-shi-yong-yomangou-jian-webgong-zuo-liu/"/>
-    <id>http://chaosyuan.github.io/2016/02/04/2016-02-04-shi-yong-yomangou-jian-webgong-zuo-liu/</id>
-    <published>2016-02-04T10:10:12.000Z</published>
-    <updated>2016-08-19T02:02:52.000Z</updated>
+    <link href="http://chaosyuan.github.io/2016/01/24/2016-01-24-shi-yong-yomangou-jian-webgong-zuo-liu/"/>
+    <id>http://chaosyuan.github.io/2016/01/24/2016-01-24-shi-yong-yomangou-jian-webgong-zuo-liu/</id>
+    <published>2016-01-24T10:10:12.000Z</published>
+    <updated>2016-12-01T09:53:11.000Z</updated>
     
     <content type="html"><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>最近公司的<a href="https://www.jucaifu.com/" target="_blank" rel="external">web</a>应用上线了，抽空总结一下项目的构建流程。项目是用<a href="http://yeoman.io/" target="_blank" rel="external">Yeoman</a>创建出来的。</p>
 <h4 id="Yeoman简介"><a href="#Yeoman简介" class="headerlink" title="Yeoman简介"></a>Yeoman简介</h4><p><a href="http://yeoman.io/" target="_blank" rel="external">Yeoman</a>是Google的团队和外部贡献者团队合作开发的，它的目标是通过<a href="http://yeoman.io/" target="_blank" rel="external">Yo</a>,<a href="http://gruntjs.com/" target="_blank" rel="external">Grunt</a>和<a href="http://bower.io/" target="_blank" rel="external">Bower</a>为开发者创建一个易用Web应用的工作流，可以让网络前端开发者快速打造一个漂亮的网络应用(web applications)。</p>

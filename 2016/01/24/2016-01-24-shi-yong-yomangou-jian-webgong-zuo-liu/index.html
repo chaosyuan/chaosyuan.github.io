@@ -1,0 +1,669 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>使用Yoman构建Web工作流 | 袁伟的技术博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="袁伟">
+    
+
+    
+    <meta name="description" content="前言最近公司的web应用上线了，抽空总结一下项目的构建流程。项目是用Yeoman创建出来的。
+Yeoman简介Yeoman是Google的团队和外部贡献者团队合作开发的，它的目标是通过Yo,Grunt和Bower为开发者创建一个易用Web应用的工作流，可以让网络前端开发者快速打造一个漂亮的网络应用(web applications)。
+Yeoman的目的不仅是要为新项目建立工作流，同时还是为了解决">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Yoman构建Web工作流">
+<meta property="og:url" content="http://chaosyuan.github.io/2016/01/24/2016-01-24-shi-yong-yomangou-jian-webgong-zuo-liu/index.html">
+<meta property="og:site_name" content="袁伟的技术博客">
+<meta property="og:description" content="前言最近公司的web应用上线了，抽空总结一下项目的构建流程。项目是用Yeoman创建出来的。
+Yeoman简介Yeoman是Google的团队和外部贡献者团队合作开发的，它的目标是通过Yo,Grunt和Bower为开发者创建一个易用Web应用的工作流，可以让网络前端开发者快速打造一个漂亮的网络应用(web applications)。
+Yeoman的目的不仅是要为新项目建立工作流，同时还是为了解决">
+<meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/yomanmulu.png">
+<meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/grunttrack.png">
+<meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/Chrome-liveReload.png">
+<meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/LiveReloadIcon.png">
+<meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/ng-inspector%20for%20AngularJS.png">
+<meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/AngularJS%20Batarang.png">
+<meta property="og:updated_time" content="2016-12-01T09:53:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Yoman构建Web工作流">
+<meta name="twitter:description" content="前言最近公司的web应用上线了，抽空总结一下项目的构建流程。项目是用Yeoman创建出来的。
+Yeoman简介Yeoman是Google的团队和外部贡献者团队合作开发的，它的目标是通过Yo,Grunt和Bower为开发者创建一个易用Web应用的工作流，可以让网络前端开发者快速打造一个漂亮的网络应用(web applications)。
+Yeoman的目的不仅是要为新项目建立工作流，同时还是为了解决">
+<meta name="twitter:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/yomanmulu.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="袁伟的技术博客" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="袁伟的技术博客">袁伟的技术博客</a></h1>
+				<h2 class="blog-motto">千里之行始于足下</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/tags">标签</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:chaosyuan.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/01/24/2016-01-24-shi-yong-yomangou-jian-webgong-zuo-liu/" title="使用Yoman构建Web工作流" itemprop="url">使用Yoman构建Web工作流</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="袁伟" target="_blank" itemprop="author">袁伟</a>
+		
+  <p class="article-time">
+    <time datetime="2016-01-24T10:10:12.000Z" itemprop="datePublished"> 发表于 2016-01-24</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Yeoman简介"><span class="toc-number">2.</span> <span class="toc-text">Yeoman简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Yeoman的作用"><span class="toc-number">3.</span> <span class="toc-text">Yeoman的作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Yeoman的安装"><span class="toc-number">4.</span> <span class="toc-text">Yeoman的安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#目录结构"><span class="toc-number">5.</span> <span class="toc-text">目录结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#开发项目"><span class="toc-number">6.</span> <span class="toc-text">开发项目</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#开发完毕"><span class="toc-number">7.</span> <span class="toc-text">开发完毕</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#推荐插件"><span class="toc-number">8.</span> <span class="toc-text">推荐插件</span></a></li></ol>
+		
+		</div>
+		
+		<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>最近公司的<a href="https://www.jucaifu.com/" target="_blank" rel="external">web</a>应用上线了，抽空总结一下项目的构建流程。项目是用<a href="http://yeoman.io/" target="_blank" rel="external">Yeoman</a>创建出来的。</p>
+<h4 id="Yeoman简介"><a href="#Yeoman简介" class="headerlink" title="Yeoman简介"></a>Yeoman简介</h4><p><a href="http://yeoman.io/" target="_blank" rel="external">Yeoman</a>是Google的团队和外部贡献者团队合作开发的，它的目标是通过<a href="http://yeoman.io/" target="_blank" rel="external">Yo</a>,<a href="http://gruntjs.com/" target="_blank" rel="external">Grunt</a>和<a href="http://bower.io/" target="_blank" rel="external">Bower</a>为开发者创建一个易用Web应用的工作流，可以让网络前端开发者快速打造一个漂亮的网络应用(web applications)。</p>
+<p>Yeoman的目的不仅是要为新项目建立工作流，同时还是为了解决前端开发所面临的诸多严重问题，比如各种零散的依赖关系. </p>
+<a id="more"></a>
+<h4 id="Yeoman的作用"><a href="#Yeoman的作用" class="headerlink" title="Yeoman的作用"></a>Yeoman的作用</h4><ol>
+<li>Yo:Yeoman核心工具，构建目录结构或文件，生成项目的生产环境和编译环境.</li>
+<li>bower:Web开发的包管理器，类似于npm，npm专注于nodeJs模块，而bower专注于CSS、JavaScript、图像等前端相关内容的管理。需要注意的是，Bower的运行，依赖于版本控制工具git。要想成功安装Yeoman,需先安装 Git.</li>
+<li>grunt:自动化构建工具.当然也可以使用<a href="http://gulpjs.com/" target="_blank" rel="external">gulp</a></li>
+</ol>
+<h4 id="Yeoman的安装"><a href="#Yeoman的安装" class="headerlink" title="Yeoman的安装"></a>Yeoman的安装</h4><p>在安装Yeoman之前，需要安装： <a href="https://nodejs.org/en/" target="_blank" rel="external">NodeJS</a></p>
+<pre><code>yuanweideMBP:~ yuanwei$ node -v
+v5.5.0
+yuanweideMBP:~ yuanwei$ npm -v
+3.3.12
+</code></pre><p>安装yeoman,grunt,bower,-g 安装在全局范围内，任何地方都能调用到相应命令</p>
+<pre><code>sudo npm install -g yo bower grunt-cli gulp
+</code></pre><p><a href="http://yeoman.io/generators/" target="_blank" rel="external">查看更多的构建程序</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir   /Users/yuanwei/yomanTest</div><div class="line">cd /Users/yuanwei/yomanTest</div><div class="line">yo</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">? &apos;Allo yuanwei! What would you like to do?</div><div class="line">  Run a generator</div><div class="line">  Karma</div><div class="line">  Webapp</div><div class="line">  ──────────────</div><div class="line">  Update your generators</div><div class="line">❯ Install a generator</div><div class="line">  Find some help</div><div class="line">  Get me out of here!</div><div class="line">  ──────────────</div></pre></td></tr></table></figure>
+<p>用上下箭头选中 Install a generator.安装完成后，生成的目录结构如下：</p>
+<p><img src="http://7xoc8b.com1.z0.glb.clouddn.com/yomanmulu.png" alt="enter image description here"></p>
+<h4 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h4><p>app</p>
+<blockquote>
+<p>源文件的存放目录,未压缩的js,css,scss等</p>
+</blockquote>
+<p>bower_components</p>
+<blockquote>
+<p>使用bower安装的第三方组件的源代码，jquery,bootstrap,angular等</p>
+</blockquote>
+<p> node_modules</p>
+<blockquote>
+<p>grunt 需要用到的工具模块安装目录</p>
+</blockquote>
+<p> test</p>
+<blockquote>
+<p>js 单元测试存放目录</p>
+</blockquote>
+<p>.bowerrc</p>
+<blockquote>
+<p>bower的配置目录，配置了使用bower安装的第3方组件存放目录</p>
+</blockquote>
+<p>.editorconfig</p>
+<blockquote>
+<p>方便开发者在不同的编辑器和IDE之间定义和维护一致的代码风格的配置，<a href="http://editorconfig.org/" target="_blank" rel="external">详细查看</a></p>
+</blockquote>
+<p>.gitattributes</p>
+<blockquote>
+<p>git属性设置，详细查看<a href="http://git-scm.com/doc" target="_blank" rel="external">git文档</a></p>
+</blockquote>
+<p>.gitignore</p>
+<blockquote>
+<p>git提交时忽略的目录，如bower_components和node_modules等目录并不需要提交给git</p>
+</blockquote>
+<p>.jshintrc</p>
+<blockquote>
+<p>jshint的配置文件，<a href="http://jshint.com/" target="_blank" rel="external">详细查看</a></p>
+</blockquote>
+<p>.yo-rc.json</p>
+<blockquote>
+<p>yo的配置文件</p>
+</blockquote>
+<p>.bower.json</p>
+<blockquote>
+<p>bower的配置文件，根据配置安装第三方组件到bower_components文件夹下</p>
+</blockquote>
+<p>.Gruntfile.json</p>
+<blockquote>
+<p>grunt的任务配置，根据任务配置自动化处理js,css等</p>
+</blockquote>
+<p>.package.json</p>
+<blockquote>
+<p>grunt的配置文件，根据配置安装grunt的依赖组件到node_modules文件夹下</p>
+</blockquote>
+<h4 id="开发项目"><a href="#开发项目" class="headerlink" title="开发项目"></a>开发项目</h4><p>在实际开发时，在app文件下进行开发，Grunt已经配置了开发任务</p>
+<p><img src="http://7xoc8b.com1.z0.glb.clouddn.com/grunttrack.png" alt="enter image description here"></p>
+<p>执行（或者直接双击serve）</p>
+<pre><code>grunt serve
+</code></pre><p>执行完命令后，创建tmp文件夹，存放经过编译后的scss文件，通过g<a href="https://github.com/gruntjs/grunt-contrib-connect" target="_blank" rel="external">runt-contrib-connect</a>模拟服务器打开app/index.html，并且通过<a href="https://github.com/gruntjs/grunt-contrib-watch" target="_blank" rel="external">grunt-contrib-watch</a>监听指定文件(html,css,js等)，如果文件内容改变，则通过<a href="https://github.com/gruntjs/grunt-contrib-connect" target="_blank" rel="external">grunt-contrib-connect</a>内的<a href="https://github.com/gruntjs/grunt-contrib-watch#optionslivereload" target="_blank" rel="external">livereload</a>功能通知浏览器，实现浏览器自动刷新</p>
+<p>livereload功能需要配置浏览器上的扩展  <a href="https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei" target="_blank" rel="external">LiveReload</a></p>
+<p><img src="http://7xoc8b.com1.z0.glb.clouddn.com/Chrome-liveReload.png" alt="enter image description here"></p>
+<p>安装完毕后，在浏览器右上方开启liveReload<br>开启图案<img src="http://7xoc8b.com1.z0.glb.clouddn.com/LiveReloadIcon.png" alt="enter image description here"><br>这样LiveReload功能才能正常使用</p>
+<h4 id="开发完毕"><a href="#开发完毕" class="headerlink" title="开发完毕"></a>开发完毕</h4><p>开发完毕时，需要对开发的内容进行检测，测试，压缩合并等</p>
+<pre><code>grunt default
+</code></pre><p>经过压缩合并等的内容都在dist目录下</p>
+<h4 id="推荐插件"><a href="#推荐插件" class="headerlink" title="推荐插件"></a>推荐插件</h4><p><a href="https://chrome.google.com/webstore/detail/ng-inspector-for-angularj/aadgmnobpdmgmigaicncghmmoeflnamj" target="_blank" rel="external">ng-inspector for AngularJS</a><br>方便查看页面AngularJS范围层次结构 ，以及它的控制器或指令与范围。</p>
+<p><img src="http://7xoc8b.com1.z0.glb.clouddn.com/ng-inspector%20for%20AngularJS.png" alt="enter image description here"></p>
+<p><a href="https://chrome.google.com/webstore/detail/angularjs-batarang/ighdmehidhipcmcojjgiloacoafjmpfk" target="_blank" rel="external">AngularJS Batarang</a><br>方便调试AngularJS<br><img src="http://7xoc8b.com1.z0.glb.clouddn.com/AngularJS%20Batarang.png" alt="enter image description here"></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Yeoman/">Yeoman</a><a href="/tags/grunt/">grunt</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://chaosyuan.github.io/2016/01/24/2016-01-24-shi-yong-yomangou-jian-webgong-zuo-liu/" data-title="使用Yoman构建Web工作流 | 袁伟的技术博客" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/02/05/2016-02-05-gruntfile-dot-js-qian-xi/" title="Grunt 浅析">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Grunt 浅析</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/01/06/2016-01-06-angularjs-controller-zhi-jian-tong-xin-ji-zhi/"  title="AngularJS Controller 之间通信机制">
+ <strong>下一篇：</strong><br/> 
+ <span>AngularJS Controller 之间通信机制
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/01/24/2016-01-24-shi-yong-yomangou-jian-webgong-zuo-liu/" data-title="使用Yoman构建Web工作流" data-url="http://chaosyuan.github.io/2016/01/24/2016-01-24-shi-yong-yomangou-jian-webgong-zuo-liu/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Yeoman简介"><span class="toc-number">2.</span> <span class="toc-text">Yeoman简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Yeoman的作用"><span class="toc-number">3.</span> <span class="toc-text">Yeoman的作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Yeoman的安装"><span class="toc-number">4.</span> <span class="toc-text">Yeoman的安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#目录结构"><span class="toc-number">5.</span> <span class="toc-text">目录结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#开发项目"><span class="toc-number">6.</span> <span class="toc-text">开发项目</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#开发完毕"><span class="toc-number">7.</span> <span class="toc-text">开发完毕</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#推荐插件"><span class="toc-number">8.</span> <span class="toc-text">推荐插件</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="chaosyuan" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AngularJS/" title="AngularJS">AngularJS<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/web/" title="web">web<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/grunt/" title="grunt">grunt<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ReactiveCocoa/" title="ReactiveCocoa">ReactiveCocoa<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/动画/" title="动画">动画<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/promise/" title="promise">promise<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSDN/" title="CSDN">CSDN<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Web/" title="Web">Web<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Yeoman/" title="Yeoman">Yeoman<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CocoaPods/" title="CocoaPods">CocoaPods<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Carthage/" title="Carthage">Carthage<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/UI/" title="UI">UI<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/block/" title="block">block<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HTTP/" title="HTTP">HTTP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://onevcat.com/" target="_blank" title="瞄神">瞄神</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://blog.devtang.com/" target="_blank" title="巧叔">巧叔</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://objccn.io/" target="_blank" title="ObjC中国">ObjC中国</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://blog.sunnyxx.com/" target="_blank" title="sunnyxx">sunnyxx</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://blog.ibireme.com/" target="_blank" title="ibireme">ibireme</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://www.jucaifu.com/" target="_blank" title="聚财富">聚财富</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://www.haochang.tv/" target="_blank" title="好唱">好唱</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 做人做事,只有偏执到癫狂,才能达到顶峰 <br/>
+			</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/u/5508924750?is_all=1" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/chaosyuan" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/yuanw-92/about" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="袁伟">袁伟</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"chaosyuan"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
