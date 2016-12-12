@@ -4,38 +4,26 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>AngularJS 路由机制 | 袁伟的技术博客</title>
+    <title>Webpack 小结 | 袁伟的技术博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="袁伟">
     
 
     
-    <meta name="description" content="前言
-在谈路由机制前先说一下现在比较流行的单页面应用，就是所谓的Single Page APP。它的主要目的有
-
-单页面应用
-无刷新的视图切换 
-每个页面包含不同数据">
+    <meta name="description" content="写在前面最近一段时间在构建公司新项目时，前端使用webpack作为构建工具。抽时间整理一下对webpack的理解及运用。
+Webpack是什么Webpack在官方的定义是:Module  bundler 译为(模块加载器), 说简单一点就是一个模块打包器。它能把各种资源，例如JS（含JSX）、coffee、样式（less/sass）、图片等都作为模块来使用和处理。它将根据模块的依赖关系进行静态分析">
 <meta property="og:type" content="article">
-<meta property="og:title" content="AngularJS 路由机制">
-<meta property="og:url" content="http://chaosyuan.github.io/2015/11/26/2015-11-26-angularjs-lu-you-ji-zhi/index.html">
+<meta property="og:title" content="Webpack 小结">
+<meta property="og:url" content="http://chaosyuan.github.io/2016/12/01/2016-12-01-webpack-qian-xi/index.html">
 <meta property="og:site_name" content="袁伟的技术博客">
-<meta property="og:description" content="前言
-在谈路由机制前先说一下现在比较流行的单页面应用，就是所谓的Single Page APP。它的主要目的有
-
-单页面应用
-无刷新的视图切换 
-每个页面包含不同数据">
-<meta property="og:updated_time" content="2016-08-19T02:03:27.000Z">
+<meta property="og:description" content="写在前面最近一段时间在构建公司新项目时，前端使用webpack作为构建工具。抽时间整理一下对webpack的理解及运用。
+Webpack是什么Webpack在官方的定义是:Module  bundler 译为(模块加载器), 说简单一点就是一个模块打包器。它能把各种资源，例如JS（含JSX）、coffee、样式（less/sass）、图片等都作为模块来使用和处理。它将根据模块的依赖关系进行静态分析">
+<meta property="og:updated_time" content="2016-12-01T10:38:49.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="AngularJS 路由机制">
-<meta name="twitter:description" content="前言
-在谈路由机制前先说一下现在比较流行的单页面应用，就是所谓的Single Page APP。它的主要目的有
-
-单页面应用
-无刷新的视图切换 
-每个页面包含不同数据">
+<meta name="twitter:title" content="Webpack 小结">
+<meta name="twitter:description" content="写在前面最近一段时间在构建公司新项目时，前端使用webpack作为构建工具。抽时间整理一下对webpack的理解及运用。
+Webpack是什么Webpack在官方的定义是:Module  bundler 译为(模块加载器), 说简单一点就是一个模块打包器。它能把各种资源，例如JS（含JSX）、coffee、样式（less/sass）、图片等都作为模块来使用和处理。它将根据模块的依赖关系进行静态分析">
 
     
     <link rel="alternative" href="/atom.xml" title="袁伟的技术博客" type="application/atom+xml">
@@ -93,14 +81,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/11/26/2015-11-26-angularjs-lu-you-ji-zhi/" title="AngularJS 路由机制" itemprop="url">AngularJS 路由机制</a>
+      <a href="/2016/12/01/2016-12-01-webpack-qian-xi/" title="Webpack 小结" itemprop="url">Webpack 小结</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="袁伟" target="_blank" itemprop="author">袁伟</a>
 		
   <p class="article-time">
-    <time datetime="2015-11-26T11:55:58.000Z" itemprop="datePublished"> 发表于 2015-11-26</time>
+    <time datetime="2016-12-01T09:46:17.000Z" itemprop="datePublished"> 发表于 2016-12-01</time>
     
   </p>
 </header>
@@ -109,56 +97,13 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#相同点"><span class="toc-number">1.</span> <span class="toc-text">相同点</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ui-Router"><span class="toc-number"></span> <span class="toc-text">ui-Router</span></a>
+			<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#写在前面"><span class="toc-number">1.</span> <span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Webpack是什么"><span class="toc-number">2.</span> <span class="toc-text">Webpack是什么</span></a></li></ol>
 		
 		</div>
 		
-		<p>前言</p>
-<p>在谈路由机制前先说一下现在比较流行的单页面应用，就是所谓的Single Page APP。它的主要目的有</p>
-<ol>
-<li>单页面应用</li>
-<li>无刷新的视图切换 </li>
-<li>每个页面包含不同数据</li>
-</ol>
+		<h4 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h4><p>最近一段时间在构建公司<a href="https://www.51tzgl.com/" target="_blank" rel="external">新项目</a>时，前端使用webpack作为构建工具。抽时间整理一下对webpack的理解及运用。</p>
+<h4 id="Webpack是什么"><a href="#Webpack是什么" class="headerlink" title="Webpack是什么"></a>Webpack是什么</h4><p>Webpack在官方的定义是:Module  bundler 译为(模块加载器), 说简单一点就是一个模块打包器。它能把各种资源，例如JS（含JSX）、coffee、样式（less/sass）、图片等都作为模块来使用和处理。它将根据模块的依赖关系进行静态分析，然后将这些模块按照指定的规则生成对应的静态资源。</p>
 <a id="more"></a>
-<p>虽然使用Javascript和Ajax可以实现上述功能，但是Ajax的一个致命缺点就是导致浏览器后退按钮失效，解决此问题有两种方法: </p>
-<ol>
-<li>使用hash，监听hashchange事件来进行视图切换</li>
-<li>使用HTML5的history API，通过pushState()记录操作历史，监听popstate事件来进行视图切换</li>
-</ol>
-<p>这样便形成了通过地址栏进行导航的深度链接(deeplinking ),也就是AngularJS的路由机制。通过路由机制，一个单页应用的各个视图就可以很好的组织起来了</p>
-<hr>
-<p>ngRoute  VS ui-router</p>
-<p>ngRoute 和 ui-router</p>
-<h5 id="相同点"><a href="#相同点" class="headerlink" title="相同点"></a>相同点</h5><ul>
-<li>两者都可以实现路由功能</li>
-</ul>
-<p>不同点</p>
-<ol>
-<li>ngroute是用AngularJS框架的核心部分。</li>
-<li>ui-router是一个社区库，它是用来提高完善ngroute路由功能的</li>
-</ol>
-<p><a href="https://github.com/angular-ui/ui-router" target="_blank" rel="external">ui-router</a>路由器属于一个第三方模块，功能非常强大。更轻松配置项目的一个模块库，是ngRouter的升级版！它支持一切正常ngroute也可以做许多额外的功能。所以实际运用中，常选择ui-router作为路由器，而不用ngRoute。</p>
-<hr>
-<h4 id="ui-Router"><a href="#ui-Router" class="headerlink" title="ui-Router"></a>ui-Router</h4><p>安装方式:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bower install angular-ui-router --save</div></pre></td></tr></table></figure></p>
-<p>将源文件包含到页面中:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;script src=&quot;bower_components/angular-ui-router/release/angular-ui-router.js&quot;&gt;&lt;/script&gt;</div></pre></td></tr></table></figure>
-<p>将ui.router作为web应用的依赖，注入到主程序<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">(function()&#123;</div><div class="line">     &apos;use strict&apos;;</div><div class="line">      angular.module(&apos;jcfApp&apos;, [&apos;ui.router&apos;]);</div><div class="line">&#125;)();</div></pre></td></tr></table></figure></p>
-<p>UI-Router可以将视图嵌套，因为它基于的是操作状态(.state)而仅非URL。当在ui-router中处理路由和状态时，开发者的重心是当前的状态是什么以及在哪一个页面里.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;div  ui-view=&quot;main-content&quot;&gt;&lt;/div&gt;</div></pre></td></tr></table></figure>
-<p>为特定状态指定的模板将会放在ui-view元素中。,这就是在同一个路由下实现嵌套视图的方法。要定义一个路由，与ngRoute的方法相同：使用.config方式，但使用的不是$routeProvider而是$stateProvider</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">(function()&#123;</div><div class="line">    &apos;use strict&apos;;</div><div class="line">    angular.module(&apos;app.account&apos;)</div><div class="line">        .config(routerConfigure);</div><div class="line">    routerConfigure.$inject = [&apos;$stateProvider&apos;, &apos;$urlRouterProvider&apos;];</div><div class="line">    function routerConfigure($stateProvider, $urlRouterProvider) &#123;</div><div class="line">        $urlRouterProvider.otherwise(&quot;/&quot;);</div><div class="line">        $stateProvider</div><div class="line">            .state(&quot;account&quot;, &#123;</div><div class="line">                url: &quot;/account/id&amp;from&quot;,</div><div class="line">                views: &#123;</div><div class="line">                    &quot;main-content&quot;: &#123;</div><div class="line">                        templateUrl: &apos;modules/account/account.tpl.html&apos;,</div><div class="line">                        controller: &quot;AccountController&quot;,</div><div class="line">                        controllerAs: &quot;vm&quot;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;)</div><div class="line">    &#125;;</div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
-<p>设置对象上定义了一个叫account的状态。设置对象stateConfig和路由设置对象的选项是差不多的。url选项将会为应用的状态指定一个URL基于用户浏览该应用所在的状态。这样当在浏览该应用的时候便能实现深度链接的效果。URL可以有多个参数。参数可以使用$stateParams服务取到。</p>
-<p>每个视图下可以设置模板 - template - HTML字符串（模板），或者是返回HTML字符串的函数 - templateUrl - HTML模板的路径（如上图代码），或者是返回HTML模板路径的函数 - templateProvider - 返回HTML字符串的函数。需要注意的是如果设置了视图选项views,该状态下的’template’,’templateUrl’<br>及’templateProvider‘，将被忽略</p>
-<p>控制器<br>指定控制器，或者在路由里面创建一个作为控制器的函数。但如果没有定义模板，控制器将无效</p>
-<p>when()<br>该函数接受两个参数：1.当前的路径，2.需要重定向到的路径（或者是需要在路径被访问是运行的函数）。设置重定向前需要为$urlRouterProvider设置when函数来接受一个字符串。例如：当重定向一个400路由到/error</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$urlRouterProvider.when(&apos;400&apos;, &apos;/error&apos;);</div></pre></td></tr></table></figure>
-<p>Resolve<br>预载入功能，可以预先载入依赖或者数据，然后注入到控制器中。在ngRoute中resolve选项可以允许在路由到达前载入数据保证（promises）。</p>
-<p>预载入选项需要一个对象，这个对象的key即要注入到控制器的依赖，value为需要被载入的factory服务。如果传入的时字符串，angular-route会试图匹配已经注册的服务。如果传入的是函数，该函数将会被注入，并且该函数返回的值便是控制器的依赖之一。如果该函数返回一个数据保证（promise），这个数据保证将在控制器被实例化前被预先载入并且数据会被注入到控制器中。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">.state(&apos;banner-Detail&apos;, &#123;</div><div class="line">  url: &quot;/bannerDetail&quot;,</div><div class="line">  views: &#123;</div><div class="line">    &quot;main-content&quot;: &#123;</div><div class="line">      templateUrl: &quot;modules/front_end_config/app_ad/tpl/banner_detail.html&quot;,</div><div class="line">      controller: &quot;bannerDetailCtr&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">  resolve: &#123;</div><div class="line">    desp: [&apos;$ocLazyLoad&apos;,</div><div class="line">      function ($ocLazyLoad) &#123;</div><div class="line">        return $ocLazyLoad.load(&apos;modules/front_end_config/app_ad/tpl/banner_detail.controller.js&apos;)</div><div class="line">      &#125;]</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<p>otherwise()<br>当用户访问的路径没有被定义的时候它将重定向到指定的页面。这是创建’默认‘路径的好方法。 otherwise()只接受一个参数，函数或者字符串，字符串必须为合法的url路由地址，函数则会在没有任何路径被匹配的时候被调用.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$urlRouterProvider.otherwise(&apos;/&apos;);</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$urlRouterProvider.otherwise(</div><div class="line">    function($injector, $location) &#123;</div><div class="line">      $location.path(&apos;/&apos;);</div><div class="line">    &#125;);</div></pre></td></tr></table></figure>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -167,7 +112,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/JavaScript/">JavaScript</a><a href="/tags/AngularJS/">AngularJS</a>
+  <span></span> <a href="/tags/JavaScript/">JavaScript</a><a href="/tags/Webpack/">Webpack</a>
   </div>
 
 </div>
@@ -176,7 +121,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://chaosyuan.github.io/2015/11/26/2015-11-26-angularjs-lu-you-ji-zhi/" data-title="AngularJS 路由机制 | 袁伟的技术博客" data-tsina="undefined" class="share clearfix">
+	  <div data-url="http://chaosyuan.github.io/2016/12/01/2016-12-01-webpack-qian-xi/" data-title="Webpack 小结 | 袁伟的技术博客" data-tsina="undefined" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -189,19 +134,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/12/10/2015-12-10-angularjs-promisedui-xiang-$q/" title="AngularJS Promise对象($q)">
-  <strong>上一篇：</strong><br/>
-  <span>
-  AngularJS Promise对象($q)</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/11/23/2015-11-23-angularjs-factory-vs-service-vs-provider/"  title="AngularJS:Factory vs Service vs Provider">
+<a href="/2016/07/01/iOS-视图控制器转场/"  title="iOS 视图控制器转场">
  <strong>下一篇：</strong><br/> 
- <span>AngularJS:Factory vs Service vs Provider
+ <span>iOS 视图控制器转场
 </span>
 </a>
 </div>
@@ -210,7 +147,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/11/26/2015-11-26-angularjs-lu-you-ji-zhi/" data-title="AngularJS 路由机制" data-url="http://chaosyuan.github.io/2015/11/26/2015-11-26-angularjs-lu-you-ji-zhi/"></div>
+	<div class="ds-thread" data-thread-key="2016/12/01/2016-12-01-webpack-qian-xi/" data-title="Webpack 小结" data-url="http://chaosyuan.github.io/2016/12/01/2016-12-01-webpack-qian-xi/"></div>
 </section>
 
 
@@ -220,7 +157,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#相同点"><span class="toc-number">1.</span> <span class="toc-text">相同点</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ui-Router"><span class="toc-number"></span> <span class="toc-text">ui-Router</span></a>
+ <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#写在前面"><span class="toc-number">1.</span> <span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Webpack是什么"><span class="toc-number">2.</span> <span class="toc-text">Webpack是什么</span></a></li></ol>
  
   </div>
 
