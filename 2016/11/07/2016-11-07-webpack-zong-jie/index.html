@@ -1,0 +1,632 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>关于Webpack 小结 | 袁伟的技术博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="袁伟">
+    
+
+    
+    <meta name="description" content="写在最前现在越来越多的网站已经从网页模式进化到Webapp模式，并且webapp通常是一个单页面应用，页面之间都是通过路由机制进行跳转。每一个视图都是通过异步的方式进行加载，这导致页面初始化和使用过程中会加载越来越多的JS代码，这给前端开发的流程和资源组织带来了巨大的挑战。
+在我看来web端开发比较特别，首先前端是基于多语言、多层次的编码和组织工作，web端产品是基于浏览器的，这些资源(HTML">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于Webpack 小结">
+<meta property="og:url" content="http://chaosyuan.github.io/2016/11/07/2016-11-07-webpack-zong-jie/index.html">
+<meta property="og:site_name" content="袁伟的技术博客">
+<meta property="og:description" content="写在最前现在越来越多的网站已经从网页模式进化到Webapp模式，并且webapp通常是一个单页面应用，页面之间都是通过路由机制进行跳转。每一个视图都是通过异步的方式进行加载，这导致页面初始化和使用过程中会加载越来越多的JS代码，这给前端开发的流程和资源组织带来了巨大的挑战。
+在我看来web端开发比较特别，首先前端是基于多语言、多层次的编码和组织工作，web端产品是基于浏览器的，这些资源(HTML">
+<meta property="og:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/webpack_module.png">
+<meta property="og:updated_time" content="2016-12-12T09:38:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于Webpack 小结">
+<meta name="twitter:description" content="写在最前现在越来越多的网站已经从网页模式进化到Webapp模式，并且webapp通常是一个单页面应用，页面之间都是通过路由机制进行跳转。每一个视图都是通过异步的方式进行加载，这导致页面初始化和使用过程中会加载越来越多的JS代码，这给前端开发的流程和资源组织带来了巨大的挑战。
+在我看来web端开发比较特别，首先前端是基于多语言、多层次的编码和组织工作，web端产品是基于浏览器的，这些资源(HTML">
+<meta name="twitter:image" content="http://7xoc8b.com1.z0.glb.clouddn.com/webpack_module.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="袁伟的技术博客" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="袁伟的技术博客">袁伟的技术博客</a></h1>
+				<h2 class="blog-motto">千里之行始于足下</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/tags">标签</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:chaosyuan.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/11/07/2016-11-07-webpack-zong-jie/" title="关于Webpack 小结" itemprop="url">关于Webpack 小结</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="袁伟" target="_blank" itemprop="author">袁伟</a>
+		
+  <p class="article-time">
+    <time datetime="2016-11-07T09:46:17.000Z" itemprop="datePublished"> 发表于 2016-11-07</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#写在最前"><span class="toc-number">1.</span> <span class="toc-text">写在最前</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Webpack是什么"><span class="toc-number">2.</span> <span class="toc-text">Webpack是什么</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Webpack的优势"><span class="toc-number">3.</span> <span class="toc-text">Webpack的优势</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Webpack的作用"><span class="toc-number">4.</span> <span class="toc-text">Webpack的作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#安装及配置"><span class="toc-number">5.</span> <span class="toc-text">安装及配置</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#安装"><span class="toc-number">5.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#配置"><span class="toc-number">5.2.</span> <span class="toc-text">配置</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#详细参考"><span class="toc-number">6.</span> <span class="toc-text">详细参考</span></a></li></ol>
+		
+		</div>
+		
+		<h4 id="写在最前"><a href="#写在最前" class="headerlink" title="写在最前"></a>写在最前</h4><p>现在越来越多的网站已经从网页模式进化到Webapp模式，并且webapp通常是一个单页面应用，页面之间都是通过路由机制进行跳转。每一个视图都是通过异步的方式进行加载，这导致页面初始化和使用过程中会加载越来越多的JS代码，这给前端开发的流程和资源组织带来了巨大的挑战。</p>
+<p>在我看来web端开发比较特别，首先前端是基于多语言、多层次的编码和组织工作，web端产品是基于浏览器的，这些资源(HTML CSS JS)是通过增量加载的方式运行到浏览器端。如何在开发环境组织好这些资源,保证它们在浏览器端快速的加载和更新，就需要一个模块化系统。</p>
+<a id="more"></a>
+<p>在<a href="https://www.jucaifu.com/" target="_blank" rel="external">聚财富</a>项目中，使用grunt构建工具。在构建<a href="https://www.51tzgl.com/" target="_blank" rel="external">51投资攻略</a>项目时，使用比较最近比较火的webpack作为打包工具。所以对webpack做一个总结，由于经验和水平有限，也难免有所疏漏，欢迎交流讨论。</p>
+<h4 id="Webpack是什么"><a href="#Webpack是什么" class="headerlink" title="Webpack是什么"></a>Webpack是什么</h4><p>Webpack在官方的定义是:Module  bundler 译为(模块加载器), 直白的说就是一个模块打包器。它能把各种资源，例如JS（含JSX）、coffee、样式（less/sass）、图片等都作为模块来使用和处理。所以在使用时直接 require(XXX) 的形式来引入各模块，无须花费太多心思，Webpack 有着各种健全的加载器（loader）在默默处理这些事情。它将根据模块的依赖关系进行静态分析，然后将这些模块按照指定的规则生成对应的静态资源。请看下图：<br><img src="http://7xoc8b.com1.z0.glb.clouddn.com/webpack_module.png" alt="图片摘自:webpack.github.io"></p>
+<p>webpack简单点来说就是一个配置文件，所有的操作都是在这一个文件中发生的，它的出现，主要是为了更好的运用于单页面（SPA）应用,因为webpack可以使的代码分离，按需加载，以及静态资源模块化的无缝结合。</p>
+<h4 id="Webpack的优势"><a href="#Webpack的优势" class="headerlink" title="Webpack的优势"></a>Webpack的优势</h4><ol>
+<li>webpack是以commonJS的形式来书写的，对于AMD和CMD的支持也很全面</li>
+<li>能被模块化的不仅仅是JS</li>
+<li>开发方便，能替代部分grunt/gulp的工作，比如打包、代码压缩混淆、图片转base64等。</li>
+<li>插件机制比较完善，扩展性强。支持React热插拔<a href="https://github.com/gaearon/react-hot-loader" target="_blank" rel="external">react-hot-loader</a><br>5.webpack兼容性出色，可以使的旧项目的模块直接迁移过来</li>
+</ol>
+<h4 id="Webpack的作用"><a href="#Webpack的作用" class="headerlink" title="Webpack的作用"></a>Webpack的作用</h4><blockquote>
+<ol>
+<li>代码分割,按需加载。</li>
+<li>图片自动转成base64。</li>
+<li>自动打包编译压缩混淆,添加md5….</li>
+</ol>
+</blockquote>
+<h4 id="安装及配置"><a href="#安装及配置" class="headerlink" title="安装及配置"></a>安装及配置</h4><h5 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h5><pre><code>npm install webpack -g
+</code></pre><p>webpack 已经安装到了全局环境下，可以通过命令行 webpack -h 查看</p>
+<p>如果常规项目还是把依赖写入 package.json 包去更人性化：</p>
+<pre><code>npm init
+npm install webpack --save-dev
+</code></pre><p>如果是mac下,有时需要加上<strong>sudo</strong></p>
+<h5 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h5><p>每个项目下都必须有一个webpack.config.js，作用如同常规的Gruntfile.js，就是一个配置文件，告诉 webpack 它需要做什么。</p>
+<ol>
+<li>entry(入口文件)</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">    module.exports = &#123;</div><div class="line">       // 入口文件配置</div><div class="line">		entry: &#123;</div><div class="line">		    index: &apos;./app/javaScript/index.js&apos;,</div><div class="line">		&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>它会让webpack知道用哪个文件作为项目的入口</p>
+<ol>
+<li>output(出口)</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">output: &#123;</div><div class="line">		path: path.join(__dirname, &apos;dist&apos;), //打包后生成的目录</div><div class="line">		publicPath: &apos;&apos;,	//模板、样式、脚本、图片等资源对应的server上的路径  </div><div class="line">		filename: &apos;javaScript/[name].[hash:6].js&apos;,	//根据对应入口名称，生成对应js名称</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<p>它可以让webpack把处理完成的文件输出到什么地方</p>
+<ol>
+<li>module.loaders 加载器配置</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">module: &#123;</div><div class="line">	loaders: [</div><div class="line">		&#123;</div><div class="line">			test: /\.css$/,</div><div class="line">			loader: ExtractTextPlugin.extract(&apos;style&apos;, &apos;css&apos;)</div><div class="line">		&#125;,</div><div class="line">		&#123;</div><div class="line">			test: /\.less$/,</div><div class="line">			loader: ExtractTextPlugin.extract(&apos;css!less&apos;)</div><div class="line">		&#125;,</div><div class="line">		&#123;</div><div class="line">			test: /\.js$/,</div><div class="line">			loader: &apos;babel&apos;,</div><div class="line">			exclude: /node_modules/</div><div class="line">		&#125;,</div><div class="line">		&#123;</div><div class="line">			test: /\.(woff|woff2|ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,</div><div class="line">			loader: &apos;file-loader?name=./fonts/[name].[ext]&apos;</div><div class="line">		&#125;,</div><div class="line">		&#123;</div><div class="line">			test: /\.(png|jpg|gif|svg)$/,</div><div class="line">			loader: &apos;url&apos;,</div><div class="line">			query: &#123;</div><div class="line">				limit: 30720, </div><div class="line">				name: &apos;../app/images/[name].[ext]?&apos; </div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>模块加载是webpack的最强大之处。你需要引用什么文件，直接配置好相关的loader就行，比如 :在项目中需要引用.json文件，只需配置一个json-loader即可。引用相关的jquery插件，配置一个imports-loader即可,然后在页面中可以通过require方式 或者 ES6语法import直接引入就可以使用</p>
+<ol>
+<li>其它解决方案配置</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">resolve: &#123;</div><div class="line">	root: [],</div><div class="line">	//require或import的时 可以不需要带后缀</div><div class="line">	extensions: [&apos;&apos;, &apos;.js&apos;, &apos;.less&apos;, &apos;.css&apos;]</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+<ol>
+<li>plugins 插件</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">plugins: [</div><div class="line">	new webpack.ProvidePlugin(&#123; //全局配置加载</div><div class="line">		$: &quot;jquery&quot;,</div><div class="line">		jQuery: &quot;jquery&quot;,</div><div class="line">		&quot;window.jQuery&quot;: &quot;jquery&quot;,</div><div class="line">	&#125;),</div><div class="line">	new CleanPlugin([&apos;dist&apos;]),// 清空dist文件夹</div><div class="line">	new webpack.optimize.CommonsChunkPlugin(&#123;</div><div class="line">		name: &apos;main&apos;, // 将公共模块提取，生成名为`main`的chunk</div><div class="line">		minChunks: 3 // 提取至少3个模块共有的部分</div><div class="line">	&#125;),</div><div class="line">	new ExtractTextPlugin( &quot;styles/[name].[hash:6].css&quot;), //提取CSS行内样式，转化为link引入</div><div class="line">	 new webpack.optimize.UglifyJsPlugin(&#123; // js压缩</div><div class="line">	 	compress: &#123;</div><div class="line">	 		warnings: false</div><div class="line">	 	&#125;</div><div class="line">	 &#125;),</div><div class="line">	new CopyWebpackPlugin([</div><div class="line">		&#123;from: &apos;./app/images&apos;, to: &apos;./images&apos;&#125; //拷贝图片</div><div class="line">	]),</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>这里51投资攻略项目使用到了<strong>html-webpack-plugin、extract-text-webpack-plugin 、CommonsChunkPlugin、clean-webpack-plugin</strong>等插件，第一个用于生成html模板，第二个用于将行内样式提取到单独的css文件中，第三个用于提取多个页面之间的公共模块，第四个用于文件夹清除。webpack 插件系统十分丰富，比如:html模板,CSS行内样式提取,热加载…..</p>
+<h4 id="详细参考"><a href="#详细参考" class="headerlink" title="详细参考"></a>详细参考</h4><ol>
+<li><a href="http://webpack.github.io/docs/" target="_blank" rel="external">官方文档</a></li>
+<li><a href="https://segmentfault.com/a/1190000002551952" target="_blank" rel="external">Webpack 入门指迷</a></li>
+<li><a href="https://github.com/petehunt/webpack-howto" target="_blank" rel="external">webpack-howto</a></li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/JavaScript/">JavaScript</a><a href="/tags/Webpack/">Webpack</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://chaosyuan.github.io/2016/11/07/2016-11-07-webpack-zong-jie/" data-title="关于Webpack 小结 | 袁伟的技术博客" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/07/01/iOS-视图控制器转场/"  title="iOS 视图控制器转场">
+ <strong>下一篇：</strong><br/> 
+ <span>iOS 视图控制器转场
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/11/07/2016-11-07-webpack-zong-jie/" data-title="关于Webpack 小结" data-url="http://chaosyuan.github.io/2016/11/07/2016-11-07-webpack-zong-jie/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#写在最前"><span class="toc-number">1.</span> <span class="toc-text">写在最前</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Webpack是什么"><span class="toc-number">2.</span> <span class="toc-text">Webpack是什么</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Webpack的优势"><span class="toc-number">3.</span> <span class="toc-text">Webpack的优势</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Webpack的作用"><span class="toc-number">4.</span> <span class="toc-text">Webpack的作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#安装及配置"><span class="toc-number">5.</span> <span class="toc-text">安装及配置</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#安装"><span class="toc-number">5.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#配置"><span class="toc-number">5.2.</span> <span class="toc-text">配置</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#详细参考"><span class="toc-number">6.</span> <span class="toc-text">详细参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="chaosyuan" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AngularJS/" title="AngularJS">AngularJS<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/web/" title="web">web<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/grunt/" title="grunt">grunt<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ReactiveCocoa/" title="ReactiveCocoa">ReactiveCocoa<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/动画/" title="动画">动画<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Yeoman/" title="Yeoman">Yeoman<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/UI/" title="UI">UI<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSDN/" title="CSDN">CSDN<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CocoaPods/" title="CocoaPods">CocoaPods<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Web/" title="Web">Web<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Carthage/" title="Carthage">Carthage<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/promise/" title="promise">promise<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/block/" title="block">block<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HTTP/" title="HTTP">HTTP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Webpack/" title="Webpack">Webpack<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://onevcat.com/" target="_blank" title="瞄神">瞄神</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://blog.devtang.com/" target="_blank" title="巧叔">巧叔</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://objccn.io/" target="_blank" title="ObjC中国">ObjC中国</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://blog.sunnyxx.com/" target="_blank" title="sunnyxx">sunnyxx</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://blog.ibireme.com/" target="_blank" title="ibireme">ibireme</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://www.jucaifu.com/" target="_blank" title="聚财富">聚财富</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://www.51tzgl.com/" target="_blank" title="51投资攻略">51投资攻略</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://www.haochang.tv/" target="_blank" title="好唱">好唱</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 做人做事,只有偏执到癫狂,才能达到顶峰 <br/>
+			</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/u/5508924750?is_all=1" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/chaosyuan" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/yuanw-92/about" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="袁伟">袁伟</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"chaosyuan"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

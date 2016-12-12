@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://chaosyuan.github.io/"/>
-  <updated>2016-09-05T08:23:30.000Z</updated>
+  <updated>2016-12-12T09:38:51.000Z</updated>
   <id>http://chaosyuan.github.io/</id>
   
   <author>
@@ -14,6 +14,84 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>关于Webpack 小结</title>
+    <link href="http://chaosyuan.github.io/2016/11/07/2016-11-07-webpack-zong-jie/"/>
+    <id>http://chaosyuan.github.io/2016/11/07/2016-11-07-webpack-zong-jie/</id>
+    <published>2016-11-07T09:46:17.000Z</published>
+    <updated>2016-12-12T09:38:51.000Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="写在最前"><a href="#写在最前" class="headerlink" title="写在最前"></a>写在最前</h4><p>现在越来越多的网站已经从网页模式进化到Webapp模式，并且webapp通常是一个单页面应用，页面之间都是通过路由机制进行跳转。每一个视图都是通过异步的方式进行加载，这导致页面初始化和使用过程中会加载越来越多的JS代码，这给前端开发的流程和资源组织带来了巨大的挑战。</p>
+<p>在我看来web端开发比较特别，首先前端是基于多语言、多层次的编码和组织工作，web端产品是基于浏览器的，这些资源(HTML CSS JS)是通过增量加载的方式运行到浏览器端。如何在开发环境组织好这些资源,保证它们在浏览器端快速的加载和更新，就需要一个模块化系统。</p>
+<a id="more"></a>
+<p>在<a href="https://www.jucaifu.com/" target="_blank" rel="external">聚财富</a>项目中，使用grunt构建工具。在构建<a href="https://www.51tzgl.com/" target="_blank" rel="external">51投资攻略</a>项目时，使用比较最近比较火的webpack作为打包工具。所以对webpack做一个总结，由于经验和水平有限，也难免有所疏漏，欢迎交流讨论。</p>
+<h4 id="Webpack是什么"><a href="#Webpack是什么" class="headerlink" title="Webpack是什么"></a>Webpack是什么</h4><p>Webpack在官方的定义是:Module  bundler 译为(模块加载器), 直白的说就是一个模块打包器。它能把各种资源，例如JS（含JSX）、coffee、样式（less/sass）、图片等都作为模块来使用和处理。所以在使用时直接 require(XXX) 的形式来引入各模块，无须花费太多心思，Webpack 有着各种健全的加载器（loader）在默默处理这些事情。它将根据模块的依赖关系进行静态分析，然后将这些模块按照指定的规则生成对应的静态资源。请看下图：<br><img src="http://7xoc8b.com1.z0.glb.clouddn.com/webpack_module.png" alt="图片摘自:webpack.github.io"></p>
+<p>webpack简单点来说就是一个配置文件，所有的操作都是在这一个文件中发生的，它的出现，主要是为了更好的运用于单页面（SPA）应用,因为webpack可以使的代码分离，按需加载，以及静态资源模块化的无缝结合。</p>
+<h4 id="Webpack的优势"><a href="#Webpack的优势" class="headerlink" title="Webpack的优势"></a>Webpack的优势</h4><ol>
+<li>webpack是以commonJS的形式来书写的，对于AMD和CMD的支持也很全面</li>
+<li>能被模块化的不仅仅是JS</li>
+<li>开发方便，能替代部分grunt/gulp的工作，比如打包、代码压缩混淆、图片转base64等。</li>
+<li>插件机制比较完善，扩展性强。支持React热插拔<a href="https://github.com/gaearon/react-hot-loader" target="_blank" rel="external">react-hot-loader</a><br>5.webpack兼容性出色，可以使的旧项目的模块直接迁移过来</li>
+</ol>
+<h4 id="Webpack的作用"><a href="#Webpack的作用" class="headerlink" title="Webpack的作用"></a>Webpack的作用</h4><blockquote>
+<ol>
+<li>代码分割,按需加载。</li>
+<li>图片自动转成base64。</li>
+<li>自动打包编译压缩混淆,添加md5….</li>
+</ol>
+</blockquote>
+<h4 id="安装及配置"><a href="#安装及配置" class="headerlink" title="安装及配置"></a>安装及配置</h4><h5 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h5><pre><code>npm install webpack -g
+</code></pre><p>webpack 已经安装到了全局环境下，可以通过命令行 webpack -h 查看</p>
+<p>如果常规项目还是把依赖写入 package.json 包去更人性化：</p>
+<pre><code>npm init
+npm install webpack --save-dev
+</code></pre><p>如果是mac下,有时需要加上<strong>sudo</strong></p>
+<h5 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h5><p>每个项目下都必须有一个webpack.config.js，作用如同常规的Gruntfile.js，就是一个配置文件，告诉 webpack 它需要做什么。</p>
+<ol>
+<li>entry(入口文件)</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">    module.exports = &#123;</div><div class="line">       // 入口文件配置</div><div class="line">		entry: &#123;</div><div class="line">		    index: &apos;./app/javaScript/index.js&apos;,</div><div class="line">		&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>它会让webpack知道用哪个文件作为项目的入口</p>
+<ol>
+<li>output(出口)</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">output: &#123;</div><div class="line">		path: path.join(__dirname, &apos;dist&apos;), //打包后生成的目录</div><div class="line">		publicPath: &apos;&apos;,	//模板、样式、脚本、图片等资源对应的server上的路径  </div><div class="line">		filename: &apos;javaScript/[name].[hash:6].js&apos;,	//根据对应入口名称，生成对应js名称</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<p>它可以让webpack把处理完成的文件输出到什么地方</p>
+<ol>
+<li>module.loaders 加载器配置</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">module: &#123;</div><div class="line">	loaders: [</div><div class="line">		&#123;</div><div class="line">			test: /\.css$/,</div><div class="line">			loader: ExtractTextPlugin.extract(&apos;style&apos;, &apos;css&apos;)</div><div class="line">		&#125;,</div><div class="line">		&#123;</div><div class="line">			test: /\.less$/,</div><div class="line">			loader: ExtractTextPlugin.extract(&apos;css!less&apos;)</div><div class="line">		&#125;,</div><div class="line">		&#123;</div><div class="line">			test: /\.js$/,</div><div class="line">			loader: &apos;babel&apos;,</div><div class="line">			exclude: /node_modules/</div><div class="line">		&#125;,</div><div class="line">		&#123;</div><div class="line">			test: /\.(woff|woff2|ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,</div><div class="line">			loader: &apos;file-loader?name=./fonts/[name].[ext]&apos;</div><div class="line">		&#125;,</div><div class="line">		&#123;</div><div class="line">			test: /\.(png|jpg|gif|svg)$/,</div><div class="line">			loader: &apos;url&apos;,</div><div class="line">			query: &#123;</div><div class="line">				limit: 30720, </div><div class="line">				name: &apos;../app/images/[name].[ext]?&apos; </div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>模块加载是webpack的最强大之处。你需要引用什么文件，直接配置好相关的loader就行，比如 :在项目中需要引用.json文件，只需配置一个json-loader即可。引用相关的jquery插件，配置一个imports-loader即可,然后在页面中可以通过require方式 或者 ES6语法import直接引入就可以使用</p>
+<ol>
+<li>其它解决方案配置</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">resolve: &#123;</div><div class="line">	root: [],</div><div class="line">	//require或import的时 可以不需要带后缀</div><div class="line">	extensions: [&apos;&apos;, &apos;.js&apos;, &apos;.less&apos;, &apos;.css&apos;]</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+<ol>
+<li>plugins 插件</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">plugins: [</div><div class="line">	new webpack.ProvidePlugin(&#123; //全局配置加载</div><div class="line">		$: &quot;jquery&quot;,</div><div class="line">		jQuery: &quot;jquery&quot;,</div><div class="line">		&quot;window.jQuery&quot;: &quot;jquery&quot;,</div><div class="line">	&#125;),</div><div class="line">	new CleanPlugin([&apos;dist&apos;]),// 清空dist文件夹</div><div class="line">	new webpack.optimize.CommonsChunkPlugin(&#123;</div><div class="line">		name: &apos;main&apos;, // 将公共模块提取，生成名为`main`的chunk</div><div class="line">		minChunks: 3 // 提取至少3个模块共有的部分</div><div class="line">	&#125;),</div><div class="line">	new ExtractTextPlugin( &quot;styles/[name].[hash:6].css&quot;), //提取CSS行内样式，转化为link引入</div><div class="line">	 new webpack.optimize.UglifyJsPlugin(&#123; // js压缩</div><div class="line">	 	compress: &#123;</div><div class="line">	 		warnings: false</div><div class="line">	 	&#125;</div><div class="line">	 &#125;),</div><div class="line">	new CopyWebpackPlugin([</div><div class="line">		&#123;from: &apos;./app/images&apos;, to: &apos;./images&apos;&#125; //拷贝图片</div><div class="line">	]),</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>这里51投资攻略项目使用到了<strong>html-webpack-plugin、extract-text-webpack-plugin 、CommonsChunkPlugin、clean-webpack-plugin</strong>等插件，第一个用于生成html模板，第二个用于将行内样式提取到单独的css文件中，第三个用于提取多个页面之间的公共模块，第四个用于文件夹清除。webpack 插件系统十分丰富，比如:html模板,CSS行内样式提取,热加载…..</p>
+<h4 id="详细参考"><a href="#详细参考" class="headerlink" title="详细参考"></a>详细参考</h4><ol>
+<li><a href="http://webpack.github.io/docs/" target="_blank" rel="external">官方文档</a></li>
+<li><a href="https://segmentfault.com/a/1190000002551952" target="_blank" rel="external">Webpack 入门指迷</a></li>
+<li><a href="https://github.com/petehunt/webpack-howto" target="_blank" rel="external">webpack-howto</a></li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;写在最前&quot;&gt;&lt;a href=&quot;#写在最前&quot; class=&quot;headerlink&quot; title=&quot;写在最前&quot;&gt;&lt;/a&gt;写在最前&lt;/h4&gt;&lt;p&gt;现在越来越多的网站已经从网页模式进化到Webapp模式，并且webapp通常是一个单页面应用，页面之间都是通过路由机制进行跳转。每一个视图都是通过异步的方式进行加载，这导致页面初始化和使用过程中会加载越来越多的JS代码，这给前端开发的流程和资源组织带来了巨大的挑战。&lt;/p&gt;
+&lt;p&gt;在我看来web端开发比较特别，首先前端是基于多语言、多层次的编码和组织工作，web端产品是基于浏览器的，这些资源(HTML CSS JS)是通过增量加载的方式运行到浏览器端。如何在开发环境组织好这些资源,保证它们在浏览器端快速的加载和更新，就需要一个模块化系统。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="JavaScript" scheme="http://chaosyuan.github.io/tags/JavaScript/"/>
+    
+      <category term="Webpack" scheme="http://chaosyuan.github.io/tags/Webpack/"/>
+    
+  </entry>
   
   <entry>
     <title>iOS 视图控制器转场</title>
@@ -1968,42 +2046,6 @@ $q.when(funcA())
 &lt;li&gt;无刷新的视图切换 &lt;/li&gt;
 &lt;li&gt;每个页面包含不同数据&lt;/li&gt;
 &lt;/ol&gt;
-    
-    </summary>
-    
-    
-      <category term="JavaScript" scheme="http://chaosyuan.github.io/tags/JavaScript/"/>
-    
-      <category term="AngularJS" scheme="http://chaosyuan.github.io/tags/AngularJS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>AngularJS:Factory vs Service vs Provider</title>
-    <link href="http://chaosyuan.github.io/2015/11/23/2015-11-23-angularjs-factory-vs-service-vs-provider/"/>
-    <id>http://chaosyuan.github.io/2015/11/23/2015-11-23-angularjs-factory-vs-service-vs-provider/</id>
-    <published>2015-11-23T12:02:38.000Z</published>
-    <updated>2016-10-27T07:25:11.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>最近在写公司后台的管理系统，由于初试AngularJS. 所以很自然地就就把业务逻辑写在 controller 和 scope 中。在git上找到AngularJs编码规范，细读之后，回头看来，代码写的是一塌糊涂。controller中充斥着大量的业务逻辑。controller本身只充当控制器的作用，controller 只在需要的时候才会初始化，一旦不需要就会被抛弃。因此，当每次切换或刷新页面的时候，Angular 会清空当前的 controller。因此controller 里是不能保存持久化数据的。这不属于它的作用范畴。业务逻辑处理应该抽离出来放在Service层，这样代码逻辑更加简洁，后期维护和测试也更加方便.</p>
-<a id="more"></a>
-<h4 id="AngularJS-Service"><a href="#AngularJS-Service" class="headerlink" title="AngularJS Service"></a>AngularJS Service</h4><p>Angular 提供了3种方法来创建并注册我们自己的 Service.</p>
-<blockquote>
-<p>  1.Factory<br>  2.Service<br>  3.Provide</p>
-</blockquote>
-<h5 id="1-Factory"><a href="#1-Factory" class="headerlink" title="1.Factory()"></a>1.Factory()</h5><p>Angular里面创建service最简单的方式是使用factory()方法,用 factory 就是创建一个对象，为它添加属性，然后把这个对象返回出来。你把 service 传进 controller 之后，在 controller 里这个对象里的属性就可以通过 factory 使用了</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line"><span class="meta">  'use strict'</span>;</div><div class="line">  angular.module(<span class="string">'service.productList'</span>, [])</div><div class="line">    .factory(<span class="string">'productListProvider'</span>, productListProvider);</div><div class="line">  productListProvider.$inject = [<span class="string">'$log'</span>,<span class="string">'$http'</span>];</div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">productListProvider</span> (<span class="params">$log,$http</span>) </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">var</span> service = &#123;</div><div class="line">      success: success,</div><div class="line">      error: error,</div><div class="line">      log: log,</div><div class="line">      debug: debug,</div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">return</span> service;</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">success</span>(<span class="params"></span>) </span>&#123;&#125;</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">error</span>(<span class="params"></span>) </span>&#123;&#125;</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">log</span>(<span class="params"></span>) </span>&#123;&#125;</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">debug</span>(<span class="params"></span>) </span>&#123;&#125;</div><div class="line">    &#125;</div><div class="line">&#125;)();</div><div class="line"><span class="string">``</span><span class="string">`       </span></div><div class="line">在controller中调用</div><div class="line">`<span class="string">``</span>javascript</div><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"><span class="meta">  'use strict'</span>;</div><div class="line">  angular.module(<span class="string">'app.product'</span>)</div><div class="line">    .controller(<span class="string">'ProductController'</span>, ProductController);</div><div class="line">  ProductController.$inject = [<span class="string">'$scope'</span>, <span class="string">'$state'</span>,  <span class="string">'productListProvider'</span>];</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">ProductController</span>(<span class="params">$scope, $state, productListProvider</span>) </span>&#123;</div><div class="line">  </div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">productList</span>(<span class="params"></span>) </span>&#123;</div><div class="line">      <span class="keyword">return</span> productListProvider.success();</div><div class="line">    &#125;</div><div class="line">    productList();</div><div class="line">  &#125;</div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
-<p><strong>注意：需要使用.config()来配置service的时候,不能使用factory()方法</strong></p>
-<h5 id="2-Service"><a href="#2-Service" class="headerlink" title="2.Service()"></a>2.Service()</h5><p>service()通过构造函数的方式创建service, 给”this”添加属性，然后 service 返回”this”。 service 传入controller ，在controller里 “this” 上的属性就可以通过 service 来使用了</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"><span class="meta">  'use strict'</span>;</div><div class="line">  angular.module(<span class="string">'login.services'</span>)</div><div class="line">    .service(<span class="string">'login'</span>, login);</div><div class="line">  login.$inject = [<span class="string">'$scope'</span>, <span class="string">'$state'</span>]</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">login</span>(<span class="params">$scope, $state</span>) </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">this</span>.userInfo = &#123;&#125;;</div><div class="line">    <span class="keyword">this</span>.setUserInfo = <span class="function"><span class="keyword">function</span> (<span class="params">useName</span>) </span>&#123;</div><div class="line"></div><div class="line">      self.userInfo[<span class="string">'name'</span>] = useName</div><div class="line">      <span class="keyword">return</span> userInfo;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
-<p>在controller中调用<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"><span class="meta">  'use strict'</span>;</div><div class="line">  angular.module(<span class="string">'app.userModule'</span>)</div><div class="line">    .controller(<span class="string">'UserInfoController'</span>, UserInfoController);</div><div class="line"></div><div class="line">  UserInfoController.$inject = [<span class="string">'$scope'</span>, <span class="string">'login'</span>];</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">UserInfoController</span> (<span class="params">$scope, login</span>) </span>&#123;</div><div class="line">    login.setUserInfo();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">&#125;)();</div></pre></td></tr></table></figure></p>
-<h5 id="3-Provider"><a href="#3-Provider" class="headerlink" title="3.Provider()"></a>3.Provider()</h5><p>providers 是唯一一种你可以传进 .config() 函数的 service。当想要在 service 对象启用之前，先进行模块范围的配置，那优先考虑使用provider<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"><span class="meta">  'use strict'</span>;</div><div class="line">  angular.module(<span class="string">'providerTestModele'</span>, [])</div><div class="line">    .config(<span class="function"><span class="keyword">function</span> (<span class="params">$stateProvider, $urlRouterProvider</span>) </span>&#123;</div><div class="line">      $urlRouterProvider.otherwise(<span class="string">"/"</span>);</div><div class="line">    &#125;)</div><div class="line">    .provider(<span class="string">'providerTest'</span>, [<span class="string">'$window'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">$window</span>) </span>&#123;</div><div class="line">      <span class="keyword">this</span>.test = &#123;</div><div class="line">        <span class="string">"firstName"</span>: <span class="string">"yw"</span></div><div class="line">      &#125;;</div><div class="line">      <span class="keyword">this</span>.$get = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.test;</div><div class="line">      &#125;;</div><div class="line">    &#125;</div><div class="line">    ]);</div><div class="line">&#125;)();</div></pre></td></tr></table></figure></p>
-<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><p>1.<a href="https://www.airpair.com/angularjs/posts/top-10-mistakes-angularjs-developers-make" target="_blank" rel="external">https://www.airpair.com/angularjs/posts/top-10-mistakes-angularjs-developers-make</a><br>2.<a href="https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md" target="_blank" rel="external">https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md</a><br>3.<a href="http://tylermcginnis.com/angularjs-factory-vs-service-vs-provider/" target="_blank" rel="external">http://tylermcginnis.com/angularjs-factory-vs-service-vs-provider/</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;最近在写公司后台的管理系统，由于初试AngularJS. 所以很自然地就就把业务逻辑写在 controller 和 scope 中。在git上找到AngularJs编码规范，细读之后，回头看来，代码写的是一塌糊涂。controller中充斥着大量的业务逻辑。controller本身只充当控制器的作用，controller 只在需要的时候才会初始化，一旦不需要就会被抛弃。因此，当每次切换或刷新页面的时候，Angular 会清空当前的 controller。因此controller 里是不能保存持久化数据的。这不属于它的作用范畴。业务逻辑处理应该抽离出来放在Service层，这样代码逻辑更加简洁，后期维护和测试也更加方便.&lt;/p&gt;
     
     </summary>
     
